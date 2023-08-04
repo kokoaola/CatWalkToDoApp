@@ -25,7 +25,7 @@ func save() {
     /// Entityテーブル登録
     let newStudent = Entity(context: context)
     newStudent.label = 0
-    newStudent.title = "テスト０"
+    newStudent.title = "テスト0"
     newStudent.timestamp = Date()
     newStudent.favorite = true
     newStudent.checked = true

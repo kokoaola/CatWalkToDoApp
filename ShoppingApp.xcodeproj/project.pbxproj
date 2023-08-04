@@ -28,6 +28,10 @@
 		3BDD3D8A28E91D2000CAA478 /* Syukei_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDD3D8928E91D2000CAA478 /* Syukei_View.swift */; };
 		3BDD3D8C28E91D8100CAA478 /* AddNewLabel_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDD3D8B28E91D8100CAA478 /* AddNewLabel_View.swift */; };
 		3BDD3D8E28E923A300CAA478 /* func.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDD3D8D28E923A300CAA478 /* func.swift */; };
+		3BED4A302A7D337D00E1CF32 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3BED4A2F2A7D337D00E1CF32 /* GoogleService-Info.plist */; };
+		3BED4A362A7D386400E1CF32 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 3BED4A352A7D386400E1CF32 /* FirebaseAnalytics */; };
+		3BED4A382A7D386400E1CF32 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 3BED4A372A7D386400E1CF32 /* FirebaseFirestore */; };
+		3BED4A3A2A7D3C4A00E1CF32 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BED4A392A7D3C4A00E1CF32 /* DataModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,6 +59,8 @@
 		3BDD3D8928E91D2000CAA478 /* Syukei_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Syukei_View.swift; sourceTree = "<group>"; };
 		3BDD3D8B28E91D8100CAA478 /* AddNewLabel_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewLabel_View.swift; sourceTree = "<group>"; };
 		3BDD3D8D28E923A300CAA478 /* func.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = func.swift; sourceTree = "<group>"; };
+		3BED4A2F2A7D337D00E1CF32 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		3BED4A392A7D3C4A00E1CF32 /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +68,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3BED4A362A7D386400E1CF32 /* FirebaseAnalytics in Frameworks */,
+				3BED4A382A7D386400E1CF32 /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -118,6 +126,7 @@
 				3BCF53F428E33AA000E853D7 /* ShoppingApp.xcdatamodeld */,
 				3BCF53ED28E33AA000E853D7 /* Assets.xcassets */,
 				3BCF53F028E33AA000E853D7 /* Preview Assets.xcassets */,
+				3BED4A2F2A7D337D00E1CF32 /* GoogleService-Info.plist */,
 			);
 			path = "Preview Content";
 			sourceTree = "<group>";
@@ -146,8 +155,9 @@
 		3BCF540E28E3D51700E853D7 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				3BDD3D8D28E923A300CAA478 /* func.swift */,
 				3BCF540528E33BE900E853D7 /* Model.swift */,
+				3BDD3D8D28E923A300CAA478 /* func.swift */,
+				3BED4A392A7D3C4A00E1CF32 /* DataModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -176,6 +186,10 @@
 			dependencies = (
 			);
 			name = ShoppingApp;
+			packageProductDependencies = (
+				3BED4A352A7D386400E1CF32 /* FirebaseAnalytics */,
+				3BED4A372A7D386400E1CF32 /* FirebaseFirestore */,
+			);
 			productName = ShoppingApp;
 			productReference = 3BCF53E628E33A9E00E853D7 /* ShoppingApp.app */;
 			productType = "com.apple.product-type.application";
@@ -204,6 +218,9 @@
 				Base,
 			);
 			mainGroup = 3BCF53DD28E33A9E00E853D7;
+			packageReferences = (
+				3BED4A342A7D386400E1CF32 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			productRefGroup = 3BCF53E728E33A9E00E853D7 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -219,6 +236,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3BCF53F128E33AA000E853D7 /* Preview Assets.xcassets in Resources */,
+				3BED4A302A7D337D00E1CF32 /* GoogleService-Info.plist in Resources */,
 				3BCF53EE28E33AA000E853D7 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -235,6 +253,7 @@
 				3BB0191B28E400830094AAD2 /* ShoppingList1.swift in Sources */,
 				3B6051FD28E6CD8E0089A7A8 /* ShoppingList2.swift in Sources */,
 				3BCF540828E33BF000E853D7 /* AddNew Item.swift in Sources */,
+				3BED4A3A2A7D3C4A00E1CF32 /* DataModel.swift in Sources */,
 				3BDD3D8E28E923A300CAA478 /* func.swift in Sources */,
 				3BCF53F328E33AA000E853D7 /* Persistence.swift in Sources */,
 				3BCF540428E33BD500E853D7 /* List_mainView.swift in Sources */,
@@ -390,7 +409,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ooo.amatnug.amatnug.ShoppingApp;
+				PRODUCT_BUNDLE_IDENTIFIER = amatnug.amatnug.ShoppingApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -419,7 +438,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ooo.amatnug.amatnug.ShoppingApp;
+				PRODUCT_BUNDLE_IDENTIFIER = amatnug.amatnug.ShoppingApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -449,6 +468,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3BED4A342A7D386400E1CF32 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3BED4A352A7D386400E1CF32 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3BED4A342A7D386400E1CF32 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		3BED4A372A7D386400E1CF32 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3BED4A342A7D386400E1CF32 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		3BCF53F428E33AA000E853D7 /* ShoppingApp.xcdatamodeld */ = {
