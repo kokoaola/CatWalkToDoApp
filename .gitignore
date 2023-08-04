@@ -42,6 +42,7 @@ perspectivev3-file
 *.xcodeproj/project.pbxproj
 *.xcodeproj/xcshareddata/
 !*.xcworkspace/contents.xcworkspacedata
+xcschememanagement.plist
 
 
 #CocoaPodsでインストールしたライブラリのデータ。
