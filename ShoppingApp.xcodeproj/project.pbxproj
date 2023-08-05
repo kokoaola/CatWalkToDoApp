@@ -16,7 +16,7 @@
 		3BCF53FE28E33AE400E853D7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BCF53FD28E33AE400E853D7 /* ContentView.swift */; };
 		3BCF540428E33BD500E853D7 /* List_mainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BCF540328E33BD500E853D7 /* List_mainView.swift */; };
 		3BCF540628E33BE900E853D7 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BCF540528E33BE900E853D7 /* Model.swift */; };
-		3BCF540828E33BF000E853D7 /* AddNew Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BCF540728E33BF000E853D7 /* AddNew Item.swift */; };
+		3BCF540828E33BF000E853D7 /* AddNewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BCF540728E33BF000E853D7 /* AddNewItem.swift */; };
 		3BCF540A28E33BF700E853D7 /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BCF540928E33BF700E853D7 /* Buttons.swift */; };
 		3BCF541128E3D85D00E853D7 /* Keisan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BCF541028E3D85D00E853D7 /* Keisan.swift */; };
 		3BDD3D8A28E91D2000CAA478 /* Syukei_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDD3D8928E91D2000CAA478 /* Syukei_View.swift */; };
@@ -26,6 +26,7 @@
 		3BED4A362A7D386400E1CF32 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 3BED4A352A7D386400E1CF32 /* FirebaseAnalytics */; };
 		3BED4A382A7D386400E1CF32 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 3BED4A372A7D386400E1CF32 /* FirebaseFirestore */; };
 		3BED4A3A2A7D3C4A00E1CF32 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BED4A392A7D3C4A00E1CF32 /* DataModel.swift */; };
+		3BED4A3E2A7E4B1900E1CF32 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BED4A3D2A7E4B1900E1CF32 /* Tag.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,7 +40,7 @@
 		3BCF53FD28E33AE400E853D7 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3BCF540328E33BD500E853D7 /* List_mainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = List_mainView.swift; sourceTree = "<group>"; };
 		3BCF540528E33BE900E853D7 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
-		3BCF540728E33BF000E853D7 /* AddNew Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AddNew Item.swift"; sourceTree = "<group>"; };
+		3BCF540728E33BF000E853D7 /* AddNewItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNewItem.swift; sourceTree = "<group>"; };
 		3BCF540928E33BF700E853D7 /* Buttons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
 		3BCF541028E3D85D00E853D7 /* Keisan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keisan.swift; sourceTree = "<group>"; };
 		3BDD3D8928E91D2000CAA478 /* Syukei_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Syukei_View.swift; sourceTree = "<group>"; };
@@ -47,6 +48,7 @@
 		3BDD3D8D28E923A300CAA478 /* func.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = func.swift; sourceTree = "<group>"; };
 		3BED4A2F2A7D337D00E1CF32 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3BED4A392A7D3C4A00E1CF32 /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
+		3BED4A3D2A7E4B1900E1CF32 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +121,7 @@
 			children = (
 				3BCF53FD28E33AE400E853D7 /* ContentView.swift */,
 				3BCF540928E33BF700E853D7 /* Buttons.swift */,
+				3BED4A3D2A7E4B1900E1CF32 /* Tag.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -128,7 +131,7 @@
 			children = (
 				3BCF540328E33BD500E853D7 /* List_mainView.swift */,
 				3BB0191A28E400830094AAD2 /* ShoppingList1.swift */,
-				3BCF540728E33BF000E853D7 /* AddNew Item.swift */,
+				3BCF540728E33BF000E853D7 /* AddNewItem.swift */,
 			);
 			path = List;
 			sourceTree = "<group>";
@@ -238,7 +241,7 @@
 			files = (
 				3BCF540628E33BE900E853D7 /* Model.swift in Sources */,
 				3BB0191B28E400830094AAD2 /* ShoppingList1.swift in Sources */,
-				3BCF540828E33BF000E853D7 /* AddNew Item.swift in Sources */,
+				3BCF540828E33BF000E853D7 /* AddNewItem.swift in Sources */,
 				3BED4A3A2A7D3C4A00E1CF32 /* DataModel.swift in Sources */,
 				3BDD3D8E28E923A300CAA478 /* func.swift in Sources */,
 				3BCF540428E33BD500E853D7 /* List_mainView.swift in Sources */,
@@ -248,6 +251,7 @@
 				3BCF541128E3D85D00E853D7 /* Keisan.swift in Sources */,
 				3BCF53FE28E33AE400E853D7 /* ContentView.swift in Sources */,
 				3BDD3D8C28E91D8100CAA478 /* AddNewLabel_View.swift in Sources */,
+				3BED4A3E2A7E4B1900E1CF32 /* Tag.swift in Sources */,
 				3BB0191E28E428720094AAD2 /* Setting_Top.swift in Sources */,
 				3BCF53EA28E33A9E00E853D7 /* ShoppingAppApp.swift in Sources */,
 			);

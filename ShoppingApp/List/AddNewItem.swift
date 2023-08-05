@@ -93,8 +93,15 @@ struct AddNewItem: View {
                 //入力された値が空白以外なら配列に追加
                 if !newName.isEmpty{
                     itemVM.addItem(title: newName, label: Int16(num))
-                    //                        save2(title: newName, label: Int16(num))
-                    isFavorite = false
+                    
+                    if isFavorite{
+                        itemVM.changeFavoriteList(itemName: newName, delete: false)
+                        
+                        //お気に入りリストに存在するが、お気に入りスイッチがOFFになってる時
+                    }else if !isFavorite && itemVM.favoriteList.contains(newName){
+                        //お気に入りから削除する
+                        itemVM.changeFavoriteList(itemName: newName, delete: true)
+                    }
                     dismiss() //追加後のページ破棄関数
                 }
             },label: {

@@ -174,14 +174,17 @@ class ItemViewModel: ObservableObject {
     
     
     ///お気に入りアイテムへ保存する
-    func changeFavoriteList(itemName: String){
-        let isExistFavoriteList = favoriteList.contains(itemName)
+    func changeFavoriteList(itemName: String, delete: Bool){
         
-        if isExistFavoriteList{
+        if delete{
             let newArray = favoriteList.filter { $0 != itemName }
             objectWillChange.send()
             favoriteList = newArray
         }else{
+            if favoriteList.contains(itemName){
+                return
+            }
+            
             objectWillChange.send()
             favoriteList.append(itemName)
         }

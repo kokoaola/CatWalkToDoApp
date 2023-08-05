@@ -10,27 +10,27 @@ import SwiftUI
 
 struct ShoppingList1: View {
     //コアデータ用のコード
-//        @Environment(\.managedObjectContext) private var viewContext
-//        @FetchRequest(
-//            entity: Entity.entity(),
-//            sortDescriptors: [NSSortDescriptor(keyPath: \Entity.timestamp, ascending: true)],
-//            //ラベルが０、未完了のものだけ抽出
-//            predicate: NSPredicate(format: "label == %d And finished == %@", 0, NSNumber(value: false)), animation: .default
-//        )private var items: FetchedResults<Entity>
-//    
-//    
-//    //コアデータ用のコード
-//    @FetchRequest(
-//        entity: Entity.entity(),
-//        sortDescriptors: [NSSortDescriptor(keyPath: \Entity.timestamp, ascending: true)],
-//        //ラベルが０、未完了のものだけ抽出
-//        predicate: NSPredicate(format: "favorite == %@", NSNumber(value: true), NSNumber(value: true)), animation: .default
-//    )private var favoriteItems: FetchedResults<Entity>
+    //        @Environment(\.managedObjectContext) private var viewContext
+    //        @FetchRequest(
+    //            entity: Entity.entity(),
+    //            sortDescriptors: [NSSortDescriptor(keyPath: \Entity.timestamp, ascending: true)],
+    //            //ラベルが０、未完了のものだけ抽出
+    //            predicate: NSPredicate(format: "label == %d And finished == %@", 0, NSNumber(value: false)), animation: .default
+    //        )private var items: FetchedResults<Entity>
+    //
+    //
+    //    //コアデータ用のコード
+    //    @FetchRequest(
+    //        entity: Entity.entity(),
+    //        sortDescriptors: [NSSortDescriptor(keyPath: \Entity.timestamp, ascending: true)],
+    //        //ラベルが０、未完了のものだけ抽出
+    //        predicate: NSPredicate(format: "favorite == %@", NSNumber(value: true), NSNumber(value: true)), animation: .default
+    //    )private var favoriteItems: FetchedResults<Entity>
     
     @Binding var isAlart: Bool
     @EnvironmentObject var itemVM: ItemViewModel
     @Binding var filterdList: [ItemDataType]
-
+    
     var body: some View {
         
         ZStack{
@@ -49,18 +49,26 @@ struct ShoppingList1: View {
                             Group{
                                 Image(systemName: "star.fill")
                                     .foregroundColor(itemVM.favoriteList.contains(item.title) ? .yellow : Color(UIColor.systemGray4))
-//                                    .foregroundColor(item.favorite ? .yellow : Color(UIColor.systemGray4))
+                                //                                    .foregroundColor(item.favorite ? .yellow : Color(UIColor.systemGray4))
                                     .opacity(0.8)
                                     .onTapGesture {
-                                        itemVM.changeFavoriteList(itemName: item.title)
-//                                        if favoriteItems.count < 20{
-//                                            itemVM.toggleFavorite(item: item)
-//                                        }else{
-//                                            isAlart.toggle()
-//                                        }
+                                        
+
+                                        if itemVM.favoriteList.contains(item.title){
+                                            itemVM.changeFavoriteList(itemName: item.title, delete: true)
+                                        }else{
+                                            if itemVM.favoriteList.count > 10{
+                                                isAlart.toggle()
+                                                return
+                                            }
+                                            itemVM.changeFavoriteList(itemName: item.title, delete: false)
                                         }
+                                        
+                                        
+                                        
                                     }
-                                }
+                            }
+                        }
                         
                         .listRowBackground(Color.clear)
                         .foregroundColor(item.checked ? Color(UIColor.secondaryLabel): Color(UIColor.label))
@@ -70,19 +78,19 @@ struct ShoppingList1: View {
                         .onTapGesture {
                             
                             itemVM.toggleCheck(item: item)
-//                            item.checked.toggle()
-//                            try? viewContext.save()
+                            //                            item.checked.toggle()
+                            //                            try? viewContext.save()
                             print(item.finished)
-                            }
                         }
                     }
+                }
                 
                 //背景色変える
                 .scrollContentBackground(.hidden)
-                }
-//            .onAppear{
-//                filterdList = itemVM.itemList.filter { $0.label == label }
-//            }
+            }
+            //            .onAppear{
+            //                filterdList = itemVM.itemList.filter { $0.label == label }
+            //            }
         }
     }
 }
