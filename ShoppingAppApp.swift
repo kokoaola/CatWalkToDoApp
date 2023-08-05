@@ -6,19 +6,34 @@
 //
 
 import SwiftUI
-import CoreData
+import FirebaseCore
+
+
+class AppDelegate: NSObject, UIApplicationDelegate {
+    func application(_ application: UIApplication,
+                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        FirebaseApp.configure()
+        
+        return true
+    }
+}
 
 @main
-struct ShoppingAppApp: App {
-    let persistenceController = PersistenceController.shared
-
+struct YourApp: App {
+    // register app delegate for Firebase setup
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
-                //.environmentObject(ShareData())
+            NavigationView {
+                ContentView()
+            }
         }
     }
+}
+    
+    
 //    ///これ書いたらエラー消えた（何かは不明）
 //    lazy var persistentContainer: NSPersistentContainer = {
 //        let container = NSPersistentContainer(name: "Entity")
@@ -30,7 +45,6 @@ struct ShoppingAppApp: App {
 //        return container
 //    }()
     
-}
 
 ///これ書いたらエラー消えた（何かは不明）
 //lazy var persistentContainer: NSPersistentContainer = {
