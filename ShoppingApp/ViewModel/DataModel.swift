@@ -6,11 +6,6 @@
 //
 
 
-/*
- Firebaseデータベースアクセス部分を作成
- FirebaseのCloud Firestoreの読み書きするコードを記載します。
- @Publishedで新しいメッセージが追加されたときに自動でデータ更新が通知されるようになります。
- */
 
 
 import Foundation
@@ -38,6 +33,7 @@ class ItemViewModel: ObservableObject {
     init() {
         self.favoriteList = defaults.stringArray(forKey:favoriteListKey) ?? ["test"]
         db.collection("items").order(by: "timestamp").addSnapshotListener { (snap, error) in
+
             if let error = error {
                 print(error.localizedDescription)
                 return
@@ -48,10 +44,12 @@ class ItemViewModel: ObservableObject {
                         let id = item.document.documentID
                         let title = item.document.get("title") as! String
                         let label = item.document.get("label") as! Int16
+
                         let checked = item.document.get("checked") as! Bool
                         let finished = item.document.get("finished") as! Bool
                         let timeData = item.document.get("timestamp", serverTimestampBehavior: .estimate) as! Timestamp
                         let timestamp = timeData.dateValue()
+
                         
                         self.itemList.append(ItemDataType(id: id,title: title, label: label, checked: checked, finished: finished, timestamp: timestamp))
                     }
@@ -60,6 +58,7 @@ class ItemViewModel: ObservableObject {
                 self.filterdList0 = self.itemList.filter { $0.label == 0 }
                 self.filterdList1 = self.itemList.filter { $0.label == 1 }
                 self.filterdList2 = self.itemList.filter { $0.label == 2 }
+
                 
             }
         }
@@ -76,12 +75,14 @@ class ItemViewModel: ObservableObject {
             "finished": false,
             "timestamp": FieldValue.serverTimestamp()
         ] as [String : Any]
+
         
         db.collection("items").addDocument(data: data) { error in
             if let error = error {
                 print(error.localizedDescription)
                 return
             }
+
         }
     }
     
@@ -177,14 +178,17 @@ class ItemViewModel: ObservableObject {
                         let id = item.document.documentID
                         let title = item.document.get("title") as! String
                         let label = item.document.get("label") as! Int16
+
                         let checked = item.document.get("checked") as! Bool
                         let finished = item.document.get("finished") as! Bool
                         let timeData = item.document.get("timestamp", serverTimestampBehavior: .estimate) as! Timestamp
                         let timestamp = timeData.dateValue()
+
                         
                         tempItemList.append(ItemDataType(id: id,title: title, label: label, checked: checked, finished: finished, timestamp: timestamp))
                     }
                 }
+
             }
             DispatchQueue.main.async {
                 self.objectWillChange.send()
@@ -203,3 +207,4 @@ class ItemViewModel: ObservableObject {
         
     }
 }
+

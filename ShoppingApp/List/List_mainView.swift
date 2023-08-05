@@ -80,7 +80,7 @@ struct List_mainView: View {
                         .tag(2)
                 }.tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                     .environmentObject(itemVM)
-                
+
             }
             
             VStack{
@@ -111,7 +111,6 @@ struct List_mainView: View {
             if isAlart{
                 AlartView(isAlart: $isAlart, isOK: $isOK, message: "お気に入り登録できるのは２０個までです。")
             }
-            
             
             
         }
