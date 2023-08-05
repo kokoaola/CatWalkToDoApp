@@ -7,18 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3B6051FD28E6CD8E0089A7A8 /* ShoppingList2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6051FC28E6CD8E0089A7A8 /* ShoppingList2.swift */; };
-		3B6051FF28E6CDA50089A7A8 /* ShoppingList3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6051FE28E6CDA50089A7A8 /* ShoppingList3.swift */; };
 		3B68669B28ED1165005C3C4D /* FavoriteList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7DA58728EC7B9C00FC82D1 /* FavoriteList.swift */; };
-		3BA4E5AC28E5CBFF001450AB /* Entity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA4E5AA28E5CBFF001450AB /* Entity+CoreDataClass.swift */; };
-		3BA4E5AD28E5CBFF001450AB /* Entity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA4E5AB28E5CBFF001450AB /* Entity+CoreDataProperties.swift */; };
 		3BB0191B28E400830094AAD2 /* ShoppingList1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB0191A28E400830094AAD2 /* ShoppingList1.swift */; };
 		3BB0191E28E428720094AAD2 /* Setting_Top.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB0191D28E428720094AAD2 /* Setting_Top.swift */; };
 		3BCF53EA28E33A9E00E853D7 /* ShoppingAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BCF53E928E33A9E00E853D7 /* ShoppingAppApp.swift */; };
 		3BCF53EE28E33AA000E853D7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3BCF53ED28E33AA000E853D7 /* Assets.xcassets */; };
 		3BCF53F128E33AA000E853D7 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3BCF53F028E33AA000E853D7 /* Preview Assets.xcassets */; };
-		3BCF53F328E33AA000E853D7 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BCF53F228E33AA000E853D7 /* Persistence.swift */; };
-		3BCF53F628E33AA000E853D7 /* ShoppingApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3BCF53F428E33AA000E853D7 /* ShoppingApp.xcdatamodeld */; };
 		3BCF53FE28E33AE400E853D7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BCF53FD28E33AE400E853D7 /* ContentView.swift */; };
 		3BCF540428E33BD500E853D7 /* List_mainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BCF540328E33BD500E853D7 /* List_mainView.swift */; };
 		3BCF540628E33BE900E853D7 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BCF540528E33BE900E853D7 /* Model.swift */; };
@@ -35,21 +29,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		3B6051FC28E6CD8E0089A7A8 /* ShoppingList2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingList2.swift; sourceTree = "<group>"; };
-		3B6051FE28E6CDA50089A7A8 /* ShoppingList3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingList3.swift; sourceTree = "<group>"; };
-		3B60520028E8822A0089A7A8 /* ShoppingApp_ver2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ShoppingApp_ver2.xcdatamodel; sourceTree = "<group>"; };
-		3B60520128E882450089A7A8 /* ShoppingApp 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ShoppingApp 2.xcdatamodel"; sourceTree = "<group>"; };
 		3B7DA58728EC7B9C00FC82D1 /* FavoriteList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteList.swift; sourceTree = "<group>"; };
-		3BA4E5AA28E5CBFF001450AB /* Entity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Entity+CoreDataClass.swift"; sourceTree = "<group>"; };
-		3BA4E5AB28E5CBFF001450AB /* Entity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Entity+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		3BB0191A28E400830094AAD2 /* ShoppingList1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingList1.swift; sourceTree = "<group>"; };
 		3BB0191D28E428720094AAD2 /* Setting_Top.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setting_Top.swift; sourceTree = "<group>"; };
 		3BCF53E628E33A9E00E853D7 /* ShoppingApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShoppingApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BCF53E928E33A9E00E853D7 /* ShoppingAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingAppApp.swift; sourceTree = "<group>"; };
 		3BCF53ED28E33AA000E853D7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3BCF53F028E33AA000E853D7 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		3BCF53F228E33AA000E853D7 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
-		3BCF53F528E33AA000E853D7 /* ShoppingApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ShoppingApp.xcdatamodel; sourceTree = "<group>"; };
 		3BCF53FD28E33AE400E853D7 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3BCF540328E33BD500E853D7 /* List_mainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = List_mainView.swift; sourceTree = "<group>"; };
 		3BCF540528E33BE900E853D7 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
@@ -90,8 +76,6 @@
 		3BCF53DD28E33A9E00E853D7 = {
 			isa = PBXGroup;
 			children = (
-				3BA4E5AA28E5CBFF001450AB /* Entity+CoreDataClass.swift */,
-				3BA4E5AB28E5CBFF001450AB /* Entity+CoreDataProperties.swift */,
 				3BCF53E928E33A9E00E853D7 /* ShoppingAppApp.swift */,
 				3BCF53E828E33A9E00E853D7 /* ShoppingApp */,
 				3BCF53E728E33A9E00E853D7 /* Products */,
@@ -122,8 +106,6 @@
 		3BCF53EF28E33AA000E853D7 /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
-				3BCF53F228E33AA000E853D7 /* Persistence.swift */,
-				3BCF53F428E33AA000E853D7 /* ShoppingApp.xcdatamodeld */,
 				3BCF53ED28E33AA000E853D7 /* Assets.xcassets */,
 				3BCF53F028E33AA000E853D7 /* Preview Assets.xcassets */,
 				3BED4A2F2A7D337D00E1CF32 /* GoogleService-Info.plist */,
@@ -145,8 +127,6 @@
 			children = (
 				3BCF540328E33BD500E853D7 /* List_mainView.swift */,
 				3BB0191A28E400830094AAD2 /* ShoppingList1.swift */,
-				3B6051FC28E6CD8E0089A7A8 /* ShoppingList2.swift */,
-				3B6051FE28E6CDA50089A7A8 /* ShoppingList3.swift */,
 				3BCF540728E33BF000E853D7 /* AddNew Item.swift */,
 			);
 			path = List;
@@ -249,13 +229,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				3BCF540628E33BE900E853D7 /* Model.swift in Sources */,
-				3BA4E5AC28E5CBFF001450AB /* Entity+CoreDataClass.swift in Sources */,
 				3BB0191B28E400830094AAD2 /* ShoppingList1.swift in Sources */,
-				3B6051FD28E6CD8E0089A7A8 /* ShoppingList2.swift in Sources */,
 				3BCF540828E33BF000E853D7 /* AddNew Item.swift in Sources */,
 				3BED4A3A2A7D3C4A00E1CF32 /* DataModel.swift in Sources */,
 				3BDD3D8E28E923A300CAA478 /* func.swift in Sources */,
-				3BCF53F328E33AA000E853D7 /* Persistence.swift in Sources */,
 				3BCF540428E33BD500E853D7 /* List_mainView.swift in Sources */,
 				3BDD3D8A28E91D2000CAA478 /* Syukei_View.swift in Sources */,
 				3BCF540A28E33BF700E853D7 /* Buttons.swift in Sources */,
@@ -263,9 +240,6 @@
 				3BCF541128E3D85D00E853D7 /* Keisan.swift in Sources */,
 				3BCF53FE28E33AE400E853D7 /* ContentView.swift in Sources */,
 				3BDD3D8C28E91D8100CAA478 /* AddNewLabel_View.swift in Sources */,
-				3B6051FF28E6CDA50089A7A8 /* ShoppingList3.swift in Sources */,
-				3BA4E5AD28E5CBFF001450AB /* Entity+CoreDataProperties.swift in Sources */,
-				3BCF53F628E33AA000E853D7 /* ShoppingApp.xcdatamodeld in Sources */,
 				3BB0191E28E428720094AAD2 /* Setting_Top.swift in Sources */,
 				3BCF53EA28E33A9E00E853D7 /* ShoppingAppApp.swift in Sources */,
 			);
@@ -492,21 +466,6 @@
 			productName = FirebaseFirestore;
 		};
 /* End XCSwiftPackageProductDependency section */
-
-/* Begin XCVersionGroup section */
-		3BCF53F428E33AA000E853D7 /* ShoppingApp.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				3B60520128E882450089A7A8 /* ShoppingApp 2.xcdatamodel */,
-				3B60520028E8822A0089A7A8 /* ShoppingApp_ver2.xcdatamodel */,
-				3BCF53F528E33AA000E853D7 /* ShoppingApp.xcdatamodel */,
-			);
-			currentVersion = 3BCF53F528E33AA000E853D7 /* ShoppingApp.xcdatamodel */;
-			path = ShoppingApp.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 3BCF53DE28E33A9E00E853D7 /* Project object */;
 }

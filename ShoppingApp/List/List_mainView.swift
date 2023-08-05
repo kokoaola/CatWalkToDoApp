@@ -69,14 +69,6 @@ struct List_mainView: View {
                         }
                     }
                 
-                .onAppear(){
-                    print("Number of items: \(itemVM.itemList.count)")
-                    labelArray = [label0, label1, label2]
-                    print(itemVM.filterdList0.count)
-                    print(itemVM.filterdList1.count)
-                    print(itemVM.filterdList2.count)
-                }
-                
                 //買い物リストの中身のビュー
                 TabView(selection: $selection) {
                     ShoppingList1(isAlart: $isAlart, filterdList: $itemVM.filterdList0)
@@ -89,21 +81,6 @@ struct List_mainView: View {
                     .environmentObject(itemVM)
 
             }
-                //買い物完了ボタンが押された後の確認アラート
-                .alert(isPresented: $showAlart){
-                    Alert(title: Text("買い物完了"),
-                    message: Text("チェックした項目を削除して\n買い物を完了にしますか？"),
-                          //OKならチェックした項目をリストから削除（未搭載）
-                          primaryButton: .default(Text("OK"), action: {
-//                        for item in checkedItems{
-//                            item.finished = true
-//                            try? viewContext.save()
-//                        }
-                    }),
-                          secondaryButton: .cancel(Text("Cansel"), action:{}))
-                }
-                
-                
             
             VStack{
                 Spacer()
@@ -116,13 +93,28 @@ struct List_mainView: View {
                 }).padding(.bottom, 30)
                 //買うものの新規追加用のシート
                 .sheet(isPresented: $isSheet, content: {AddNewItem().environmentObject(itemVM)})
+            }                //買い物完了ボタンが押された後の確認アラート
+            .alert(isPresented: $showAlart){
+                Alert(title: Text("買い物完了"),
+                      message: Text("チェックした項目を削除して\n買い物を完了にしますか？"),
+                      //OKならチェックした項目をリストから削除（未搭載）
+                      primaryButton: .default(Text("OK"), action: {
+                    //                        for item in checkedItems{
+                    //                            item.finished = true
+                    //                            try? viewContext.save()
+                    //                        }
+                }),
+                      secondaryButton: .cancel(Text("Cansel"), action:{}))
             }
-            .onAppear{
-                print("Number of items: \(itemVM.itemList.count)")
+            
+            .onAppear(){
+                labelArray = [label0, label1, label2]
             }
             if isAlart{
                 AlartView(isAlart: $isAlart, isOK: $isOK, message: "お気に入り登録できるのは２０個までです。")
             }
+            
+            
 
         }
     }
