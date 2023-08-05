@@ -45,19 +45,16 @@ class ItemViewModel: ObservableObject {
                         let id = item.document.documentID
                         let title = item.document.get("title") as! String
                         let label = item.document.get("label") as! Int16
-                        let favorite = item.document.get("favorite") as! Bool
+//                        let favorite = item.document.get("favorite") as! Bool
                         let checked = item.document.get("checked") as! Bool
                         let finished = item.document.get("finished") as! Bool
                         let timeData = item.document.get("timestamp", serverTimestampBehavior: .estimate) as! Timestamp
                         let timestamp = timeData.dateValue()
 //                        let id = item.document.documentID
 
-                        self.itemList.append(ItemDataType(id: id,title: title, label: label, favorite: favorite, checked: checked, finished: finished, timestamp: timestamp))
-                        print("O")
+                        self.itemList.append(ItemDataType(id: id,title: title, label: label, checked: checked, finished: finished, timestamp: timestamp))
                     }
                 }
-                print(self.itemList)
-                print(self.itemList.count)
                 // 日付順に並べ替えする
 //                self.items.sort { before, after in
 //                    return before.createAt < after.createAt ? true : false
@@ -69,8 +66,6 @@ class ItemViewModel: ObservableObject {
             
             }
         }
-        print("★®")
-        print(self.itemList.count)
     }
 
     
@@ -160,14 +155,14 @@ class ItemViewModel: ObservableObject {
                         let id = item.document.documentID
                         let title = item.document.get("title") as! String
                         let label = item.document.get("label") as! Int16
-                        let favorite = item.document.get("favorite") as! Bool
+//                        let favorite = item.document.get("favorite") as! Bool
                         let checked = item.document.get("checked") as! Bool
                         let finished = item.document.get("finished") as! Bool
                         let timeData = item.document.get("timestamp", serverTimestampBehavior: .estimate) as! Timestamp
                         let timestamp = timeData.dateValue()
                         //                        let id = item.document.documentID
                         
-                        tempItemList.append(ItemDataType(id: id,title: title, label: label, favorite: favorite, checked: checked, finished: finished, timestamp: timestamp))
+                        tempItemList.append(ItemDataType(id: id,title: title, label: label, checked: checked, finished: finished, timestamp: timestamp))
                     }
                 }
                 
@@ -178,46 +173,17 @@ class ItemViewModel: ObservableObject {
     }
     
     
-    ///お気に入りフラグをtrueにして保存する
-    func toggleFavorite(item: ItemDataType){
-        let documentId = item.id
-        let newCheckedStatus = !item.favorite
-        let db = Firestore.firestore()
-        
-        var updatedItem = item
-        updatedItem.favorite = newCheckedStatus
-        
-        
-        //UIを更新
-        if let index = itemList.firstIndex(where: { $0.id == documentId }) {
-            DispatchQueue.main.async {
-                // 4. Update the UI by assigning the updated item to the appropriate index in the `itemList` array.
-                self.itemList[index] = updatedItem
-            }
-        }
-        
-        //変更を保存
-        db.collection("items").document(documentId).updateData([
-            "favorite": newCheckedStatus
-        ]) { [weak self] error in
-            if let error = error {
-                print(error.localizedDescription)
-            }
-        }
-        
-        addFavoriteList(isFavoriite: newCheckedStatus, itemName: item.title)
-    }
-    
-    
     ///お気に入りアイテムへ保存する
-    func addFavoriteList(isFavoriite:Bool,itemName: String){
-        if isFavoriite{
-            objectWillChange.send()
-            favoriteList.append(itemName)
-        }else{
+    func changeFavoriteList(itemName: String){
+        let isExistFavoriteList = favoriteList.contains(itemName)
+        
+        if isExistFavoriteList{
             let newArray = favoriteList.filter { $0 != itemName }
             objectWillChange.send()
             favoriteList = newArray
+        }else{
+            objectWillChange.send()
+            favoriteList.append(itemName)
         }
         
         defaults.set(favoriteList, forKey: favoriteListKey)

@@ -48,10 +48,11 @@ struct ShoppingList1: View {
                             //お気に入り用スター表示
                             Group{
                                 Image(systemName: "star.fill")
-                                    .foregroundColor(item.favorite ? .yellow : Color(UIColor.systemGray4))
+                                    .foregroundColor(itemVM.favoriteList.contains(item.title) ? .yellow : Color(UIColor.systemGray4))
+//                                    .foregroundColor(item.favorite ? .yellow : Color(UIColor.systemGray4))
                                     .opacity(0.8)
                                     .onTapGesture {
-                                        itemVM.toggleFavorite(item: item)
+                                        itemVM.changeFavoriteList(itemName: item.title)
 //                                        if favoriteItems.count < 20{
 //                                            itemVM.toggleFavorite(item: item)
 //                                        }else{
