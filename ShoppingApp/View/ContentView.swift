@@ -15,20 +15,20 @@ import CoreData
 struct ContentView: View {
     
     var body: some View {
-            VStack{
-                //下のタブビュー
-                TabView{
-                    List_mainView()
-                        .tabItem{
-                            Label("買い物リスト", systemImage: "cart")
-                        }
-                    Keisan().tabItem{
-                        Label("単価計算", systemImage: "arrow.2.squarepath")
+        VStack{
+            //下のタブビュー
+            TabView{
+                List_mainView()
+                    .tabItem{
+                        Label("買い物リスト", systemImage: "cart")
                     }
-                    Setting_Top()
-                        .tabItem{
-                            Label("設定", systemImage: "gearshape")
+                Keisan().tabItem{
+                    Label("単価計算", systemImage: "arrow.2.squarepath")
                 }
+                Setting_Top()
+                    .tabItem{
+                        Label("設定", systemImage: "gearshape")
+                    }
             }
         }
     }
