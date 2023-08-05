@@ -20,9 +20,9 @@ struct Setting_Top: View {
                     NavigationLink(destination: {
                         FavoriteList()
                     }, label: {Text("お気に入りリスト編集")})
-                    NavigationLink(destination: {
-                        Syukei_View()
-                    }, label: {Text("買い物頻度の確認（おまけ機能）")})
+//                    NavigationLink(destination: {
+//                        Syukei_View()
+//                    }, label: {Text("買い物頻度の確認（おまけ機能）")})
                 }
             }
             .navigationTitle(Text("各種設定"))

@@ -21,7 +21,17 @@ class ItemViewModel: ObservableObject {
     @Published var filterdList0 = [ItemDataType]()
     @Published var filterdList1 = [ItemDataType]()
     @Published var filterdList2 = [ItemDataType]()
+    
+    @Published var favoriteList:[String]
+    ///ユーザーデフォルト用の変数
+    private let defaults = UserDefaults.standard
+    ///ユーザーデフォルト用キー：目標用
+    private let favoriteListKey = "favoriteList"
+    
     init() {
+        self.favoriteList = defaults.stringArray(forKey:favoriteListKey) ?? ["test"]
+        
+        
         let db = Firestore.firestore()
 
         db.collection("items").addSnapshotListener { (snap, error) in
@@ -35,19 +45,16 @@ class ItemViewModel: ObservableObject {
                         let id = item.document.documentID
                         let title = item.document.get("title") as! String
                         let label = item.document.get("label") as! Int16
-                        let favorite = item.document.get("favorite") as! Bool
+//                        let favorite = item.document.get("favorite") as! Bool
                         let checked = item.document.get("checked") as! Bool
                         let finished = item.document.get("finished") as! Bool
                         let timeData = item.document.get("timestamp", serverTimestampBehavior: .estimate) as! Timestamp
                         let timestamp = timeData.dateValue()
 //                        let id = item.document.documentID
 
-                        self.itemList.append(ItemDataType(id: id,title: title, label: label, favorite: favorite, checked: checked, finished: finished, timestamp: timestamp))
-                        print("O")
+                        self.itemList.append(ItemDataType(id: id,title: title, label: label, checked: checked, finished: finished, timestamp: timestamp))
                     }
                 }
-                print(self.itemList)
-                print(self.itemList.count)
                 // 日付順に並べ替えする
 //                self.items.sort { before, after in
 //                    return before.createAt < after.createAt ? true : false
@@ -59,10 +66,10 @@ class ItemViewModel: ObservableObject {
             
             }
         }
-        print("★®")
-        print(self.itemList.count)
     }
 
+    
+    ///アイテムをデータベースに追加する
     func addItem(title: String, label: Int16){
         let data = [
             "label": label,
@@ -84,33 +91,9 @@ class ItemViewModel: ObservableObject {
             print("success")
         }
     }
-    
-//    func toggleCheck(item:ItemDataType){
-//        let documentId = item.id
-//        objectWillChange.send()
-//        let newCheckedStatus = !item.checked
-//        itemList[0].checked = itemList[0].checked
-//        print("item.checked", !item.checked)
-//        print("newCheckedStatus", newCheckedStatus)
-//        let db = Firestore.firestore()
-//
-//
-//        db.collection("items").document(documentId).updateData([
-//            "checked": newCheckedStatus
-//        ]) { error in
-//            if let error = error {
-//                print(error.localizedDescription)
-//            } else {
-//                print("Success")
-//                print("item.checked", item.checked)
-//            }
-//
-//            DispatchQueue.main.async {
-//                self.updateAllTasks()
-//            }
-//        }
-//    }
-    
+
+
+    ///達成フラグをtrueにして保存する
     func toggleCheck(item: ItemDataType){
         let documentId = item.id
         let newCheckedStatus = !item.checked
@@ -126,10 +109,6 @@ class ItemViewModel: ObservableObject {
             }
         }
         
-        
-        
-        // 1. Toggle the `checked` status of the provided `item`.
-        // 2. Update the `checked` field in the Firestore database for the document with id `documentId`.
         db.collection("items").document(documentId).updateData([
             "checked": newCheckedStatus
         ]) { [weak self] error in
@@ -137,28 +116,28 @@ class ItemViewModel: ObservableObject {
                 print(error.localizedDescription)
             } else {
                 
-                // 3. Fetch the updated data from Firestore and update the `itemList` array.
-                db.collection("items").document(documentId).getDocument { (document, error) in
-                    if let document = document, document.exists {
-                        let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
-                        
-                        guard let docData = document.data() else {
-                            print("Document data was empty.")
-                            return
-                        }
-                        
-//                        self?.updateAllTasks()
-
-                    } else {
-                        print("Document does not exist.")
-                    }
-                }
+//                // 3. Fetch the updated data from Firestore and update the `itemList` array.
+//                db.collection("items").document(documentId).getDocument { (document, error) in
+//                    if let document = document, document.exists {
+//                        let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
+//
+//                        guard let docData = document.data() else {
+//                            print("Document data was empty.")
+//                            return
+//                        }
+//
+////                        self?.updateAllTasks()
+//
+//                    } else {
+//                        print("Document does not exist.")
+//                    }
+//                }
             }
         }
     }
 
-    
-    
+
+
     ///すべてのデータを再取得するメソッド
     func updateAllTasks(){
         var tempItemList = [ItemDataType]()
@@ -176,14 +155,14 @@ class ItemViewModel: ObservableObject {
                         let id = item.document.documentID
                         let title = item.document.get("title") as! String
                         let label = item.document.get("label") as! Int16
-                        let favorite = item.document.get("favorite") as! Bool
+//                        let favorite = item.document.get("favorite") as! Bool
                         let checked = item.document.get("checked") as! Bool
                         let finished = item.document.get("finished") as! Bool
                         let timeData = item.document.get("timestamp", serverTimestampBehavior: .estimate) as! Timestamp
                         let timestamp = timeData.dateValue()
                         //                        let id = item.document.documentID
                         
-                        tempItemList.append(ItemDataType(id: id,title: title, label: label, favorite: favorite, checked: checked, finished: finished, timestamp: timestamp))
+                        tempItemList.append(ItemDataType(id: id,title: title, label: label, checked: checked, finished: finished, timestamp: timestamp))
                     }
                 }
                 
@@ -191,6 +170,27 @@ class ItemViewModel: ObservableObject {
             
             self.itemList = tempItemList
         }
+    }
+    
+    
+    ///お気に入りアイテムへ保存する
+    func changeFavoriteList(itemName: String, delete: Bool){
+        
+        if delete{
+            let newArray = favoriteList.filter { $0 != itemName }
+            objectWillChange.send()
+            favoriteList = newArray
+        }else{
+            if favoriteList.contains(itemName){
+                return
+            }
+            
+            objectWillChange.send()
+            favoriteList.append(itemName)
+        }
+        
+        defaults.set(favoriteList, forKey: favoriteListKey)
+        print(favoriteList)
     }
 }
 

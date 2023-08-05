@@ -36,6 +36,7 @@ struct List_mainView: View {
     @AppStorage("label1") var label1 = "ラベル２"
     @AppStorage("label2") var label2 = "ラベル３"
     
+    
     //ラベル名を格納するための配列
     @State var labelArray:[String] = ["" , "", ""]
     
