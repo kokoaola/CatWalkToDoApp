@@ -17,8 +17,8 @@ import Foundation
 import FirebaseFirestore
 
 
-struct itemDataType: Identifiable {
-    public var id = UUID()
+struct ItemDataType: Identifiable {
+    public var id: String
     public var title: String
     public var label: Int16
     public var favorite: Bool
@@ -28,7 +28,7 @@ struct itemDataType: Identifiable {
 }
 
 class ItemViewModel: ObservableObject {
-    @Published var items = [itemDataType]()
+    @Published var itemList = [ItemDataType]()
 
     init() {
         let db = Firestore.firestore()
@@ -41,6 +41,7 @@ class ItemViewModel: ObservableObject {
             if let snap = snap {
                 for item in snap.documentChanges {
                     if item.type == .added {
+                        let id = item.document.documentID
                         let title = item.document.get("title") as! String
                         let label = item.document.get("label") as! Int16
                         let favorite = item.document.get("favorite") as! Bool
@@ -50,7 +51,7 @@ class ItemViewModel: ObservableObject {
                         let timestamp = timeData.dateValue()
 //                        let id = item.document.documentID
 
-                        self.items.append(itemDataType(title: title, label: label, favorite: favorite, checked: checked, finished: finished, timestamp: timestamp))
+                        self.itemList.append(ItemDataType(id: id,title: title, label: label, favorite: favorite, checked: checked, finished: finished, timestamp: timestamp))
                     }
                 }
                 // 日付順に並べ替えする
@@ -63,7 +64,7 @@ class ItemViewModel: ObservableObject {
     }
 
     func addItem(title: String, label: Int16){
-        var data = [
+        let data = [
             "label": label,
             "title": title,
             "favorite": false,
@@ -81,6 +82,70 @@ class ItemViewModel: ObservableObject {
             }
 
             print("success")
+        }
+    }
+    
+    func toggleCheck(item:ItemDataType){
+        let documentId = item.id
+        objectWillChange.send()
+        let newCheckedStatus = !item.checked
+        print("item.checked", item.checked)
+        print("newCheckedStatus", newCheckedStatus)
+        let db = Firestore.firestore()
+        
+
+        db.collection("items").document(documentId).updateData([
+            "checked": newCheckedStatus
+        ]) { error in
+            if let error = error {
+                print(error.localizedDescription)
+            } else {
+                print("Success")
+                print("item.checked", item.checked)
+            }
+            
+            DispatchQueue.main.async {
+                self.updateAllTasks()
+            }
+        }
+    }
+    
+    
+    ///すべてのデータを再取得するメソッド
+    func updateAllTasks(){
+        var tempItemList = [ItemDataType]()
+        
+        let db = Firestore.firestore()
+        
+        db.collection("items").addSnapshotListener { (snap, error) in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            if let snap = snap {
+                for item in snap.documentChanges {
+                    if item.type == .added {
+                        let id = item.document.documentID
+                        let title = item.document.get("title") as! String
+                        let label = item.document.get("label") as! Int16
+                        let favorite = item.document.get("favorite") as! Bool
+                        let checked = item.document.get("checked") as! Bool
+                        let finished = item.document.get("finished") as! Bool
+                        let timeData = item.document.get("timestamp", serverTimestampBehavior: .estimate) as! Timestamp
+                        let timestamp = timeData.dateValue()
+                        //                        let id = item.document.documentID
+                        
+                        tempItemList.append(ItemDataType(id: id,title: title, label: label, favorite: favorite, checked: checked, finished: finished, timestamp: timestamp))
+                    }
+                }
+                // 日付順に並べ替えする
+                //                self.items.sort { before, after in
+                //                    return before.createAt < after.createAt ? true : false
+                //                }
+                
+            }
+            
+            self.itemList = tempItemList
         }
     }
 }

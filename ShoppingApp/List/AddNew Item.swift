@@ -26,7 +26,7 @@ struct AddNewItem: View {
     )private var favoriteItems: FetchedResults<Entity>
     
     //@State var favoriteArray : [String] = retunFavoriteArray(items: favoriteItems)
-    
+    @EnvironmentObject var itemVM: ItemViewModel
     
     //名前入力用の変数
     @State var newName = ""
@@ -140,8 +140,9 @@ struct AddNewItem: View {
                 Button(action: {
                     //入力された値が空白以外なら配列に追加
                     if !newName.isEmpty{
-                        save2(title: newName, label: Int16(num))
-                        isFavorite = false
+                            itemVM.addItem(title: newName, label: Int16(num))
+                            //                        save2(title: newName, label: Int16(num))
+                            isFavorite = false
                         dismiss() //追加後のページ破棄関数
                     }
                 },label: {

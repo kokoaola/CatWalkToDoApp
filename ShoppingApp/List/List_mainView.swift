@@ -39,6 +39,9 @@ struct List_mainView: View {
     //ラベル名を格納するための配列
     @State var labelArray:[String] = ["" , "", ""]
     
+    @ObservedObject var itemVM = ItemViewModel()
+    
+    
     var body: some View {
         ZStack{
             VStack {
@@ -79,6 +82,7 @@ struct List_mainView: View {
                     ShoppingList3()
                         .tag(2)
                 }.tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                    .environmentObject(itemVM)
 
             }
                 //買い物完了ボタンが押された後の確認アラート
@@ -107,7 +111,7 @@ struct List_mainView: View {
                         //ボタン本体のデザインは別のファイル
                 }).padding(.bottom, 30)
                 //買うものの新規追加用のシート
-                .sheet(isPresented: $isSheet, content: {AddNewItem()})
+                .sheet(isPresented: $isSheet, content: {AddNewItem().environmentObject(itemVM)})
                 
 
             }
@@ -120,7 +124,7 @@ struct List_mainView: View {
 
 struct List_mainView_Previews: PreviewProvider {
     static var previews: some View {
-        List_mainView()
+        List_mainView().environmentObject(ItemViewModel())
     }
 }
 

@@ -18,6 +18,7 @@ struct ShoppingList1: View {
             predicate: NSPredicate(format: "label == %d And finished == %@", 0, NSNumber(value: false)), animation: .default
         )private var items: FetchedResults<Entity>
     
+    
     //コアデータ用のコード
     @FetchRequest(
         entity: Entity.entity(),
@@ -27,19 +28,20 @@ struct ShoppingList1: View {
     )private var favoriteItems: FetchedResults<Entity>
     
     @Binding var isAlart: Bool
-    
+    @EnvironmentObject var itemVM: ItemViewModel
+
     var body: some View {
         
         ZStack{
             VStack{
                 //買い物リスト本体
                 List{
-                    ForEach(items){ item in
+                    ForEach(itemVM.itemList){ item in
                         HStack{
                             //チェックボックス表示
                             Image(systemName: item.checked ? "checkmark.square.fill": "square")
                             //タイトル表示
-                            Text(item.title ?? "aaa")
+                            Text(item.title)
                                 .strikethrough(item.checked ? true: false)
                             Spacer()
                             //お気に入り用スター表示
@@ -47,15 +49,14 @@ struct ShoppingList1: View {
                                 Image(systemName: "star.fill")
                                     .foregroundColor(item.favorite ? .yellow : Color(UIColor.systemGray4))
                                     .opacity(0.8)
-                                    .onTapGesture {
-                                        if favoriteItems.count < 20{
-                                            item.favorite.toggle()
-                                            try? viewContext.save()
-                                        }else{
-                                            isAlart.toggle()
-                                        }
-
-                                        }
+//                                    .onTapGesture {
+//                                        if favoriteItems.count < 20{
+//                                            item.favorite.toggle()
+//                                            try? viewContext.save()
+//                                        }else{
+//                                            isAlart.toggle()
+//                                        }
+//                                        }
                                     }
                                 }
                         
@@ -65,8 +66,10 @@ struct ShoppingList1: View {
                         
                         //タップでボックスにチェック機能
                         .onTapGesture {
-                            item.checked.toggle()
-                            try? viewContext.save()
+                            
+                            itemVM.toggleCheck(item: item)
+//                            item.checked.toggle()
+//                            try? viewContext.save()
                             print(item.finished)
                             }
                         }
@@ -85,5 +88,6 @@ struct ShoppingList1_Previews: PreviewProvider {
     @State static var aaa  = false
     static var previews: some View {
         ShoppingList1(isAlart: $aaa)
+            .environmentObject(ItemViewModel())
     }
 }
