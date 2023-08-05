@@ -85,30 +85,78 @@ class ItemViewModel: ObservableObject {
         }
     }
     
-    func toggleCheck(item:ItemDataType){
+//    func toggleCheck(item:ItemDataType){
+//        let documentId = item.id
+//        objectWillChange.send()
+//        let newCheckedStatus = !item.checked
+//        itemList[0].checked = itemList[0].checked
+//        print("item.checked", !item.checked)
+//        print("newCheckedStatus", newCheckedStatus)
+//        let db = Firestore.firestore()
+//
+//
+//        db.collection("items").document(documentId).updateData([
+//            "checked": newCheckedStatus
+//        ]) { error in
+//            if let error = error {
+//                print(error.localizedDescription)
+//            } else {
+//                print("Success")
+//                print("item.checked", item.checked)
+//            }
+//
+//            DispatchQueue.main.async {
+//                self.updateAllTasks()
+//            }
+//        }
+//    }
+    
+    func toggleCheck(item: ItemDataType){
         let documentId = item.id
-        objectWillChange.send()
         let newCheckedStatus = !item.checked
-        print("item.checked", item.checked)
-        print("newCheckedStatus", newCheckedStatus)
         let db = Firestore.firestore()
         
-
+        var updatedItem = item
+        updatedItem.checked = newCheckedStatus
+        
+        if let index = itemList.firstIndex(where: { $0.id == documentId }) {
+            DispatchQueue.main.async {
+                // 4. Update the UI by assigning the updated item to the appropriate index in the `itemList` array.
+                self.itemList[index] = updatedItem
+            }
+        }
+        
+        
+        
+        // 1. Toggle the `checked` status of the provided `item`.
+        // 2. Update the `checked` field in the Firestore database for the document with id `documentId`.
         db.collection("items").document(documentId).updateData([
             "checked": newCheckedStatus
-        ]) { error in
+        ]) { [weak self] error in
             if let error = error {
                 print(error.localizedDescription)
             } else {
-                print("Success")
-                print("item.checked", item.checked)
-            }
-            
-            DispatchQueue.main.async {
-                self.updateAllTasks()
+                
+                // 3. Fetch the updated data from Firestore and update the `itemList` array.
+                db.collection("items").document(documentId).getDocument { (document, error) in
+                    if let document = document, document.exists {
+                        let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
+                        
+                        guard let docData = document.data() else {
+                            print("Document data was empty.")
+                            return
+                        }
+                        
+//                        self?.updateAllTasks()
+
+                    } else {
+                        print("Document does not exist.")
+                    }
+                }
             }
         }
     }
+
     
     
     ///すべてのデータを再取得するメソッド
@@ -138,10 +186,6 @@ class ItemViewModel: ObservableObject {
                         tempItemList.append(ItemDataType(id: id,title: title, label: label, favorite: favorite, checked: checked, finished: finished, timestamp: timestamp))
                     }
                 }
-                // 日付順に並べ替えする
-                //                self.items.sort { before, after in
-                //                    return before.createAt < after.createAt ? true : false
-                //                }
                 
             }
             
