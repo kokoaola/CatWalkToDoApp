@@ -9,13 +9,13 @@ import SwiftUI
 
 struct Syukei_View: View {
     //コアデータ用のコード
-    @Environment(\.managedObjectContext) private var viewContext
-    @FetchRequest(
-        entity: Entity.entity(),
-        sortDescriptors: [NSSortDescriptor(keyPath: \Entity.timestamp, ascending: true)],
-        //ラベルが０、未完了のものだけ抽出
-        predicate: NSPredicate(format: "favorite == %@ And finished == %@", NSNumber(value: true), NSNumber(value: true)), animation: .default
-    )private var items: FetchedResults<Entity>
+//    @Environment(\.managedObjectContext) private var viewContext
+//    @FetchRequest(
+//        entity: Entity.entity(),
+//        sortDescriptors: [NSSortDescriptor(keyPath: \Entity.timestamp, ascending: true)],
+//        //ラベルが０、未完了のものだけ抽出
+//        predicate: NSPredicate(format: "favorite == %@ And finished == %@", NSNumber(value: true), NSNumber(value: true)), animation: .default
+//    )private var items: FetchedResults<Entity>
     
     
     @State var kikan = Team.week
@@ -68,13 +68,13 @@ struct Syukei_View: View {
                 
                 //買い物リスト本体
                 List{
-                    ForEach(returnArray(dic: omakeDic(dateArray: makeTeamArray(day: theDate, term: kikan))), id: \.self) { item in
-                        HStack{
-                            Text("\(item)")
-                            Spacer()
-                            Text("\(omakeDic(dateArray: makeTeamArray(day: theDate, term: kikan))[item]!)回")
-                        }
-                    }
+//                    ForEach(returnArray(dic: omakeDic(dateArray: makeTeamArray(day: theDate, term: kikan))), id: \.self) { item in
+//                        HStack{
+//                            Text("\(item)")
+//                            Spacer()
+//                            Text("\(omakeDic(dateArray: makeTeamArray(day: theDate, term: kikan))[item]!)回")
+//                        }
+//                    }
                 }
             }
         }

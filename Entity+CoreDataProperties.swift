@@ -10,21 +10,21 @@ import Foundation
 import CoreData
 
 
-extension Entity {
-
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Entity> {
-        return NSFetchRequest<Entity>(entityName: "Entity")
-    }
-
-    @NSManaged public var timestamp: Date?
-    @NSManaged public var title: String?
-    @NSManaged public var label: Int16
-    @NSManaged public var favorite: Bool
-    @NSManaged public var checked: Bool
-    @NSManaged public var finished: Bool
-
-}
-
-extension Entity : Identifiable {
-
-}
+//extension Entity {
+//
+//    @nonobjc public class func fetchRequest() -> NSFetchRequest<Entity> {
+//        return NSFetchRequest<Entity>(entityName: "Entity")
+//    }
+//
+//    @NSManaged public var timestamp: Date?
+//    @NSManaged public var title: String?
+//    @NSManaged public var label: Int16
+//    @NSManaged public var favorite: Bool
+//    @NSManaged public var checked: Bool
+//    @NSManaged public var finished: Bool
+//
+//}
+//
+//extension Entity : Identifiable {
+//
+//}

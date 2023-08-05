@@ -10,13 +10,13 @@ import SwiftUI
 
 
 struct List_mainView: View {
-    @Environment(\.managedObjectContext) private var viewContext
-    @FetchRequest(
-        entity: Entity.entity(),
-        sortDescriptors: [],
-        //ラベルが０、未完了+チェックがついたのものだけ完了用に抽出
-        predicate: NSPredicate(format: "finished == %@ And checked == %@", NSNumber(value: false), NSNumber(value: true))
-    )private var checkedItems: FetchedResults<Entity>
+//    @Environment(\.managedObjectContext) private var viewContext
+//    @FetchRequest(
+//        entity: Entity.entity(),
+//        sortDescriptors: [],
+//        //ラベルが０、未完了+チェックがついたのものだけ完了用に抽出
+//        predicate: NSPredicate(format: "finished == %@ And checked == %@", NSNumber(value: false), NSNumber(value: true))
+//    )private var checkedItems: FetchedResults<Entity>
     
     //項目追加シート用のBool
     @State var isSheet = false
@@ -70,16 +70,20 @@ struct List_mainView: View {
                     }
                 
                 .onAppear(){
+                    print("Number of items: \(itemVM.itemList.count)")
                     labelArray = [label0, label1, label2]
+                    print(itemVM.filterdList0.count)
+                    print(itemVM.filterdList1.count)
+                    print(itemVM.filterdList2.count)
                 }
                 
                 //買い物リストの中身のビュー
                 TabView(selection: $selection) {
-                    ShoppingList1(isAlart: $isAlart)
+                    ShoppingList1(isAlart: $isAlart, filterdList: $itemVM.filterdList0)
                         .tag(0)
-                    ShoppingList2()
+                    ShoppingList1(isAlart: $isAlart, filterdList: $itemVM.filterdList1)
                         .tag(1)
-                    ShoppingList3()
+                    ShoppingList1(isAlart: $isAlart, filterdList: $itemVM.filterdList2)
                         .tag(2)
                 }.tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                     .environmentObject(itemVM)
@@ -91,10 +95,10 @@ struct List_mainView: View {
                     message: Text("チェックした項目を削除して\n買い物を完了にしますか？"),
                           //OKならチェックした項目をリストから削除（未搭載）
                           primaryButton: .default(Text("OK"), action: {
-                        for item in checkedItems{
-                            item.finished = true
-                            try? viewContext.save()
-                        }
+//                        for item in checkedItems{
+//                            item.finished = true
+//                            try? viewContext.save()
+//                        }
                     }),
                           secondaryButton: .cancel(Text("Cansel"), action:{}))
                 }
@@ -112,19 +116,22 @@ struct List_mainView: View {
                 }).padding(.bottom, 30)
                 //買うものの新規追加用のシート
                 .sheet(isPresented: $isSheet, content: {AddNewItem().environmentObject(itemVM)})
-                
-
+            }
+            .onAppear{
+                print("Number of items: \(itemVM.itemList.count)")
             }
             if isAlart{
                 AlartView(isAlart: $isAlart, isOK: $isOK, message: "お気に入り登録できるのは２０個までです。")
             }
+
         }
     }
 }
 
 struct List_mainView_Previews: PreviewProvider {
     static var previews: some View {
-        List_mainView().environmentObject(ItemViewModel())
+        List_mainView()
+            .environmentObject(ItemViewModel())
     }
 }
 

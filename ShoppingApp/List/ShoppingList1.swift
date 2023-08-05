@@ -10,25 +10,26 @@ import SwiftUI
 
 struct ShoppingList1: View {
     //コアデータ用のコード
-        @Environment(\.managedObjectContext) private var viewContext
-        @FetchRequest(
-            entity: Entity.entity(),
-            sortDescriptors: [NSSortDescriptor(keyPath: \Entity.timestamp, ascending: true)],
-            //ラベルが０、未完了のものだけ抽出
-            predicate: NSPredicate(format: "label == %d And finished == %@", 0, NSNumber(value: false)), animation: .default
-        )private var items: FetchedResults<Entity>
-    
-    
-    //コアデータ用のコード
-    @FetchRequest(
-        entity: Entity.entity(),
-        sortDescriptors: [NSSortDescriptor(keyPath: \Entity.timestamp, ascending: true)],
-        //ラベルが０、未完了のものだけ抽出
-        predicate: NSPredicate(format: "favorite == %@", NSNumber(value: true), NSNumber(value: true)), animation: .default
-    )private var favoriteItems: FetchedResults<Entity>
+//        @Environment(\.managedObjectContext) private var viewContext
+//        @FetchRequest(
+//            entity: Entity.entity(),
+//            sortDescriptors: [NSSortDescriptor(keyPath: \Entity.timestamp, ascending: true)],
+//            //ラベルが０、未完了のものだけ抽出
+//            predicate: NSPredicate(format: "label == %d And finished == %@", 0, NSNumber(value: false)), animation: .default
+//        )private var items: FetchedResults<Entity>
+//    
+//    
+//    //コアデータ用のコード
+//    @FetchRequest(
+//        entity: Entity.entity(),
+//        sortDescriptors: [NSSortDescriptor(keyPath: \Entity.timestamp, ascending: true)],
+//        //ラベルが０、未完了のものだけ抽出
+//        predicate: NSPredicate(format: "favorite == %@", NSNumber(value: true), NSNumber(value: true)), animation: .default
+//    )private var favoriteItems: FetchedResults<Entity>
     
     @Binding var isAlart: Bool
     @EnvironmentObject var itemVM: ItemViewModel
+    @Binding var filterdList: [ItemDataType]
 
     var body: some View {
         
@@ -36,7 +37,7 @@ struct ShoppingList1: View {
             VStack{
                 //買い物リスト本体
                 List{
-                    ForEach(itemVM.itemList){ item in
+                    ForEach(filterdList){ item in
                         HStack{
                             //チェックボックス表示
                             Image(systemName: item.checked ? "checkmark.square.fill": "square")
@@ -74,10 +75,13 @@ struct ShoppingList1: View {
                             }
                         }
                     }
+                
                 //背景色変える
                 .scrollContentBackground(.hidden)
                 }
-            .onAppear{}
+//            .onAppear{
+//                filterdList = itemVM.itemList.filter { $0.label == label }
+//            }
         }
     }
 }
@@ -86,8 +90,9 @@ struct ShoppingList1: View {
 
 struct ShoppingList1_Previews: PreviewProvider {
     @State static var aaa  = false
+    @State static var a = [ItemDataType]()
     static var previews: some View {
-        ShoppingList1(isAlart: $aaa)
+        ShoppingList1(isAlart: $aaa, filterdList: $a)
             .environmentObject(ItemViewModel())
     }
 }

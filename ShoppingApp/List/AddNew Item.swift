@@ -16,16 +16,7 @@ struct AddNewItem: View {
     @AppStorage("label1") var label1 = "ラベル２"
     @AppStorage("label2") var label2 = "ラベル３"
     
-    //コアデータ用のコード
-    @Environment(\.managedObjectContext) private var viewContext
-    @FetchRequest(
-        entity: Entity.entity(),
-        sortDescriptors: [NSSortDescriptor(keyPath: \Entity.timestamp, ascending: true)],
-        //ラベルが０、未完了のものだけ抽出
-        predicate: NSPredicate(format: "favorite == %@", NSNumber(value: true)), animation: .default
-    )private var favoriteItems: FetchedResults<Entity>
-    
-    //@State var favoriteArray : [String] = retunFavoriteArray(items: favoriteItems)
+
     @EnvironmentObject var itemVM: ItemViewModel
     
     //名前入力用の変数
@@ -45,7 +36,7 @@ struct AddNewItem: View {
     
     var body: some View {
         let testArray: [String] = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
-        var favoriteArray : [String] = retunFavoriteArray(items: favoriteItems)
+        var favoriteArray : [String] = []
         let row = [GridItem(.flexible(minimum: 100.0), spacing: 10),
                    GridItem(.flexible(minimum: 100.0), spacing: 10),
                    GridItem(.flexible(minimum: 100.0), spacing: 10),
@@ -150,36 +141,36 @@ struct AddNewItem: View {
                 }).padding()
                 Spacer()
             }
-        .onAppear{
-            favoriteArray = retunFavoriteArray(items: favoriteItems)
-        }
+//        .onAppear{
+//            favoriteArray = retunFavoriteArray(items: favoriteItems)
+//        }
         }
 
 //保存用の関数
 func save2(title: String, label: Int16){
-    let persistenceController = PersistenceController.shared
-    let context = persistenceController.container.viewContext
-    let newItem = Entity(context: context)
-    newItem.label = label
-    newItem.title = title
-    newItem.timestamp = Date()
-    newItem.favorite = isFavorite
-    newItem.checked = false
-    newItem.finished = false
-    /// コミット
-    try? context.save()
+//    let persistenceController = PersistenceController.shared
+//    let context = persistenceController.container.viewContext
+//    let newItem = Entity(context: context)
+//    newItem.label = label
+//    newItem.title = title
+//    newItem.timestamp = Date()
+//    newItem.favorite = isFavorite
+//    newItem.checked = false
+//    newItem.finished = false
+//    /// コミット
+//    try? context.save()
 }
 
-func retunFavoriteArray(items: FetchedResults<Entity>) -> [String]{
-    var favorite:[String] = []
-    
-    for item in items {
-        if !favorite.contains(item.title!){
-            favorite.append(item.title!)
-        }
-    }
-    return favorite
-}
+//func retunFavoriteArray(items: FetchedResults<Entity>) -> [String]{
+//    var favorite:[String] = []
+//    
+//    for item in items {
+//        if !favorite.contains(item.title!){
+//            favorite.append(item.title!)
+//        }
+//    }
+//    return favorite
+//}
 
 
 }

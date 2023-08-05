@@ -29,7 +29,9 @@ struct ItemDataType: Identifiable {
 
 class ItemViewModel: ObservableObject {
     @Published var itemList = [ItemDataType]()
-
+    @Published var filterdList0 = [ItemDataType]()
+    @Published var filterdList1 = [ItemDataType]()
+    @Published var filterdList2 = [ItemDataType]()
     init() {
         let db = Firestore.firestore()
 
@@ -52,15 +54,24 @@ class ItemViewModel: ObservableObject {
 //                        let id = item.document.documentID
 
                         self.itemList.append(ItemDataType(id: id,title: title, label: label, favorite: favorite, checked: checked, finished: finished, timestamp: timestamp))
+                        print("O")
                     }
                 }
+                print(self.itemList)
+                print(self.itemList.count)
                 // 日付順に並べ替えする
 //                self.items.sort { before, after in
 //                    return before.createAt < after.createAt ? true : false
 //                }
+                
+                self.filterdList0 = self.itemList.filter { $0.label == 0 }
+                self.filterdList1 = self.itemList.filter { $0.label == 1 }
+                self.filterdList2 = self.itemList.filter { $0.label == 2 }
             
             }
         }
+        print("★®")
+        print(self.itemList.count)
     }
 
     func addItem(title: String, label: Int16){
