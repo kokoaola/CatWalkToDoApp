@@ -143,57 +143,57 @@ func returnArray(dic: Dictionary<String, Int>) -> [String]{
 }
 
 
-func omakeDic(dateArray: [Date]) -> Dictionary<String, Int>{
-    //データフォーマットの初期設定
-    let df = DateFormatter()
-    df.locale = Locale(identifier: "ja_Jp")
-    let cal = Calendar(identifier: .gregorian)
-    
-    //取り出したいデータ期間の初日と最終日の日付を作る
-    let formatedDay1 = cal.date(bySettingHour: 0, minute: 0, second: 0, of: dateArray[0])!
-    let formatedDay2 = cal.date(bySettingHour: 23, minute: 59, second: 59, of: dateArray[1])!
-    
-    //期間内のすべてのデータを取り出す
-    let persistenceController = PersistenceController.shared
-    let context = persistenceController.container.viewContext
-    let request = NSFetchRequest<Entity>(entityName: "Entity")
-    let predicate = NSPredicate(format: "(%@ <= timestamp) AND (timestamp <= %@)", dateToNSDate(date: formatedDay1), dateToNSDate(date: formatedDay2))
-    request.predicate = predicate
-    let allData = try? context.fetch(request)
-    
-    //アイテム名のみを格納した配列を生成
-    var allTitleArray : [String] = []
-    for item in allData!{
-        if !allTitleArray.contains(String(item.title!)){
-            allTitleArray.append(String(item.title!))
-        }
-    }
+//func omakeDic(dateArray: [Date]) -> Dictionary<String, Int>{
+//    //データフォーマットの初期設定
+//    let df = DateFormatter()
+//    df.locale = Locale(identifier: "ja_Jp")
+//    let cal = Calendar(identifier: .gregorian)
+//    
+//    //取り出したいデータ期間の初日と最終日の日付を作る
+//    let formatedDay1 = cal.date(bySettingHour: 0, minute: 0, second: 0, of: dateArray[0])!
+//    let formatedDay2 = cal.date(bySettingHour: 23, minute: 59, second: 59, of: dateArray[1])!
+//    
+//    //期間内のすべてのデータを取り出す
+//    let persistenceController = PersistenceController.shared
+//    let context = persistenceController.container.viewContext
+//    let request = NSFetchRequest<Entity>(entityName: "Entity")
+//    let predicate = NSPredicate(format: "(%@ <= timestamp) AND (timestamp <= %@)", dateToNSDate(date: formatedDay1), dateToNSDate(date: formatedDay2))
+//    request.predicate = predicate
+//    let allData = try? context.fetch(request)
+//    
+//    //アイテム名のみを格納した配列を生成
+//    var allTitleArray : [String] = []
+//    for item in allData!{
+//        if !allTitleArray.contains(String(item.title!)){
+//            allTitleArray.append(String(item.title!))
+//        }
+//    }
+//
+//    //アイテム名から辞書を生成（キー：アイテム名、バリュー：購入回数）
+//    var dic: Dictionary<String, Int> = [:]
+//    var counter = 0
+//    for array in allTitleArray {
+//        for task in allData!{
+//            if task.title == array{
+//                counter += 1
+//            }
+//        }
+//        dic[array] = counter
+//        counter = 0
+//    }
+//    return dic
+//}
 
-    //アイテム名から辞書を生成（キー：アイテム名、バリュー：購入回数）
-    var dic: Dictionary<String, Int> = [:]
-    var counter = 0
-    for array in allTitleArray {
-        for task in allData!{
-            if task.title == array{
-                counter += 1
-            }
-        }
-        dic[array] = counter
-        counter = 0
-    }
-    return dic
-}
-
-func makeItemArray(array:FetchedResults<Entity>) -> [String]{
-    //アイテム名のみを格納した配列を生成
-    var allTitleArray : [String] = []
-    for item in array{
-        if !allTitleArray.contains(String(item.title!)){
-            allTitleArray.append(String(item.title!))
-        }
-    }
-    return allTitleArray
-}
+//func makeItemArray(array:FetchedResults<Entity>) -> [String]{
+//    //アイテム名のみを格納した配列を生成
+//    var allTitleArray : [String] = []
+//    for item in array{
+//        if !allTitleArray.contains(String(item.title!)){
+//            allTitleArray.append(String(item.title!))
+//        }
+//    }
+//    return allTitleArray
+//}
 
 
 

@@ -38,10 +38,11 @@ perspectivev3-file
 
 
 #XcodeのプロジェクトのBuild Scheme、構成などが入っているデータ。
-#*.xcodeproj/*
+*.xcodeproj/*
 *.xcodeproj/project.pbxproj
 *.xcodeproj/xcshareddata/
 !*.xcworkspace/contents.xcworkspacedata
+xcschememanagement.plist
 
 
 #CocoaPodsでインストールしたライブラリのデータ。
