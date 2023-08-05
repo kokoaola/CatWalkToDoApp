@@ -50,14 +50,14 @@ struct ShoppingList1: View {
                                 Image(systemName: "star.fill")
                                     .foregroundColor(item.favorite ? .yellow : Color(UIColor.systemGray4))
                                     .opacity(0.8)
-//                                    .onTapGesture {
+                                    .onTapGesture {
+                                        itemVM.toggleFavorite(item: item)
 //                                        if favoriteItems.count < 20{
-//                                            item.favorite.toggle()
-//                                            try? viewContext.save()
+//                                            itemVM.toggleFavorite(item: item)
 //                                        }else{
 //                                            isAlart.toggle()
 //                                        }
-//                                        }
+                                        }
                                     }
                                 }
                         
