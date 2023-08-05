@@ -29,7 +29,7 @@ class ItemViewModel: ObservableObject {
     private let favoriteListKey = "favoriteList"
     
     init() {
-        self.favoriteList = defaults.stringArray(forKey:favoriteListKey) ?? []
+        self.favoriteList = defaults.stringArray(forKey:favoriteListKey) ?? ["test"]
         
         
         let db = Firestore.firestore()
