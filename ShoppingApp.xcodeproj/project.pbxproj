@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3B124DFD2A7F9C51003CC5FA /* AppSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B124DFC2A7F9C51003CC5FA /* AppSetting.swift */; };
 		3B3C64FC2A7EBBC600A43033 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 3B3C64FB2A7EBBC600A43033 /* FirebaseAnalytics */; };
 		3B3C64FE2A7EBBC600A43033 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 3B3C64FD2A7EBBC600A43033 /* FirebaseFirestore */; };
 		3B68669B28ED1165005C3C4D /* FavoriteList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7DA58728EC7B9C00FC82D1 /* FavoriteList.swift */; };
@@ -30,6 +31,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3B124DFC2A7F9C51003CC5FA /* AppSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSetting.swift; sourceTree = "<group>"; };
 		3B7DA58728EC7B9C00FC82D1 /* FavoriteList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteList.swift; sourceTree = "<group>"; };
 		3BB0191A28E400830094AAD2 /* ShoppingList1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingList1.swift; sourceTree = "<group>"; };
 		3BB0191D28E428720094AAD2 /* Setting_Top.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setting_Top.swift; sourceTree = "<group>"; };
@@ -141,6 +143,7 @@
 			children = (
 				3BCF540528E33BE900E853D7 /* Model.swift */,
 				3BDD3D8D28E923A300CAA478 /* func.swift */,
+				3B124DFC2A7F9C51003CC5FA /* AppSetting.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -249,6 +252,7 @@
 				3BCF540A28E33BF700E853D7 /* Buttons.swift in Sources */,
 				3B68669B28ED1165005C3C4D /* FavoriteList.swift in Sources */,
 				3BCF541128E3D85D00E853D7 /* Keisan.swift in Sources */,
+				3B124DFD2A7F9C51003CC5FA /* AppSetting.swift in Sources */,
 				3BCF53FE28E33AE400E853D7 /* ContentView.swift in Sources */,
 				3BDD3D8C28E91D8100CAA478 /* AddNewLabel_View.swift in Sources */,
 				3BED4A3E2A7E4B1900E1CF32 /* Tag.swift in Sources */,
