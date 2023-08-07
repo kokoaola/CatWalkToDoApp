@@ -206,5 +206,35 @@ class ItemViewModel: ObservableObject {
         self.isBusy = false
         
     }
+    
+    
+    ///タイトルを変更して保存する
+    func changeTitle(item: ItemDataType, newTitle: String){
+        print(item.title, item.checked)
+        let documentId = item.id
+        
+//        var updatedItem = item
+//        updatedItem.title = newTitle
+        
+        
+        let group = DispatchGroup() // DispatchGroupを作成
+        
+        group.enter() // タスクが始まったことを通知
+        db.collection("items").document(documentId).updateData([
+            "title": newTitle
+        ]) { [weak self] error in
+            if let error = error {
+                print(error.localizedDescription)
+            }else{
+                print(item.title, item.checked)
+            }
+        }
+        group.leave()
+        
+        // 全てのタスクが終わった後に呼ばれる
+        group.notify(queue: .main) {
+            self.updateAllTasks()
+        }
+    }
 }
 

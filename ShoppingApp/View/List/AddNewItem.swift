@@ -124,8 +124,17 @@ struct AddNewItem: View {
                                 isInputActive = false
                             }
                         }
+                        
+                        ToolbarItemGroup(placement: .navigationBarLeading) {
+                            Spacer()
+                            Button("キャンセル") {
+                                dismiss()
+                            }
+                        }
                     }
-                    .foregroundColor(Color(UIColor.label))
+
+                
+                
             }
         }
     }

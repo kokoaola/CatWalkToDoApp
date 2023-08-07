@@ -14,10 +14,17 @@ struct ShoppingList1: View {
     @EnvironmentObject var itemVM: ItemViewModel
     @Binding var filterdList: [ItemDataType]
     
+    //項目追加シート用のBool
+    @State var showAddSheet = false
+    
+    //項目追加シート用のBool
+    @State var showEditSheet = false
+    
+    @State private var selectedItem: ItemDataType? = nil
+    
+    
     var body: some View {
         
-        ZStack{
-            VStack{
                 //買い物リスト本体
                 List{
                     ForEach(filterdList){ item in
@@ -30,22 +37,15 @@ struct ShoppingList1: View {
                                 .strikethrough(item.checked ? true: false)
                             Spacer()
                             //お気に入り用スター表示
-                            //                            Group{
-                            //                                Image(systemName: "star.fill")
-                            //                                    .foregroundColor(itemVM.favoriteList.contains(item.title) ? .yellow : Color(UIColor.systemGray4))
-                            //                                    .opacity(0.8)
-                            //                                    .onTapGesture {
-                            //                                        if itemVM.favoriteList.contains(item.title){
-                            //                                            itemVM.changeFavoriteList(itemName: item.title, delete: true)
-                            //                                        }else{
-                            //                                            if itemVM.favoriteList.count > 10{
-                            //                                                isAlart.toggle()
-                            //                                                return
-                            //                                            }
-                            //                                            itemVM.changeFavoriteList(itemName: item.title, delete: false)
-                            //                                        }
-                            //                                    }
-                            //                            }
+
+                                Image(systemName: "info.circle")
+                                    .foregroundColor(.gray)
+                                    .opacity(0.8)
+                                    .onTapGesture {
+                                        selectedItem = item
+                                        showEditSheet = true
+                                    }
+                            
                         }
                         
                         .listRowBackground(Color.clear)
@@ -55,15 +55,24 @@ struct ShoppingList1: View {
                         //タップでボックスにチェック機能
                         .onTapGesture {
                             itemVM.toggleCheck(item: item)
+                            print(item)
                         }
                         
                     }
                 }
+                .sheet(isPresented: $showAddSheet, content: {
+                    if let item = selectedItem {
+                        AddNewItem().environmentObject(itemVM)
+                    }
+                })
+                .sheet(isPresented: $showEditSheet, content: {
+                    if let item = selectedItem {
+                        EditItemView(item: item).environmentObject(itemVM)
+                    }
+                })
                 .disabled(itemVM.isBusy)
                 //背景色変える
                 .scrollContentBackground(.hidden)
-            }
-        }
     }
 }
 
