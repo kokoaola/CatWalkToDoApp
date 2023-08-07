@@ -7,70 +7,74 @@
 
 import SwiftUI
 
+
+///アイテム編集用のシート
 struct EditItemView: View {
-    //ユーザーデフォルトから３つのラベルデータを取得
+    ///ユーザーデフォルトから３つのラベルデータを取得
     @AppStorage("label0") var label0 = "ラベル１"
     @AppStorage("label1") var label1 = "ラベル２"
     @AppStorage("label2") var label2 = "ラベル３"
     
-    
-    @EnvironmentObject var itemVM: ItemViewModel
-    
     ///キーボードフォーカス用変数（Doneボタン表示のため）
     @FocusState var isInputActive: Bool
     
-    //名前入力用の変数
-    @State var newName = ""
+    ///名前入力用の変数
+    @State private var newName = ""
     
-    //ラベル入力用の変数
-    @State var num = 0
+    ///ラベル入力用の変数
+    @State private var num = 0
     
-    //お気に入り追加用の変数
-    @State var isFavorite = false
+    ///お気に入り追加用の変数
+    @State private var isFavorite = false
     
-    //ページ破棄用のdismiss
+    ///ページ破棄用のdismiss
     @Environment(\.dismiss) private var dismiss
     
+    ///ItemViewModelに引数として渡すための変数
     @State var item: ItemDataType
     
-    @State var showDeleteAlert = false
+    ///削除ボタンが押された時の確認アラート表示フラグ
+    @State private var showDeleteAlert = false
+    
+    ///itemViewModelのための変数
+    @EnvironmentObject var itemVM: ItemViewModel
     
     
     
     var body: some View {
-        
+        //ツールバー使用するためNavigationStack
         NavigationStack{
-            VStack(spacing: 10.0){
+            VStack(spacing: 40.0){
                 
-                
-                Group{
-                    ///ラベル選択用のピッカー
-                    HStack{
-                        Text("追加先")
-                        Picker(selection: $num, label: Text("aaa")){
-                            Text(label0)
-                                .tag(0)
-                            Text(label1)
-                                .tag(1)
-                            Text(label2)
-                                .tag(2)
-                        }
-                        .pickerStyle(.segmented)
+                //ラベル選択用のピッカー
+                HStack{
+                    Text("追加先")
+                    Picker(selection: $num, label: Text("aaa")){
+                        Text(label0)
+                            .tag(0)
+                        Text(label1)
+                            .tag(1)
+                        Text(label2)
+                            .tag(2)
                     }
-                    
-                    
-                    ///お気に入りに追加のスイッチ
-                    Toggle(isOn: $isFavorite){
-                        Text("お気に入り")
-                    }
-                    ///入力用テキストフィールド
-                    TextField("追加する項目", text: $newName)
-                        .focused($isInputActive)
-                        .overlay(RoundedRectangle(cornerRadius: 1).stroke(Color(UIColor.label), lineWidth: 0.1))
-                    
-                }.padding()
+                    .pickerStyle(.segmented)
+                }
+                .padding(.top)
                 
-                ///追加ボタン
+                
+                //お気に入りに追加のトグルスイッチ
+                Toggle(isOn: $isFavorite){
+                    Text("お気に入りに追加")
+                }
+                
+                
+                //タイトル入力用テキストフィールド
+                TextField("追加する項目", text: $newName)
+                    .focused($isInputActive)
+                    .overlay(RoundedRectangle(cornerRadius: 1).stroke(Color(UIColor.label), lineWidth: 0.1))
+                
+                
+                //保存ボタン
                 Button(action: {
                     //入力された値が空白以外なら配列に追加
                     if !newName.isEmpty{
@@ -89,7 +93,7 @@ struct EditItemView: View {
                 },label: {
                     TuikaButton() //ボタンデザインは別ファイル
                 })
-                .padding()
+                
                 .onAppear{
                     print(item)
                     num = Int(item.label)
@@ -109,7 +113,6 @@ struct EditItemView: View {
                               message: Text("表示中のアイテムを削除しますか？"),
                               //OKならチェックした項目をリストから削除（未搭載）
                               primaryButton: .destructive(Text("削除する"), action: {
-//                            itemVM.completeTask()
                             itemVM.deleteSelectedTask(item: item)
                             dismiss()
                         }),
@@ -144,13 +147,19 @@ struct EditItemView: View {
                                 Image(systemName: "trash")
                                     .foregroundColor(.red)
                             }
-
+                            
                         }
                         
                     }
                 
-                    
+                
             }
+            .padding()
+            
+            //ナビゲーションバーの設定
+            .navigationTitle("編集")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(.visible, for: .navigationBar)
         }
     }
     
