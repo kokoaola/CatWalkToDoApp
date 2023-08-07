@@ -114,7 +114,7 @@ struct List_mainView: View {
                       message: Text("チェックした項目を削除して\n買い物を完了にしますか？"),
                       //OKならチェックした項目をリストから削除（未搭載）
                       primaryButton: .default(Text("OK"), action: {
-                    itemVM.deleteTask()
+                    itemVM.completeTask()
                 }),
                       secondaryButton: .cancel(Text("Cansel"), action:{}))
             }

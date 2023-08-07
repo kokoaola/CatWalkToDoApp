@@ -33,6 +33,7 @@ struct EditItemView: View {
     
     @State var item: ItemDataType
     
+    @State var showDeleteAlert = false
     
     
     
@@ -60,7 +61,7 @@ struct EditItemView: View {
                     
                     ///お気に入りに追加のスイッチ
                     Toggle(isOn: $isFavorite){
-                        Text("お気に入りに追加")
+                        Text("お気に入り")
                     }
                     ///入力用テキストフィールド
                     TextField("追加する項目", text: $newName)
@@ -102,6 +103,23 @@ struct EditItemView: View {
                 
                 Spacer()
                 
+                
+                //削除ボタンが押された後の確認アラート
+                    .alert(isPresented: $showDeleteAlert){
+                        Alert(title: Text("アイテムの削除"),
+                              message: Text("表示中のアイテムを削除しますか？"),
+                              //OKならチェックした項目をリストから削除（未搭載）
+                              primaryButton: .destructive(Text("削除する"), action: {
+//                            itemVM.completeTask()
+                            itemVM.deleteSelectedTask(item: item)
+                            dismiss()
+                        }),
+                              secondaryButton: .cancel(Text("やめる"), action:{}))
+                    }
+                
+                
+                //ツールバーの設置
+                //キーボード閉じるボタン
                     .toolbar {
                         ToolbarItemGroup(placement: .keyboard) {
                             Spacer()
@@ -110,18 +128,24 @@ struct EditItemView: View {
                             }
                         }
                         
+                        //シート閉じるボタン
                         ToolbarItemGroup(placement: .navigationBarLeading) {
                             Spacer()
-                            Button("キャンセル") {
+                            Button("閉じる") {
                                 dismiss()
                             }
                         }
                         
+                        //削除ボタン
                         ToolbarItemGroup(placement: .navigationBarTrailing) {
                             Spacer()
-                            Button("削除する") {
-                                dismiss()
+                            Button(role: .destructive) {
+                                showDeleteAlert = true
+                            } label: {
+                                Image(systemName: "trash")
+                                    .foregroundColor(.red)
                             }
+
                         }
                         
                     }
