@@ -206,14 +206,15 @@ class ItemViewModel: ObservableObject {
     
     
     ///タイトルを変更して保存する
-    func changeTitle(item: ItemDataType, newTitle: String){
+    func changeTitle(item: ItemDataType, newTitle: String, newLabel: Int){
         print(item.title, item.checked)
         let documentId = item.id
         
         let group = DispatchGroup() // DispatchGroupを作成
         group.enter() // タスクが始まったことを通知
         db.collection("items").document(documentId).updateData([
-            "title": newTitle
+            "title": newTitle,
+            "label": Int16(newLabel)
         ]) { [weak self] error in
             if let error = error {
                 print(error.localizedDescription)

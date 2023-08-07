@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+///アプリ全体に適用するプロパティ、メソッド
 class AppSetting{
     
     static func colseKeyBoard(){

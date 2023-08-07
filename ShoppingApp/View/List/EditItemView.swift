@@ -74,7 +74,7 @@ struct EditItemView: View {
                 Button(action: {
                     //入力された値が空白以外なら配列に追加
                     if !newName.isEmpty{
-                        itemVM.changeTitle(item: item, newTitle: newName)
+                        itemVM.changeTitle(item: item, newTitle: newName, newLabel: num)
                         
                         if isFavorite{
                             itemVM.changeFavoriteList(itemName: newName, delete: false)
@@ -102,7 +102,6 @@ struct EditItemView: View {
                 }
                 
                 Spacer()
-                
                 
                 //削除ボタンが押された後の確認アラート
                     .alert(isPresented: $showDeleteAlert){
