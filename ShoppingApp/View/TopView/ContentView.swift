@@ -4,10 +4,6 @@
 //
 //  Created by koala panda on 2022/09/26.
 //
-///メモ　11/2
-///１  無駄なコード修正した,画面サイズからラベルの大きさを取得
-///２　UIを勉強したらいじろう
-
 
 import SwiftUI
 import CoreData

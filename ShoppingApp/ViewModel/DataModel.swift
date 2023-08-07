@@ -138,8 +138,9 @@ class ItemViewModel: ObservableObject {
     }
     
     
+    
     ///完了したタスクの削除
-    func deleteTask() {
+    func completeTask() {
         let completeArray = itemList.filter { $0.checked == true }
         
         let group = DispatchGroup() // DispatchGroupを作成
@@ -154,12 +155,12 @@ class ItemViewModel: ObservableObject {
         }
         group.leave() // タスクが終わったことを通知
         
-        
         // 全てのタスクが終わった後に呼ばれる
         group.notify(queue: .main) {
             self.updateAllTasks()
         }
     }
+    
     
     
     ///すべてのデータを再取得するメソッド
@@ -178,17 +179,14 @@ class ItemViewModel: ObservableObject {
                         let id = item.document.documentID
                         let title = item.document.get("title") as! String
                         let label = item.document.get("label") as! Int16
-
                         let checked = item.document.get("checked") as! Bool
                         let finished = item.document.get("finished") as! Bool
                         let timeData = item.document.get("timestamp", serverTimestampBehavior: .estimate) as! Timestamp
                         let timestamp = timeData.dateValue()
 
-                        
                         tempItemList.append(ItemDataType(id: id,title: title, label: label, checked: checked, finished: finished, timestamp: timestamp))
                     }
                 }
-
             }
             DispatchQueue.main.async {
                 self.objectWillChange.send()
@@ -200,11 +198,59 @@ class ItemViewModel: ObservableObject {
                 self.objectWillChange.send()
                 self.filterdList2 = self.itemList.filter { $0.label == 2 }
             }
-            
         }
         
         self.isBusy = false
         
+    }
+    
+    
+    ///タイトルを変更して保存する
+    func changeTitle(item: ItemDataType, newTitle: String, newLabel: Int){
+        print(item.title, item.checked)
+        let documentId = item.id
+        
+        let group = DispatchGroup() // DispatchGroupを作成
+        group.enter() // タスクが始まったことを通知
+        db.collection("items").document(documentId).updateData([
+            "title": newTitle,
+            "label": Int16(newLabel)
+        ]) { [weak self] error in
+            if let error = error {
+                print(error.localizedDescription)
+            }else{
+                print(item.title, item.checked)
+            }
+        }
+        group.leave()
+        
+        // 全てのタスクが終わった後に呼ばれる
+        group.notify(queue: .main) {
+            self.updateAllTasks()
+        }
+    }
+    
+    
+    
+    func deleteSelectedTask(item:ItemDataType){
+        let completeArray = [item]
+        
+        let group = DispatchGroup() // DispatchGroupを作成
+        group.enter() // タスクが始まったことを通知
+        
+        for item in completeArray {
+            db.collection("items").document(item.id).delete() { error in
+                if let error = error {
+                    print("Error removing document: \(error)")
+                }
+            }
+        }
+        group.leave() // タスクが終わったことを通知
+        
+        // 全てのタスクが終わった後に呼ばれる
+        group.notify(queue: .main) {
+            self.updateAllTasks()
+        }
     }
 }
 

@@ -31,7 +31,7 @@ struct TuikaButton: View {
             .stroke(Color(UIColor.label), lineWidth: 1)
             .foregroundColor(Color(UIColor.systemBackground))
             .frame(width: 200, height: 50)
-            .overlay(Text("追加する")
+            .overlay(Text("保存する")
                 .foregroundColor(Color(UIColor.label)))
             .font(.title)
             .font(.system(size: 50, weight: .semibold))
