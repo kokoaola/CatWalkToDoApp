@@ -11,8 +11,12 @@ import SwiftUI
 struct Keisan: View {
     @State var price = ""
     @State var amount = ""
+    ///キーボードフォーカス用変数（Doneボタン表示のため）
+    @FocusState var isInputActivePrice: Bool
+    @FocusState var isInputActiveVolume: Bool
     
     var body: some View {
+        NavigationStack{
         VStack{
             
             //価格入力用のテキストフィールド
@@ -21,6 +25,7 @@ struct Keisan: View {
                 TextField("商品の価格を入力", text: $price)
                     .keyboardType(.numberPad)
                     .textFieldStyle(.roundedBorder)
+                    .focused($isInputActivePrice)
                 Text("円")
             }.padding()
             
@@ -30,6 +35,7 @@ struct Keisan: View {
                 TextField("ml、個数などを入力", text: $amount)
                     .keyboardType(.numberPad)
                     .textFieldStyle(.roundedBorder)
+                    .focused($isInputActiveVolume)
             }
             .padding()
             
@@ -38,6 +44,27 @@ struct Keisan: View {
                 .font(.largeTitle)
             Text("\n\n入力した単位１あたりの値段です。\n単価は小さければ小さいほどお得です。")
                 .foregroundColor(Color(UIColor.systemGray))
+        }
+            
+            //タップでキーボードを閉じる
+        .onTapGesture {
+            AppSetting.colseKeyBoard()
+        }
+            
+        //キーボード閉じるボタンを配置
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button(isInputActivePrice && !isInputActiveVolume ? "次へ" : "閉じる") {
+                    if isInputActivePrice && !isInputActiveVolume{
+                        isInputActiveVolume = true
+                    }else{
+                        isInputActivePrice = false
+                        isInputActiveVolume = false
+                    }
+                }
+                }
+            }
         }
     }
     
