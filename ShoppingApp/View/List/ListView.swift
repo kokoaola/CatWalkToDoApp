@@ -55,7 +55,10 @@ struct ShoppingList1: View {
                     itemVM.toggleCheck(item: item)
                 }
             }
+            Spacer().frame(height: 40)
+                .listRowBackground(EmptyView())
         }
+
         
         //タスク編集用のシート
         .sheet(isPresented: $showEditSheet, content: {

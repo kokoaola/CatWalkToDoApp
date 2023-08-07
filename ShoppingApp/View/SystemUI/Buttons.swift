@@ -10,14 +10,17 @@ import SwiftUI
 //買い物完了ボタン
 struct Buttons: View {
     var body: some View {
-        Rectangle()
-            .stroke(Color(UIColor.label), lineWidth: 1)
+        Capsule()
             .frame(width: 170.0, height: 50)
-            .background()
+//            .cornerRadius(25)
+        
             .foregroundColor(Color(UIColor.systemBackground))
 
-            .overlay(Text("買い物を完了する")
-                .foregroundColor(Color(UIColor.label)))
+            .overlay(Text("タスクを完了する")
+                .foregroundColor(Color.primary))
+            .overlay(
+                Capsule()
+                    .stroke(Color.primary, lineWidth: 2))
             //.font(.title3)
             
     }

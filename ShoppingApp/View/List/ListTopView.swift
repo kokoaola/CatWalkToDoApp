@@ -78,6 +78,7 @@ struct List_mainView: View {
                         .tag(2)
                 }.tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                     .environmentObject(itemVM)
+                
             }
             
             VStack{
@@ -88,11 +89,15 @@ struct List_mainView: View {
                 }, label: {
                     Buttons()
                     //ボタン本体のデザインは別のファイル
-                }).padding(.bottom, 30)
+                })
+                .padding(.bottom, 10)
             }
             
             //タスク新規追加用のシート
-            .sheet(isPresented: $showAddNewItemSheet, content: {AddNewItem().environmentObject(itemVM)})
+            .sheet(isPresented: $showAddNewItemSheet, content: {
+                AddNewItem(newLabelNum: selection)
+                    .environmentObject(itemVM)
+            })
             
             //買い物完了ボタンが押された後の確認アラート
             .alert(isPresented: $showCompleteTaskAlert){
