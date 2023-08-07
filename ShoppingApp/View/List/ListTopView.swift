@@ -80,7 +80,7 @@ struct List_mainView: View {
                         .tag(2)
                 }.tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                     .environmentObject(itemVM)
-
+                
             }
             
             VStack{

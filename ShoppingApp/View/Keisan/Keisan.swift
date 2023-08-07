@@ -35,6 +35,7 @@ struct Keisan: View {
                 TextField("ml、個数などを入力", text: $amount)
                     .keyboardType(.numberPad)
                     .textFieldStyle(.roundedBorder)
+                    .focused($isInputActiveVolume)
             }
             .padding()
             
@@ -54,9 +55,13 @@ struct Keisan: View {
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-                Button("閉じる") {
-                    isInputActivePrice = false
-                    isInputActiveVolume = false
+                Button(isInputActivePrice && !isInputActiveVolume ? "次へ" : "閉じる") {
+                    if isInputActivePrice && !isInputActiveVolume{
+                        isInputActiveVolume = true
+                    }else{
+                        isInputActivePrice = false
+                        isInputActiveVolume = false
+                    }
                 }
                 }
             }
