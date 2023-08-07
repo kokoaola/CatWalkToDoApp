@@ -13,7 +13,7 @@
 		3B3C64FE2A7EBBC600A43033 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 3B3C64FD2A7EBBC600A43033 /* FirebaseFirestore */; };
 		3B68669B28ED1165005C3C4D /* FavoriteList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7DA58728EC7B9C00FC82D1 /* FavoriteList.swift */; };
 		3BB0191B28E400830094AAD2 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB0191A28E400830094AAD2 /* ListView.swift */; };
-		3BB0191E28E428720094AAD2 /* Setting_Top.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB0191D28E428720094AAD2 /* Setting_Top.swift */; };
+		3BB0191E28E428720094AAD2 /* SettingTop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB0191D28E428720094AAD2 /* SettingTop.swift */; };
 		3BCF53EA28E33A9E00E853D7 /* ShoppingAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BCF53E928E33A9E00E853D7 /* ShoppingAppApp.swift */; };
 		3BCF53EE28E33AA000E853D7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3BCF53ED28E33AA000E853D7 /* Assets.xcassets */; };
 		3BCF53F128E33AA000E853D7 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3BCF53F028E33AA000E853D7 /* Preview Assets.xcassets */; };
@@ -23,8 +23,7 @@
 		3BCF540828E33BF000E853D7 /* AddNewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BCF540728E33BF000E853D7 /* AddNewItem.swift */; };
 		3BCF540A28E33BF700E853D7 /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BCF540928E33BF700E853D7 /* Buttons.swift */; };
 		3BCF541128E3D85D00E853D7 /* Keisan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BCF541028E3D85D00E853D7 /* Keisan.swift */; };
-		3BDD3D8A28E91D2000CAA478 /* Syukei_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDD3D8928E91D2000CAA478 /* Syukei_View.swift */; };
-		3BDD3D8C28E91D8100CAA478 /* AddNewLabel_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDD3D8B28E91D8100CAA478 /* AddNewLabel_View.swift */; };
+		3BDD3D8C28E91D8100CAA478 /* EditLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDD3D8B28E91D8100CAA478 /* EditLabel.swift */; };
 		3BED4A302A7D337D00E1CF32 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3BED4A2F2A7D337D00E1CF32 /* GoogleService-Info.plist */; };
 		3BED4A3A2A7D3C4A00E1CF32 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BED4A392A7D3C4A00E1CF32 /* DataModel.swift */; };
 		3BED4A3E2A7E4B1900E1CF32 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BED4A3D2A7E4B1900E1CF32 /* Tag.swift */; };
@@ -35,7 +34,7 @@
 		3B124E002A80AFF9003CC5FA /* EditItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditItemView.swift; sourceTree = "<group>"; };
 		3B7DA58728EC7B9C00FC82D1 /* FavoriteList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteList.swift; sourceTree = "<group>"; };
 		3BB0191A28E400830094AAD2 /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
-		3BB0191D28E428720094AAD2 /* Setting_Top.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setting_Top.swift; sourceTree = "<group>"; };
+		3BB0191D28E428720094AAD2 /* SettingTop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingTop.swift; sourceTree = "<group>"; };
 		3BCF53E628E33A9E00E853D7 /* ShoppingApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShoppingApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BCF53E928E33A9E00E853D7 /* ShoppingAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingAppApp.swift; sourceTree = "<group>"; };
 		3BCF53ED28E33AA000E853D7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -46,8 +45,7 @@
 		3BCF540728E33BF000E853D7 /* AddNewItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNewItem.swift; sourceTree = "<group>"; };
 		3BCF540928E33BF700E853D7 /* Buttons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
 		3BCF541028E3D85D00E853D7 /* Keisan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keisan.swift; sourceTree = "<group>"; };
-		3BDD3D8928E91D2000CAA478 /* Syukei_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Syukei_View.swift; sourceTree = "<group>"; };
-		3BDD3D8B28E91D8100CAA478 /* AddNewLabel_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewLabel_View.swift; sourceTree = "<group>"; };
+		3BDD3D8B28E91D8100CAA478 /* EditLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLabel.swift; sourceTree = "<group>"; };
 		3BED4A2F2A7D337D00E1CF32 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3BED4A392A7D3C4A00E1CF32 /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
 		3BED4A3D2A7E4B1900E1CF32 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
@@ -86,9 +84,8 @@
 		3BB0191C28E428580094AAD2 /* Setting */ = {
 			isa = PBXGroup;
 			children = (
-				3BB0191D28E428720094AAD2 /* Setting_Top.swift */,
-				3BDD3D8B28E91D8100CAA478 /* AddNewLabel_View.swift */,
-				3BDD3D8928E91D2000CAA478 /* Syukei_View.swift */,
+				3BB0191D28E428720094AAD2 /* SettingTop.swift */,
+				3BDD3D8B28E91D8100CAA478 /* EditLabel.swift */,
 				3B7DA58728EC7B9C00FC82D1 /* FavoriteList.swift */,
 			);
 			path = Setting;
@@ -264,15 +261,14 @@
 				3BED4A3A2A7D3C4A00E1CF32 /* DataModel.swift in Sources */,
 				3BCF540428E33BD500E853D7 /* ListTopView.swift in Sources */,
 				3B124E012A80AFF9003CC5FA /* EditItemView.swift in Sources */,
-				3BDD3D8A28E91D2000CAA478 /* Syukei_View.swift in Sources */,
 				3BCF540A28E33BF700E853D7 /* Buttons.swift in Sources */,
 				3B68669B28ED1165005C3C4D /* FavoriteList.swift in Sources */,
 				3BCF541128E3D85D00E853D7 /* Keisan.swift in Sources */,
 				3B124DFD2A7F9C51003CC5FA /* AppSetting.swift in Sources */,
 				3BCF53FE28E33AE400E853D7 /* ContentView.swift in Sources */,
-				3BDD3D8C28E91D8100CAA478 /* AddNewLabel_View.swift in Sources */,
+				3BDD3D8C28E91D8100CAA478 /* EditLabel.swift in Sources */,
 				3BED4A3E2A7E4B1900E1CF32 /* Tag.swift in Sources */,
-				3BB0191E28E428720094AAD2 /* Setting_Top.swift in Sources */,
+				3BB0191E28E428720094AAD2 /* SettingTop.swift in Sources */,
 				3BCF53EA28E33A9E00E853D7 /* ShoppingAppApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
