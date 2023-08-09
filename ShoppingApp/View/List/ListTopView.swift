@@ -62,11 +62,11 @@ struct List_mainView: View {
                     
                     //買い物リストの中身は洗濯中のタブによって切り替える
                     TabView(selection: $selection) {
-                        ShoppingList1(filterdList: $itemVM.filterdList0)
+                        ShoppingList1(filterdList: $itemVM.filterdList0, labelNum: selection)
                             .tag(0)
-                        ShoppingList1(filterdList: $itemVM.filterdList1)
+                        ShoppingList1(filterdList: $itemVM.filterdList1, labelNum: selection)
                             .tag(1)
-                        ShoppingList1(filterdList: $itemVM.filterdList2)
+                        ShoppingList1(filterdList: $itemVM.filterdList2, labelNum: selection)
                             .tag(2)
                     }.tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                         .environmentObject(itemVM)
@@ -108,17 +108,10 @@ struct List_mainView: View {
                 }
             }
             
+            .navigationBarItems(trailing: EditButton())
+            
             //キーボード閉じるボタン
             .toolbar {
-                
-                //シート閉じるボタン
-                ToolbarItemGroup(placement: .navigationBarLeading) {
-                    Spacer()
-                    Button("Edit") {
-                        EditButton()
-                    }
-                }
-                
                 //左上のプラスの追加ボタン
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Spacer()

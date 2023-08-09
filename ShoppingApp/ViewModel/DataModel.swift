@@ -110,6 +110,7 @@ class ItemViewModel: ObservableObject {
                     self.filterdList0.sort {
                         $0.indexedLabel["index"] ?? 0 < $1.indexedLabel["index"] ?? 0 //比較の条件式
                     }
+                    print("filterdList0", self.filterdList0.count)
                     self.objectWillChange.send()
                     self.filterdList1 = self.itemList.filter { $0.indexedLabel["label"] == 1 }
                     self.filterdList1.sort {
@@ -321,19 +322,17 @@ class ItemViewModel: ObservableObject {
         print(item.title, item.checked)
         let documentId = item.id
         
-        var newIndex: Int
+        var newArray: [ItemDataType]
+        
         switch newLabel{
         case 0:
-            newIndex = self.filterdList0.count + 1
-            print(newIndex)
+            newArray = self.filterdList0
         case 1:
-            newIndex = self.filterdList1.count + 1
-            print(newIndex)
+            newArray = self.filterdList1
         case 2:
-            newIndex = self.filterdList2.count + 1
-            print(newIndex)
+            newArray = self.filterdList2
         default:
-            newIndex = self.filterdList0.count + 1
+            newArray = self.filterdList0
         }
         
         
@@ -353,7 +352,7 @@ class ItemViewModel: ObservableObject {
         
         // 全てのタスクが終わった後に呼ばれる
         group.notify(queue: .main) {
-            self.renumber(label: newLabel)
+            self.renumber(label: newLabel, newArray: newArray)
             self.updateAllTasks()
         }
     }
@@ -382,31 +381,18 @@ class ItemViewModel: ObservableObject {
     }
     
     
-    func renumber(label: Int){
-        var array: [ItemDataType]
-        switch label{
-        case 0:
-            array = self.filterdList0
-        case 1:
-            array = self.filterdList1
-        case 2:
-            array = self.filterdList2
-        default:
-            array = self.filterdList0
-        }
+    func renumber(label: Int, newArray: [ItemDataType]){
         
-        for (index, item) in array.enumerated(){
-            print(index, item)
-            let documentId = item.id
-            
-            db.collection("items").document(documentId).updateData([
-                "indexedLabel": ["label": label, "index": index],
-            ]) { [weak self] error in
-                if let error = error {
-                    print(error.localizedDescription)
-                }
-            }
+            for (index, item) in newArray.enumerated(){
+                print(item.title)
+                let documentId = item.id
+                
+                self.db.collection("items").document(documentId).updateData([
+                    "indexedLabel": ["label": label, "index": index],
+                ])
+                
         }
+        updateAllTasks()
     }
     
 

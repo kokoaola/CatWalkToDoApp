@@ -11,6 +11,7 @@ import SwiftUI
 struct ShoppingList1: View {
     ///引数で受け取る配列（リスト表示用）
     @Binding var filterdList: [ItemDataType]
+    var labelNum: Int = 0
     
     ///項目編集シート用表示フラグ
     @State private var showEditSheet = false
@@ -21,14 +22,14 @@ struct ShoppingList1: View {
     ///itemViewModelのための変数
     @EnvironmentObject var itemVM: ItemViewModel
     
-    @State var list: [ItemViewModel] = []
+    @State var list: [ItemDataType] = []
 
     
     var body: some View {
         
         //買い物リスト本体
         List{
-            ForEach(filterdList){ item in
+            ForEach(list){ item in
                 HStack{
                     //チェックボックス表示
                     Image(systemName: item.checked ? "checkmark.square.fill": "square")
@@ -58,7 +59,7 @@ struct ShoppingList1: View {
                     itemVM.toggleCheck(item: item)
                 }
             }
-            .onMove(perform: hoge)
+            .onMove(perform: moveItem)
             
             Spacer().frame(height: 40)
                 .listRowBackground(EmptyView())
@@ -72,6 +73,14 @@ struct ShoppingList1: View {
             }
         })
         
+        .onAppear{
+            print("Appear")
+            list = filterdList
+        }
+        .onChange(of: labelNum, perform: { newValue in
+            list = filterdList
+        })
+        
         //処理中はタップ不可
         .disabled(itemVM.isBusy)
         
@@ -79,9 +88,15 @@ struct ShoppingList1: View {
         .scrollContentBackground(.hidden)
     }
     
-    func hoge(_ from: IndexSet, _ to: Int){
-        filterdList.move(fromOffsets: from, toOffset: to)
+    func moveItem(from source: IndexSet, to destination: Int) {
+        
+        list.move(fromOffsets: source, toOffset: destination)
+        itemVM.renumber(label: labelNum, newArray: list)
+        
+
     }
+    
+
 }
 
 
