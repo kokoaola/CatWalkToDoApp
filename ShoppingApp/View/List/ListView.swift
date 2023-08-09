@@ -20,6 +20,8 @@ struct ShoppingList1: View {
     
     ///itemViewModelのための変数
     @EnvironmentObject var itemVM: ItemViewModel
+    
+    @State var list: [ItemViewModel] = []
 
     
     var body: some View {
@@ -34,6 +36,7 @@ struct ShoppingList1: View {
                     //タイトル表示
                     Text(item.title)
                         .strikethrough(item.checked ? true: false)
+                    Text("\(item.indexedLabel["label"] ?? 0) - \(item.indexedLabel["index"] ?? 0)")
                     Spacer()
                     
                     //infoマーク表示
@@ -55,6 +58,8 @@ struct ShoppingList1: View {
                     itemVM.toggleCheck(item: item)
                 }
             }
+            .onMove(perform: hoge)
+            
             Spacer().frame(height: 40)
                 .listRowBackground(EmptyView())
         }
@@ -72,6 +77,10 @@ struct ShoppingList1: View {
         
         //背景色変える
         .scrollContentBackground(.hidden)
+    }
+    
+    func hoge(_ from: IndexSet, _ to: Int){
+        filterdList.move(fromOffsets: from, toOffset: to)
     }
 }
 

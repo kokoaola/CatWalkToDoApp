@@ -30,8 +30,12 @@ class ItemViewModel: ObservableObject {
     
     let db = Firestore.firestore()
     
+    
+    
+    
     init() {
         self.favoriteList = defaults.stringArray(forKey:favoriteListKey) ?? ["test"]
+        //MARK: -
         db.collection("items").order(by: "timestamp").addSnapshotListener { (snap, error) in
 
             if let error = error {
@@ -44,20 +48,20 @@ class ItemViewModel: ObservableObject {
                         let id = item.document.documentID
                         let title = item.document.get("title") as! String
                         let label = item.document.get("label") as! Int16
-
+                        let indexedLabel = item.document.get("indexedLabel") as?  Dictionary<String, Int> ?? ["index":0 , "label": 0]
                         let checked = item.document.get("checked") as! Bool
                         let finished = item.document.get("finished") as! Bool
                         let timeData = item.document.get("timestamp", serverTimestampBehavior: .estimate) as! Timestamp
                         let timestamp = timeData.dateValue()
 
                         
-                        self.itemList.append(ItemDataType(id: id,title: title, label: label, checked: checked, finished: finished, timestamp: timestamp))
+                        self.itemList.append(ItemDataType(id: id,title: title, label: label, indexedLabel: indexedLabel, checked: checked, finished: finished, timestamp: timestamp))
                     }
                 }
                 
-                self.filterdList0 = self.itemList.filter { $0.label == 0 }
-                self.filterdList1 = self.itemList.filter { $0.label == 1 }
-                self.filterdList2 = self.itemList.filter { $0.label == 2 }
+                self.filterdList0 = self.itemList.filter { $0.indexedLabel["label"] == 0 }
+                self.filterdList1 = self.itemList.filter { $0.indexedLabel["label"] == 1 }
+                self.filterdList2 = self.itemList.filter { $0.indexedLabel["label"] == 2 }
 
                 
             }
@@ -67,9 +71,26 @@ class ItemViewModel: ObservableObject {
     
     ///アイテムをデータベースに追加する
     func addItem(title: String, label: Int16){
+        
+        
+        //MARK: -
+        var index: Int
+        switch label{
+        case 0:
+            index = self.filterdList0.count
+        case 1:
+            index = self.filterdList1.count
+        case 2:
+            index = self.filterdList2.count
+        default:
+            index = self.filterdList0.count
+        }
+        
+        
         let data = [
             "label": label,
             "title": title,
+            "indexedLabel": ["label": label, "index": index],
             "favorite": false,
             "checked": false,
             "finished": false,
@@ -166,7 +187,7 @@ class ItemViewModel: ObservableObject {
     ///すべてのデータを再取得するメソッド
     func updateAllTasks(){
         isBusy = true
-        var tempItemList = [ItemDataType]()
+        let tempItemList = [ItemDataType]()
         
         db.collection("items").order(by: "timestamp").addSnapshotListener { (snap, error) in
             if let error = error {
@@ -179,12 +200,13 @@ class ItemViewModel: ObservableObject {
                         let id = item.document.documentID
                         let title = item.document.get("title") as! String
                         let label = item.document.get("label") as! Int16
+                        let indexedLabel = item.document.get("indexedLabel")  as!  Dictionary<String, Int>
                         let checked = item.document.get("checked") as! Bool
                         let finished = item.document.get("finished") as! Bool
                         let timeData = item.document.get("timestamp", serverTimestampBehavior: .estimate) as! Timestamp
                         let timestamp = timeData.dateValue()
 
-                        tempItemList.append(ItemDataType(id: id,title: title, label: label, checked: checked, finished: finished, timestamp: timestamp))
+                        self.itemList.append(ItemDataType(id: id,title: title, label: label, indexedLabel: indexedLabel, checked: checked, finished: finished, timestamp: timestamp))
                     }
                 }
             }
@@ -192,11 +214,11 @@ class ItemViewModel: ObservableObject {
                 self.objectWillChange.send()
                 self.itemList = tempItemList
                 self.objectWillChange.send()
-                self.filterdList0 = self.itemList.filter { $0.label == 0 }
+                self.filterdList0 = self.itemList.filter { $0.indexedLabel["label"] == 0 }
                 self.objectWillChange.send()
-                self.filterdList1 = self.itemList.filter { $0.label == 1 }
+                self.filterdList1 = self.itemList.filter { $0.indexedLabel["label"] == 1 }
                 self.objectWillChange.send()
-                self.filterdList2 = self.itemList.filter { $0.label == 2 }
+                self.filterdList2 = self.itemList.filter { $0.indexedLabel["label"] == 2 }
             }
         }
         
@@ -218,8 +240,6 @@ class ItemViewModel: ObservableObject {
         ]) { [weak self] error in
             if let error = error {
                 print(error.localizedDescription)
-            }else{
-                print(item.title, item.checked)
             }
         }
         group.leave()
