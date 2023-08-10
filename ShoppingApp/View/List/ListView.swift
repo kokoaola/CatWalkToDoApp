@@ -37,11 +37,11 @@ struct ShoppingList1: View {
                     //タイトル表示
                     Text(item.title)
                         .strikethrough(item.checked ? true: false)
-                    Text("\(item.index)")
+                    Text("index: \(item.index)")
                     Spacer()
                     
                     //infoマーク表示
-                    Image(systemName: "info.circle")
+                    Image(systemName: "square.and.pencil")
                         .foregroundColor(.gray)
                         .opacity(0.8)
                     //infoマークタップで編集シート表示
@@ -60,6 +60,7 @@ struct ShoppingList1: View {
                 }
             }
             .onMove(perform: moveItem)
+
             
             Spacer().frame(height: 40)
                 .listRowBackground(EmptyView())
@@ -73,20 +74,6 @@ struct ShoppingList1: View {
             }
         })
         
-        .onAppear{
-            print("View label0Item", itemVM.label0Item)
-            print("View label1Item", itemVM.label1Item)
-            print("View label2Item", itemVM.label2Item)
-        }
-        
-//        .onAppear{
-//            print("Appear")
-//            list = filterdList
-//        }
-//        .onChange(of: labelNum, perform: { newValue in
-//            list = filterdList
-//        })
-        
         //処理中はタップ不可
         .disabled(itemVM.isBusy)
         
@@ -94,15 +81,23 @@ struct ShoppingList1: View {
         .scrollContentBackground(.hidden)
     }
     
-    func moveItem(from source: IndexSet, to destination: Int) {
+    func moveItem(offsets: IndexSet, index: Int) {
+        let label: String
         
-        list.move(fromOffsets: source, toOffset: destination)
-        itemVM.renumber(label: labelNum, newArray: list)
+        switch labelNum{
+        case 0:
+            label = "label0Item"
+        case 1:
+            label = "label1Item"
+        case 2:
+            label = "label2Item"
+        default:
+            label = "label0Item"
+        }
         
-
+        filterdList.move(fromOffsets: offsets, toOffset: index)
+        itemVM.updateIndexesForCollection(label, items: filterdList)
     }
-    
-
 }
 
 

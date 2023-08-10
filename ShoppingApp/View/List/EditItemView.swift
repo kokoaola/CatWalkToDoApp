@@ -71,16 +71,17 @@ struct EditItemView: View {
                 
                 
                 //タイトル入力用テキストフィールド
+                
+                //タイトル入力用テキストフィールド
                 TextField("追加する項目", text: $newName)
+                    .frame(height: 40)
                     .focused($isInputActive)
-                    .overlay(RoundedRectangle(cornerRadius: 1).stroke(Color(UIColor.label), lineWidth: 0.1))
+                    .overlay(RoundedRectangle(cornerRadius: 1).stroke(Color(.tertiarySystemGroupedBackground), lineWidth: 1))
                 
                 
                 //保存ボタン
                 Button(action: {
                     
-                    print(oldLabel)
-                    print(newNum)
                     //入力された値が空白以外なら配列に追加
                     if !newName.isEmpty{
                         itemVM.changeTitle(item: item, newTitle: newName, newLabel: newNum)
@@ -100,8 +101,6 @@ struct EditItemView: View {
                 })
                 
                 .onAppear{
-                    print(oldLabel)
-                    print(newNum)
                     newName = item.title
                     if itemVM.favoriteList.contains(item.title){
                         isFavorite = true
@@ -109,10 +108,7 @@ struct EditItemView: View {
                         isFavorite = false
                     }
                 }
-                
-                .onChange(of: oldLabel) { newValue in
-                    print(newValue)
-                }
+
                 
                 Spacer()
                 

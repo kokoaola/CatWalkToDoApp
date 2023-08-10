@@ -45,27 +45,31 @@ class ItemViewModel: ObservableObject {
         fetchDataForCollection("label0Item")
         fetchDataForCollection("label1Item")
         fetchDataForCollection("label2Item")
+        
+//        renumberW()
     }
     
     
-    func fetchData1() {
-        db.collection("label0Item").order(by: "index").addSnapshotListener { (snapshot, error) in
-            if let snap = snapshot {
-                for item in snap.documentChanges {
-                    if item.type == .added {
-                        let id = item.document.documentID
-                        let title = item.document.get("title") as! String
-                        let index = item.document.get("index") as! Int16
-                        let checked = item.document.get("checked") as! Bool
-                        let timeData = item.document.get("timestamp", serverTimestampBehavior: .estimate) as! Timestamp
-                        let timestamp = timeData.dateValue()
-                        
-                        self.label0Item.append(ItemDataType(id: id, title: title, index: index, checked: checked, timestamp: timestamp))
-                    }
-                }
-            }
-        }
-    }
+//    func fetchData1() {
+//        db.collection("label0Item").order(by: "index").addSnapshotListener { (snapshot, error) in
+//            if let snap = snapshot {
+//                for item in snap.documentChanges {
+//                    if item.type == .added {
+//                        let id = item.document.documentID
+//                        let title = item.document.get("title") as! String
+//                        let index = item.document.get("index") as! Int16
+//                        let checked = item.document.get("checked") as! Bool
+//                        let timeData = item.document.get("timestamp", serverTimestampBehavior: .estimate) as! Timestamp
+//                        let timestamp = timeData.dateValue()
+//
+//                        self.label0Item.append(ItemDataType(id: id, title: title, index: index, checked: checked, timestamp: timestamp))
+//                    }
+//                }
+//
+//
+//            }
+//        }
+//    }
     
     
     
@@ -228,6 +232,7 @@ class ItemViewModel: ObservableObject {
             }
         }
         fetchDataForCollection(collection)
+//        renumber()
     }
     
     
@@ -240,6 +245,7 @@ class ItemViewModel: ObservableObject {
             deleteSelectedTask(item: item)
             
             addItem(title: newTitle, label: newLabel)
+            
             return
         }
         
@@ -275,19 +281,19 @@ class ItemViewModel: ObservableObject {
             }
             fetchDataForCollection(collection)
         }
+//        renumber()
     }
     
     
-    
-    func renumber(label: Int, newArray: [ItemDataType]){
-        for (index, item) in newArray.enumerated(){
-            print(item.title)
+    ///index番号を振り直す
+    func updateIndexesForCollection(_ collectionName: String, items: [ItemDataType]) {
+        for (index, item) in items.enumerated() {
             let documentId = item.id
-            
-            self.db.collection("items").document(documentId).updateData([
-                "indexedLabel": ["label": label, "index": index],
+            self.db.collection(collectionName).document(documentId).updateData([
+                "index": index
             ])
         }
+        fetchDataForCollection(collectionName)
     }
 }
 
