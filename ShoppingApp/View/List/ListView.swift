@@ -11,7 +11,7 @@ import SwiftUI
 struct ShoppingList1: View {
     ///引数で受け取る配列（リスト表示用）
     @Binding var filterdList: [ItemDataType]
-    var labelNum: Int = 0
+    @Binding var labelNum: Int
     
     ///項目編集シート用表示フラグ
     @State private var showEditSheet = false
@@ -29,7 +29,7 @@ struct ShoppingList1: View {
         
         //買い物リスト本体
         List{
-            ForEach(list){ item in
+            ForEach(filterdList){ item in
                 HStack{
                     //チェックボックス表示
                     Image(systemName: item.checked ? "checkmark.square.fill": "square")
@@ -37,7 +37,7 @@ struct ShoppingList1: View {
                     //タイトル表示
                     Text(item.title)
                         .strikethrough(item.checked ? true: false)
-                    Text("\(item.indexedLabel["label"] ?? 0) - \(item.indexedLabel["index"] ?? 0)")
+                    Text("\(item.index)")
                     Spacer()
                     
                     //infoマーク表示
@@ -56,7 +56,7 @@ struct ShoppingList1: View {
                 //セルタップでボックスにチェック
                 .contentShape(Rectangle())
                 .onTapGesture {
-                    itemVM.toggleCheck(item: item)
+                    itemVM.toggleCheck(item: item, labelNum: labelNum)
                 }
             }
             .onMove(perform: moveItem)
@@ -69,17 +69,23 @@ struct ShoppingList1: View {
         //タスク編集用のシート
         .sheet(isPresented: $showEditSheet, content: {
             if let item = selectedItem {
-                EditItemView(item: item).environmentObject(itemVM)
+                EditItemView(oldLabel: labelNum, newNum: $labelNum, item: item).environmentObject(itemVM)
             }
         })
         
         .onAppear{
-            print("Appear")
-            list = filterdList
+            print("View label0Item", itemVM.label0Item)
+            print("View label1Item", itemVM.label1Item)
+            print("View label2Item", itemVM.label2Item)
         }
-        .onChange(of: labelNum, perform: { newValue in
-            list = filterdList
-        })
+        
+//        .onAppear{
+//            print("Appear")
+//            list = filterdList
+//        }
+//        .onChange(of: labelNum, perform: { newValue in
+//            list = filterdList
+//        })
         
         //処理中はタップ不可
         .disabled(itemVM.isBusy)
@@ -102,10 +108,10 @@ struct ShoppingList1: View {
 
 
 struct ShoppingList1_Previews: PreviewProvider {
-    @State static var aaa  = false
+    @State static var aaa  = 0
     @State static var a = [ItemDataType]()
     static var previews: some View {
-        ShoppingList1(filterdList: $a)
+        ShoppingList1(filterdList: $a, labelNum: $aaa)
             .environmentObject(ItemViewModel())
     }
 }

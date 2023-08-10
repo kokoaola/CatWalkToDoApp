@@ -98,7 +98,7 @@ struct AddNewItem: View {
                 Button(action: {
                     //入力された値が空白以外なら配列に追加
                     if !newName.isEmpty{
-                        itemVM.addItem(title: newName, label: Int16(newLabelNum))
+                        itemVM.addItem(title: newName, label: newLabelNum)
                         
                         if isFavorite{
                             itemVM.changeFavoriteList(itemName: newName, delete: false)

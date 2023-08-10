@@ -21,8 +21,10 @@ struct EditItemView: View {
     ///名前入力用の変数
     @State private var newName = ""
     
+    let oldLabel: Int
+    
     ///ラベル入力用の変数
-    @State private var num = 0
+    @Binding var newNum: Int
     
     ///お気に入り追加用の変数
     @State private var isFavorite = false
@@ -49,7 +51,7 @@ struct EditItemView: View {
                 //ラベル選択用のピッカー
                 HStack{
                     Text("追加先")
-                    Picker(selection: $num, label: Text("aaa")){
+                    Picker(selection: $newNum, label: Text("aaa")){
                         Text(label0)
                             .tag(0)
                         Text(label1)
@@ -76,9 +78,12 @@ struct EditItemView: View {
                 
                 //保存ボタン
                 Button(action: {
+                    
+                    print(oldLabel)
+                    print(newNum)
                     //入力された値が空白以外なら配列に追加
                     if !newName.isEmpty{
-                        itemVM.changeTitle(item: item, newTitle: newName, newLabel: num)
+                        itemVM.changeTitle(item: item, newTitle: newName, newLabel: newNum)
                         
                         if isFavorite{
                             itemVM.changeFavoriteList(itemName: newName, delete: false)
@@ -95,14 +100,18 @@ struct EditItemView: View {
                 })
                 
                 .onAppear{
-                    print(item)
-                    num = Int(item.label)
+                    print(oldLabel)
+                    print(newNum)
                     newName = item.title
                     if itemVM.favoriteList.contains(item.title){
                         isFavorite = true
                     }else{
                         isFavorite = false
                     }
+                }
+                
+                .onChange(of: oldLabel) { newValue in
+                    print(newValue)
                 }
                 
                 Spacer()
@@ -147,7 +156,6 @@ struct EditItemView: View {
                                 Image(systemName: "trash")
                                     .foregroundColor(.red)
                             }
-                            
                         }
                     }
                 
@@ -164,10 +172,10 @@ struct EditItemView: View {
     
 }
 
-struct EditItemView_Previews: PreviewProvider {
-    static let item = ItemDataType(id: "A", title: "aaa", label: 2, checked: false, finished: false, timestamp: Date())
-    static var previews: some View {
-        EditItemView(item: item)
-            .environmentObject(ItemViewModel())
-    }
-}
+//struct EditItemView_Previews: PreviewProvider {
+//    static let item = ItemDataType(id: "A", title: "AA", index: 1, checked: false, timestamp: Date())
+//    static var previews: some View {
+//        EditItemView(oldLabel: 1, item: item)
+//            .environmentObject(ItemViewModel())
+//    }
+//}

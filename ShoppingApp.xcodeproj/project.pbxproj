@@ -9,9 +9,9 @@
 /* Begin PBXBuildFile section */
 		3B124DFD2A7F9C51003CC5FA /* AppSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B124DFC2A7F9C51003CC5FA /* AppSetting.swift */; };
 		3B124E012A80AFF9003CC5FA /* EditItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B124E002A80AFF9003CC5FA /* EditItemView.swift */; };
-		3B3C64FC2A7EBBC600A43033 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 3B3C64FB2A7EBBC600A43033 /* FirebaseAnalytics */; };
-		3B3C64FE2A7EBBC600A43033 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 3B3C64FD2A7EBBC600A43033 /* FirebaseFirestore */; };
 		3B68669B28ED1165005C3C4D /* FavoriteList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7DA58728EC7B9C00FC82D1 /* FavoriteList.swift */; };
+		3B6D766E2A84CDB500062D1C /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 3B6D766D2A84CDB500062D1C /* FirebaseAnalytics */; };
+		3B6D76702A84CDB500062D1C /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 3B6D766F2A84CDB500062D1C /* FirebaseFirestore */; };
 		3BB0191B28E400830094AAD2 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB0191A28E400830094AAD2 /* ListView.swift */; };
 		3BB0191E28E428720094AAD2 /* SettingTop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB0191D28E428720094AAD2 /* SettingTop.swift */; };
 		3BCF53EA28E33A9E00E853D7 /* ShoppingAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BCF53E928E33A9E00E853D7 /* ShoppingAppApp.swift */; };
@@ -56,8 +56,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3B3C64FC2A7EBBC600A43033 /* FirebaseAnalytics in Frameworks */,
-				3B3C64FE2A7EBBC600A43033 /* FirebaseFirestore in Frameworks */,
+				3B6D766E2A84CDB500062D1C /* FirebaseAnalytics in Frameworks */,
+				3B6D76702A84CDB500062D1C /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -194,8 +194,8 @@
 			);
 			name = ShoppingApp;
 			packageProductDependencies = (
-				3B3C64FB2A7EBBC600A43033 /* FirebaseAnalytics */,
-				3B3C64FD2A7EBBC600A43033 /* FirebaseFirestore */,
+				3B6D766D2A84CDB500062D1C /* FirebaseAnalytics */,
+				3B6D766F2A84CDB500062D1C /* FirebaseFirestore */,
 			);
 			productName = ShoppingApp;
 			productReference = 3BCF53E628E33A9E00E853D7 /* ShoppingApp.app */;
@@ -226,7 +226,7 @@
 			);
 			mainGroup = 3BCF53DD28E33A9E00E853D7;
 			packageReferences = (
-				3B3C64FA2A7EBBC600A43033 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				3B6D766C2A84CDB500062D1C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = 3BCF53E728E33A9E00E853D7 /* Products */;
 			projectDirPath = "";
@@ -472,25 +472,25 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		3B3C64FA2A7EBBC600A43033 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+		3B6D766C2A84CDB500062D1C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 10.0.0;
+				branch = master;
+				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		3B3C64FB2A7EBBC600A43033 /* FirebaseAnalytics */ = {
+		3B6D766D2A84CDB500062D1C /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 3B3C64FA2A7EBBC600A43033 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = 3B6D766C2A84CDB500062D1C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAnalytics;
 		};
-		3B3C64FD2A7EBBC600A43033 /* FirebaseFirestore */ = {
+		3B6D766F2A84CDB500062D1C /* FirebaseFirestore */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 3B3C64FA2A7EBBC600A43033 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = 3B6D766C2A84CDB500062D1C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestore;
 		};
 /* End XCSwiftPackageProductDependency section */
