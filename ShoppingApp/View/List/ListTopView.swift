@@ -62,11 +62,11 @@ struct List_mainView: View {
                     
                     //買い物リストの中身は洗濯中のタブによって切り替える
                     TabView(selection: $selection) {
-                        ShoppingList1(filterdList: $itemVM.filterdList0, labelNum: selection)
+                        ShoppingList1(filterdList: $itemVM.label0Item, labelNum: selection)
                             .tag(0)
-                        ShoppingList1(filterdList: $itemVM.filterdList1, labelNum: selection)
+                        ShoppingList1(filterdList: $itemVM.label1Item, labelNum: selection)
                             .tag(1)
-                        ShoppingList1(filterdList: $itemVM.filterdList2, labelNum: selection)
+                        ShoppingList1(filterdList: $itemVM.label2Item, labelNum: selection)
                             .tag(2)
                     }.tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                         .environmentObject(itemVM)

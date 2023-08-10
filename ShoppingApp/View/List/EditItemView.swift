@@ -96,7 +96,7 @@ struct EditItemView: View {
                 
                 .onAppear{
                     print(item)
-                    num = Int(item.label)
+//                    num = Int(item.label)
                     newName = item.title
                     if itemVM.favoriteList.contains(item.title){
                         isFavorite = true
@@ -165,7 +165,7 @@ struct EditItemView: View {
 }
 
 struct EditItemView_Previews: PreviewProvider {
-    static let item = ItemDataType(id: "A", title: "aaa", label: 2, checked: false, finished: false, timestamp: Date())
+    static let item = ItemDataType(id: "A", title: "AA", index: 1, checked: false, timestamp: Date())
     static var previews: some View {
         EditItemView(item: item)
             .environmentObject(ItemViewModel())

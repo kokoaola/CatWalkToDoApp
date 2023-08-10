@@ -11,9 +11,9 @@ import Foundation
 struct ItemDataType: Identifiable {
     public var id: String
     public var title: String
-    public var label: Int16
-    public var indexedLabel: Dictionary<String, Int> = ["label": 0, "index": 0]
+    public var index: Int16
+//    public var indexedLabel: Dictionary<String, Int> = ["label": 0, "index": 0]
     public var checked: Bool
-    public var finished: Bool
+//    public var finished: Bool
     public var timestamp: Date
 }

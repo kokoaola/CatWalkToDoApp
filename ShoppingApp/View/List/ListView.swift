@@ -29,7 +29,7 @@ struct ShoppingList1: View {
         
         //買い物リスト本体
         List{
-            ForEach(list){ item in
+            ForEach(filterdList){ item in
                 HStack{
                     //チェックボックス表示
                     Image(systemName: item.checked ? "checkmark.square.fill": "square")
@@ -37,7 +37,7 @@ struct ShoppingList1: View {
                     //タイトル表示
                     Text(item.title)
                         .strikethrough(item.checked ? true: false)
-                    Text("\(item.indexedLabel["label"] ?? 0) - \(item.indexedLabel["index"] ?? 0)")
+                    Text("\(item.index)")
                     Spacer()
                     
                     //infoマーク表示
@@ -73,13 +73,13 @@ struct ShoppingList1: View {
             }
         })
         
-        .onAppear{
-            print("Appear")
-            list = filterdList
-        }
-        .onChange(of: labelNum, perform: { newValue in
-            list = filterdList
-        })
+//        .onAppear{
+//            print("Appear")
+//            list = filterdList
+//        }
+//        .onChange(of: labelNum, perform: { newValue in
+//            list = filterdList
+//        })
         
         //処理中はタップ不可
         .disabled(itemVM.isBusy)
