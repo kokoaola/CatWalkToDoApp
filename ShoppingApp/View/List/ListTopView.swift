@@ -98,6 +98,7 @@ struct List_mainView: View {
                           //OKならチェックした項目をリストから削除（未搭載）
                           primaryButton: .default(Text("OK"), action: {
                         itemVM.completeTask(labelNum: selection)
+                        
                     }),
                           secondaryButton: .cancel(Text("Cansel"), action:{}))
                 }
@@ -108,7 +109,7 @@ struct List_mainView: View {
                 }
             }
             
-            .navigationBarItems(trailing: EditButton())
+//            .navigationBarItems(trailing: EditButton())
             
             //キーボード閉じるボタン
             .toolbar {
