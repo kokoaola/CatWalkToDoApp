@@ -11,7 +11,7 @@ import SwiftUI
 struct ShoppingList1: View {
     ///引数で受け取る配列（リスト表示用）
     @Binding var filterdList: [ItemDataType]
-    var labelNum: Int = 0
+    @Binding var labelNum: Int
     
     ///項目編集シート用表示フラグ
     @State private var showEditSheet = false
@@ -69,7 +69,7 @@ struct ShoppingList1: View {
         //タスク編集用のシート
         .sheet(isPresented: $showEditSheet, content: {
             if let item = selectedItem {
-                EditItemView(oldLabel: labelNum, item: item).environmentObject(itemVM)
+                EditItemView(oldLabel: labelNum, newNum: $labelNum, item: item).environmentObject(itemVM)
             }
         })
         
@@ -77,18 +77,6 @@ struct ShoppingList1: View {
             print("View label0Item", itemVM.label0Item)
             print("View label1Item", itemVM.label1Item)
             print("View label2Item", itemVM.label2Item)
-//            switch labelNum{
-//            case 0:
-//                filterdList = itemVM.label0Item
-//                print(itemVM.label0Item)
-//            case 1:
-//                filterdList = itemVM.label1Item
-//                print(itemVM.label1Item)
-//            default:
-//                filterdList = itemVM.label2Item
-//                print(itemVM.label2Item)
-//            }
-            
         }
         
 //        .onAppear{
@@ -120,10 +108,10 @@ struct ShoppingList1: View {
 
 
 struct ShoppingList1_Previews: PreviewProvider {
-    @State static var aaa  = false
+    @State static var aaa  = 0
     @State static var a = [ItemDataType]()
     static var previews: some View {
-        ShoppingList1(filterdList: $a)
+        ShoppingList1(filterdList: $a, labelNum: $aaa)
             .environmentObject(ItemViewModel())
     }
 }
