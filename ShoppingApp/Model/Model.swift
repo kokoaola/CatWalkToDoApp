@@ -8,12 +8,10 @@
 import Foundation
 
 ///Firestoreに保存するカスタムデータタイプ
-struct ItemDataType: Identifiable {
+struct ItemDataType:Identifiable, Codable  {
     public var id: String
     public var title: String
     public var index: Int16
-//    public var indexedLabel: Dictionary<String, Int> = ["label": 0, "index": 0]
     public var checked: Bool
-//    public var finished: Bool
     public var timestamp: Date
 }

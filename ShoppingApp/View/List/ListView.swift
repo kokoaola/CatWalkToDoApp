@@ -56,7 +56,7 @@ struct ShoppingList1: View {
                 //セルタップでボックスにチェック
                 .contentShape(Rectangle())
                 .onTapGesture {
-                    itemVM.toggleCheck(item: item)
+                    itemVM.toggleCheck(item: item, labelNum: labelNum)
                 }
             }
             .onMove(perform: moveItem)
@@ -69,9 +69,27 @@ struct ShoppingList1: View {
         //タスク編集用のシート
         .sheet(isPresented: $showEditSheet, content: {
             if let item = selectedItem {
-                EditItemView(item: item).environmentObject(itemVM)
+                EditItemView(oldLabel: labelNum, item: item).environmentObject(itemVM)
             }
         })
+        
+        .onAppear{
+            print("View label0Item", itemVM.label0Item)
+            print("View label1Item", itemVM.label1Item)
+            print("View label2Item", itemVM.label2Item)
+//            switch labelNum{
+//            case 0:
+//                filterdList = itemVM.label0Item
+//                print(itemVM.label0Item)
+//            case 1:
+//                filterdList = itemVM.label1Item
+//                print(itemVM.label1Item)
+//            default:
+//                filterdList = itemVM.label2Item
+//                print(itemVM.label2Item)
+//            }
+            
+        }
         
 //        .onAppear{
 //            print("Appear")

@@ -21,6 +21,8 @@ struct EditItemView: View {
     ///名前入力用の変数
     @State private var newName = ""
     
+    let oldLabel: Int
+    
     ///ラベル入力用の変数
     @State private var num = 0
     
@@ -78,7 +80,7 @@ struct EditItemView: View {
                 Button(action: {
                     //入力された値が空白以外なら配列に追加
                     if !newName.isEmpty{
-                        itemVM.changeTitle(item: item, newTitle: newName, newLabel: num)
+                        itemVM.changeTitle(item: item, newTitle: newName,oldLabel: oldLabel, newLabel: num)
                         
                         if isFavorite{
                             itemVM.changeFavoriteList(itemName: newName, delete: false)
@@ -96,7 +98,7 @@ struct EditItemView: View {
                 
                 .onAppear{
                     print(item)
-//                    num = Int(item.label)
+                    num = oldLabel
                     newName = item.title
                     if itemVM.favoriteList.contains(item.title){
                         isFavorite = true
@@ -167,7 +169,7 @@ struct EditItemView: View {
 struct EditItemView_Previews: PreviewProvider {
     static let item = ItemDataType(id: "A", title: "AA", index: 1, checked: false, timestamp: Date())
     static var previews: some View {
-        EditItemView(item: item)
+        EditItemView(oldLabel: 1, item: item)
             .environmentObject(ItemViewModel())
     }
 }
