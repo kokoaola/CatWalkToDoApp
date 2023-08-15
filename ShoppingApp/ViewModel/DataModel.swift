@@ -46,36 +46,17 @@ class ItemViewModel: ObservableObject {
         fetchDataForCollection("label0Item")
         fetchDataForCollection("label1Item")
         fetchDataForCollection("label2Item")
-
+        
     }
     
-
+    
     ///引数で渡されたラベルに応じたデータをフェッチするメソッド
     private func fetchDataForCollection(_ collectionName: String) {
         
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        var tempArray = [ItemDataType]()
-        
-        db.collection("users").document(uid).collection("items").order(by: "index").addSnapshotListener { (snapshot, error) in
-
-            // データが変更されるたびにこのブロックが実行される
-            
-//            if let snap = snapshot {
-//                for item in snap.documentChanges {
-//                    if item.type == .added {
-//                        let id = item.document.documentID
-//                        let title = item.document.get("title") as! String
-//                        let index = item.document.get("index") as! Int16
-//                        let checked = item.document.get("checked") as! Bool
-//                        let timeData = item.document.get("timestamp", serverTimestampBehavior: .estimate) as! Timestamp
-//                        let timestamp = timeData.dateValue()
-//
-//                        tempArray.append(ItemDataType(id: id, title: title, index: index, checked: checked, timestamp: timestamp))
-//                    }
-//                }
-//            }
-            
+        db.collection("users").document(uid).collection(collectionName).order(by: "index").addSnapshotListener { (snapshot, error) in
+            var tempArray = [ItemDataType]()
             if let snap = snapshot {
                 print("snap",snap.count)
                 for document in snap.documents {
@@ -90,44 +71,19 @@ class ItemViewModel: ObservableObject {
                     tempArray.append(ItemDataType(id: id, title: title, index: index, checked: checked, timestamp: timestamp))
                     print("1tempArray", tempArray.count)
                 }
-                
-                
-                
-                switch collectionName {
-                case "label0Item":
-                    self.label0Item = tempArray
-                case "label1Item":
-                    self.label1Item = tempArray
-                case "label2Item":
-                    self.label2Item = tempArray
-                default:
-                    break
-                }
+            }
+            switch collectionName {
+            case "label0Item":
+                self.label0Item = tempArray
+            case "label1Item":
+                self.label1Item = tempArray
+            case "label2Item":
+                self.label2Item = tempArray
+            default:
+                break
             }
         }
-//        var tempArray = [ItemDataType]()
-//        db.collection(collectionName).order(by: "index").addSnapshotListener { (snapshot, error) in
-//            // データが変更されるたびにこのブロックが実行される
-//            //           db.collection(collectionName).getDocuments { (snapshot, error) in
-//            // このブロックはデータを一度だけ取得するために実行される
-//
-//            if let snap = snapshot {
-//                for item in snap.documentChanges {
-//                    if item.type == .added {
-//                        let id = item.document.documentID
-//                        let title = item.document.get("title") as! String
-//                        let index = item.document.get("index") as! Int16
-//                        let checked = item.document.get("checked") as! Bool
-//                        let timeData = item.document.get("timestamp", serverTimestampBehavior: .estimate) as! Timestamp
-//                        let timestamp = timeData.dateValue()
-//
-//                        tempArray.append(ItemDataType(id: id, title: title, index: index, checked: checked, timestamp: timestamp))
-//                    }
-//                }
-//            }
-            
-
-        }
+    }
     
     
     
@@ -136,21 +92,21 @@ class ItemViewModel: ObservableObject {
     func addItem(title: String, label: Int){
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        let collection: String
+        let collectionName: String
         var newIndex: Int
         switch label{
         case 0:
             newIndex = self.label0Item.count
-            collection = "label0Item"
+            collectionName = "label0Item"
         case 1:
             newIndex = self.label1Item.count
-            collection = "label1Item"
+            collectionName = "label1Item"
         case 2:
             newIndex = self.label2Item.count
-            collection = "label2Item"
+            collectionName = "label2Item"
         default:
             newIndex = self.label0Item.count
-            collection = "label0Item"
+            collectionName = "label0Item"
         }
         
         let data = [
@@ -162,7 +118,7 @@ class ItemViewModel: ObservableObject {
         
         
         // 新しいアイテムを追加
-        db.collection("users").document(uid).collection("items").addDocument(data: data) { (error) in
+        db.collection("users").document(uid).collection(collectionName).addDocument(data: data) { (error) in
             if let err = error {
                 print("Error adding document: \(err)")
             } else {
@@ -171,12 +127,12 @@ class ItemViewModel: ObservableObject {
         }
         
         
-//        db.collection(collection).addDocument(data: data) { error in
-//            if let error = error {
-//                print(error.localizedDescription)
-//                return
-//            }
-        }
+        //        db.collection(collection).addDocument(data: data) { error in
+        //            if let error = error {
+        //                print(error.localizedDescription)
+        //                return
+        //            }
+    }
     
     
     
@@ -263,7 +219,7 @@ class ItemViewModel: ObservableObject {
             }
         }
         fetchDataForCollection(collection)
-//        renumber()
+        //        renumber()
     }
     
     
@@ -312,7 +268,7 @@ class ItemViewModel: ObservableObject {
             }
             fetchDataForCollection(collection)
         }
-//        renumber()
+        //        renumber()
     }
     
     
