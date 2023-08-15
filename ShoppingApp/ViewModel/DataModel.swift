@@ -125,19 +125,14 @@ class ItemViewModel: ObservableObject {
                 print("Document successfully added!")
             }
         }
-        
-        
-        //        db.collection(collection).addDocument(data: data) { error in
-        //            if let error = error {
-        //                print(error.localizedDescription)
-        //                return
-        //            }
     }
     
     
     
     ///達成フラグをtrueにして保存する
     func toggleCheck(item: ItemDataType, labelNum: Int){
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
         
         let documentId = item.id
         let newCheckedStatus = !item.checked
@@ -159,12 +154,12 @@ class ItemViewModel: ObservableObject {
             collection = "label0Item"
         }
         
-        
-        db.collection(collection).document(documentId).updateData([
+        db.collection("users").document(uid).collection(collection).document(documentId).updateData([
             "checked": newCheckedStatus
         ])
         fetchDataForCollection(collection)
     }
+    
     
     
     ///お気に入りアイテムへ保存する
@@ -190,35 +185,37 @@ class ItemViewModel: ObservableObject {
     
     ///完了したタスクの削除
     func completeTask(labelNum: Int) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
         
         var collection: String = ""
-        var array: [ItemDataType] = []
+        var completedArray: [ItemDataType] = []
         
         switch labelNum{
         case 0:
             collection = "label0Item"
-            array = label0Item
+            completedArray = label0Item.filter { $0.checked == true }
         case 1:
             collection = "label1Item"
-            array = label1Item
+            completedArray = label1Item.filter { $0.checked == true }
         case 2:
             collection = "label2Item"
-            array = label2Item
+            completedArray = label2Item.filter { $0.checked == true }
         default:
             break
         }
         
-        let completeArray = array.filter { $0.checked == true }
-        print(completeArray.count)
-        
-        for item in completeArray {
-            self.db.collection(collection).document(item.id).delete() { error in
+        for item in completedArray {
+            let documentId = item.id
+            
+            db.collection("users").document(uid).collection(collection).document(documentId).delete() { error in
                 if let error = error {
                     print("Error removing document: \(error)")
                 }
             }
         }
         fetchDataForCollection(collection)
+        
+        //MARK: -
         //        renumber()
     }
     
