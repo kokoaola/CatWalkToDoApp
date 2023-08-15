@@ -97,7 +97,7 @@ struct EditItemView: View {
                         dismiss() //追加後のページ破棄関数
                     }
                 },label: {
-                    TuikaButton() //ボタンデザインは別ファイル
+                    SaveButton() //ボタンデザインは別ファイル
                 })
                 
                 .onAppear{

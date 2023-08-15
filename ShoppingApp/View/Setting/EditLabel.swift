@@ -48,7 +48,7 @@ struct AddNewLabel_View: View {
                 label2 = newName2
                 dismiss()
             }, label: {
-                LabelButton() //保存ボタンは別ファイル
+                SaveButton() //保存ボタンは別ファイル
             })
             .padding(.top, 40.0)
             

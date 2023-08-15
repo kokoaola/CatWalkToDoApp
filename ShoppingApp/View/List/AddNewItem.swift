@@ -111,7 +111,7 @@ struct AddNewItem: View {
                         dismiss() //追加後はページ破棄
                     }
                 },label: {
-                    TuikaButton() //ボタンデザインは別ファイル
+                    SaveButton() //ボタンデザインは別ファイル
                 }).padding()
                 
                 Spacer()
@@ -134,9 +134,6 @@ struct AddNewItem: View {
                             }
                         }
                     }
-
-                
-                
             }
             .padding()
             
@@ -146,7 +143,6 @@ struct AddNewItem: View {
             .toolbarBackground(.visible, for: .navigationBar)
         }
     }
-    
 }
 
 struct AddNewItem_Previews: PreviewProvider {
