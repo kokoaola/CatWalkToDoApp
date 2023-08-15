@@ -11,6 +11,7 @@
 import Foundation
 import FirebaseFirestore
 import SwiftUI
+import Firebase
 
 class ItemViewModel: ObservableObject {
     
@@ -49,44 +50,91 @@ class ItemViewModel: ObservableObject {
     }
     
 
+    ///引数で渡されたラベルに応じたデータをフェッチするメソッド
     private func fetchDataForCollection(_ collectionName: String) {
+        
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
         var tempArray = [ItemDataType]()
-        db.collection(collectionName).order(by: "index").addSnapshotListener { (snapshot, error) in
+        
+        db.collection("users").document(uid).collection("items").order(by: "index").addSnapshotListener { (snapshot, error) in
+
             // データが変更されるたびにこのブロックが実行される
-            //           db.collection(collectionName).getDocuments { (snapshot, error) in
-            // このブロックはデータを一度だけ取得するために実行される
+            
+//            if let snap = snapshot {
+//                for item in snap.documentChanges {
+//                    if item.type == .added {
+//                        let id = item.document.documentID
+//                        let title = item.document.get("title") as! String
+//                        let index = item.document.get("index") as! Int16
+//                        let checked = item.document.get("checked") as! Bool
+//                        let timeData = item.document.get("timestamp", serverTimestampBehavior: .estimate) as! Timestamp
+//                        let timestamp = timeData.dateValue()
+//
+//                        tempArray.append(ItemDataType(id: id, title: title, index: index, checked: checked, timestamp: timestamp))
+//                    }
+//                }
+//            }
             
             if let snap = snapshot {
-                for item in snap.documentChanges {
-                    if item.type == .added {
-                        let id = item.document.documentID
-                        let title = item.document.get("title") as! String
-                        let index = item.document.get("index") as! Int16
-                        let checked = item.document.get("checked") as! Bool
-                        let timeData = item.document.get("timestamp", serverTimestampBehavior: .estimate) as! Timestamp
-                        let timestamp = timeData.dateValue()
-                        
-                        tempArray.append(ItemDataType(id: id, title: title, index: index, checked: checked, timestamp: timestamp))
-                    }
+                print("snap",snap.count)
+                for document in snap.documents {
+                    let id = document.documentID
+                    let title = document.get("title") as! String
+                    let index = document.get("index") as! Int16
+                    let checked = document.get("checked") as! Bool
+                    let timeData = document.get("timestamp", serverTimestampBehavior: .estimate) as! Timestamp
+                    let timestamp = timeData.dateValue()
+                    print(title)
+                    
+                    tempArray.append(ItemDataType(id: id, title: title, index: index, checked: checked, timestamp: timestamp))
+                    print("1tempArray", tempArray.count)
+                }
+                
+                
+                
+                switch collectionName {
+                case "label0Item":
+                    self.label0Item = tempArray
+                case "label1Item":
+                    self.label1Item = tempArray
+                case "label2Item":
+                    self.label2Item = tempArray
+                default:
+                    break
                 }
             }
-            
-            switch collectionName {
-            case "label0Item":
-                self.label0Item = tempArray
-            case "label1Item":
-                self.label1Item = tempArray
-            case "label2Item":
-                self.label2Item = tempArray
-            default:
-                break
-            }
         }
-    }
+//        var tempArray = [ItemDataType]()
+//        db.collection(collectionName).order(by: "index").addSnapshotListener { (snapshot, error) in
+//            // データが変更されるたびにこのブロックが実行される
+//            //           db.collection(collectionName).getDocuments { (snapshot, error) in
+//            // このブロックはデータを一度だけ取得するために実行される
+//
+//            if let snap = snapshot {
+//                for item in snap.documentChanges {
+//                    if item.type == .added {
+//                        let id = item.document.documentID
+//                        let title = item.document.get("title") as! String
+//                        let index = item.document.get("index") as! Int16
+//                        let checked = item.document.get("checked") as! Bool
+//                        let timeData = item.document.get("timestamp", serverTimestampBehavior: .estimate) as! Timestamp
+//                        let timestamp = timeData.dateValue()
+//
+//                        tempArray.append(ItemDataType(id: id, title: title, index: index, checked: checked, timestamp: timestamp))
+//                    }
+//                }
+//            }
+            
+
+        }
+    
+    
     
     
     ///アイテムをデータベースに追加する
     func addItem(title: String, label: Int){
+        guard let uid = Auth.auth().currentUser?.uid else { return }
         
         let collection: String
         var newIndex: Int
@@ -113,15 +161,23 @@ class ItemViewModel: ObservableObject {
         ] as [String : Any]
         
         
-        db.collection(collection).addDocument(data: data) { error in
-            if let error = error {
-                print(error.localizedDescription)
-                return
+        // 新しいアイテムを追加
+        db.collection("users").document(uid).collection("items").addDocument(data: data) { (error) in
+            if let err = error {
+                print("Error adding document: \(err)")
+            } else {
+                print("Document successfully added!")
             }
         }
         
         
-    }
+//        db.collection(collection).addDocument(data: data) { error in
+//            if let error = error {
+//                print(error.localizedDescription)
+//                return
+//            }
+        }
+    
     
     
     ///達成フラグをtrueにして保存する
