@@ -27,7 +27,7 @@ struct Buttons: View {
 }
 
 //買い物リストの要素追加ボタン
-struct TuikaButton: View {
+struct SaveButton: View {
     var body: some View {
         //ボタンのラベル
         Capsule()
@@ -42,18 +42,18 @@ struct TuikaButton: View {
 }
 
 //ボタンのラベル
-struct LabelButton: View {
-    var body: some View {
-        Capsule()
-            .stroke(Color(UIColor.label), lineWidth: 1)
-            .foregroundColor(Color(UIColor.systemBackground))
-            .frame(width: 200, height: 50)
-            .overlay(Text("ラベル名を変更する")
-                .foregroundColor(Color(UIColor.label)))
-            .font(.title3)
-            .font(.system(size: 50, weight: .semibold))
-    }
-}
+//struct LabelButton: View {
+//    var body: some View {
+//        Capsule()
+//            .stroke(Color(UIColor.label), lineWidth: 1)
+//            .foregroundColor(Color(UIColor.systemBackground))
+//            .frame(width: 200, height: 50)
+//            .overlay(Text("ラベル名を変更する")
+//                .foregroundColor(Color(UIColor.label)))
+//            .font(.title3)
+//            .font(.system(size: 50, weight: .semibold))
+//    }
+//}
 
 struct PeriodButton: View {
     let period: String
@@ -158,8 +158,7 @@ struct CompButton_Previews: PreviewProvider {
     static var previews: some View {
         VStack{
             Buttons()
-            TuikaButton()
-            LabelButton()
+            SaveButton()
             PeriodButton(period: "aaa")
             FavoriteButton(title: "aaaaaaaaaaaaaaaaaa")
             AlartView(isAlart: $aa, isOK: $bb, message: cc)

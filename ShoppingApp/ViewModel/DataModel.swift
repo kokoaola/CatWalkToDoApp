@@ -45,34 +45,10 @@ class ItemViewModel: ObservableObject {
         fetchDataForCollection("label0Item")
         fetchDataForCollection("label1Item")
         fetchDataForCollection("label2Item")
-        
-//        renumberW()
+
     }
     
-    
-//    func fetchData1() {
-//        db.collection("label0Item").order(by: "index").addSnapshotListener { (snapshot, error) in
-//            if let snap = snapshot {
-//                for item in snap.documentChanges {
-//                    if item.type == .added {
-//                        let id = item.document.documentID
-//                        let title = item.document.get("title") as! String
-//                        let index = item.document.get("index") as! Int16
-//                        let checked = item.document.get("checked") as! Bool
-//                        let timeData = item.document.get("timestamp", serverTimestampBehavior: .estimate) as! Timestamp
-//                        let timestamp = timeData.dateValue()
-//
-//                        self.label0Item.append(ItemDataType(id: id, title: title, index: index, checked: checked, timestamp: timestamp))
-//                    }
-//                }
-//
-//
-//            }
-//        }
-//    }
-    
-    
-    
+
     private func fetchDataForCollection(_ collectionName: String) {
         var tempArray = [ItemDataType]()
         db.collection(collectionName).order(by: "index").addSnapshotListener { (snapshot, error) in
@@ -112,21 +88,20 @@ class ItemViewModel: ObservableObject {
     ///アイテムをデータベースに追加する
     func addItem(title: String, label: Int){
         
-        
         let collection: String
         var newIndex: Int
         switch label{
         case 0:
-            newIndex = self.label0Item.count + 1
+            newIndex = self.label0Item.count
             collection = "label0Item"
         case 1:
-            newIndex = self.label1Item.count + 1
+            newIndex = self.label1Item.count
             collection = "label1Item"
         case 2:
-            newIndex = self.label2Item.count + 1
+            newIndex = self.label2Item.count
             collection = "label2Item"
         default:
-            newIndex = self.label0Item.count + 1
+            newIndex = self.label0Item.count
             collection = "label0Item"
         }
         

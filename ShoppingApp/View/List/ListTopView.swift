@@ -82,7 +82,7 @@ struct List_mainView: View {
                         Buttons()
                         //ボタン本体のデザインは別のファイル
                     })
-                    .padding(.bottom, 10)
+                    .padding(.bottom, 20)
                 }
                 
                 //タスク新規追加用のシート
@@ -93,9 +93,9 @@ struct List_mainView: View {
                 
                 //買い物完了ボタンが押された後の確認アラート
                 .alert(isPresented: $showCompleteTaskAlert){
-                    Alert(title: Text("買い物完了"),
-                          message: Text("チェックした項目を削除して\n買い物を完了にしますか？"),
-                          //OKならチェックした項目をリストから削除（未搭載）
+                    Alert(title: Text("タスクの完了"),
+                          message: Text("チェックした項目を削除しますか？"),
+                          //OKならチェックした項目をリストから削除
                           primaryButton: .default(Text("OK"), action: {
                         itemVM.completeTask(labelNum: selection)
                         

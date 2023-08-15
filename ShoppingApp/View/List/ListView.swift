@@ -29,8 +29,10 @@ struct ShoppingList1: View {
         
         //買い物リスト本体
         List{
+            
             ForEach(filterdList){ item in
                 HStack{
+                    Text("")
                     //チェックボックス表示
                     Image(systemName: item.checked ? "checkmark.square.fill": "square")
                         .font(.title2)
@@ -49,9 +51,11 @@ struct ShoppingList1: View {
                             selectedItem = item
                             showEditSheet = true
                         }
+
                 }
                 .listRowBackground(Color.clear)
-                .opacity(item.checked ? 0.1 : 1)
+                .opacity(item.checked ? 0.3 : 1)
+                .padding(.vertical, 8)
                 
                 //セルタップでボックスにチェック
                 .contentShape(Rectangle())
@@ -60,11 +64,15 @@ struct ShoppingList1: View {
                 }
             }
             .onMove(perform: moveItem)
+//            .listRowSeparator(.)
 
             
             Spacer().frame(height: 40)
                 .listRowBackground(EmptyView())
+            
+            
         }
+        .listStyle(.sidebar)
 
         
         //タスク編集用のシート
