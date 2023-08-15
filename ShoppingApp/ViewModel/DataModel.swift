@@ -133,7 +133,6 @@ class ItemViewModel: ObservableObject {
     func toggleCheck(item: ItemDataType, labelNum: Int){
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        
         let documentId = item.id
         let newCheckedStatus = !item.checked
         
@@ -183,51 +182,12 @@ class ItemViewModel: ObservableObject {
     
     
     
-    ///完了したタスクの削除
-    func completeTask(labelNum: Int) {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        
-        var collection: String = ""
-        var completedArray: [ItemDataType] = []
-        
-        switch labelNum{
-        case 0:
-            collection = "label0Item"
-            completedArray = label0Item.filter { $0.checked == true }
-        case 1:
-            collection = "label1Item"
-            completedArray = label1Item.filter { $0.checked == true }
-        case 2:
-            collection = "label2Item"
-            completedArray = label2Item.filter { $0.checked == true }
-        default:
-            break
-        }
-        
-        for item in completedArray {
-            let documentId = item.id
-            
-            db.collection("users").document(uid).collection(collection).document(documentId).delete() { error in
-                if let error = error {
-                    print("Error removing document: \(error)")
-                }
-            }
-        }
-        fetchDataForCollection(collection)
-        
-        //MARK: -
-        //        renumber()
-    }
-    
-    
-    
     ///タイトルを変更して保存する
     func changeTitle(item: ItemDataType, newTitle: String ,newLabel: Int){
         
         //ラベル番号が変更されたらアイテムを削除してから新規追加
         if true{
             deleteSelectedTask(item: item)
-            
             addItem(title: newTitle, label: newLabel)
             
             return
@@ -245,39 +205,149 @@ class ItemViewModel: ObservableObject {
             collection = "label0Item"
         }
         
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
         //アイテムのタイトル書き換え
-        db.collection(collection).document(item.id).updateData([
+        db.collection("users").document(uid).collection(collection).document(item.id).updateData([
             "title": newTitle
-        ])
+        ]){ error in
+            if let error = error {
+                print("Error removing document: \(error)")
+            }else{
+                print("OK")
+            }
+        }
     }
     
     
-    ///選んだタスクを削除する
-    func deleteSelectedTask(item:ItemDataType){
+    
+    ///完了したタスクをまとめて削除
+    func completeTask(labelNum: Int) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        let collectionArray = ["label0Item","label1Item","label2Item"]
+        var collection: String = ""
+        var completedArray: [ItemDataType] = []
+        var notCompletedArray: [ItemDataType] = []
         
-        for collection in collectionArray{
-            self.db.collection(collection).document(item.id).delete() { error in
+        switch labelNum{
+        case 0:
+            collection = "label0Item"
+            completedArray = label0Item.filter { $0.checked == true }
+            notCompletedArray = label0Item.filter { $0.checked == false }
+        case 1:
+            collection = "label1Item"
+            completedArray = label1Item.filter { $0.checked == true }
+            notCompletedArray = label1Item.filter { $0.checked == false }
+        case 2:
+            collection = "label2Item"
+            completedArray = label2Item.filter { $0.checked == true }
+            notCompletedArray = label2Item.filter { $0.checked == false }
+        default:
+            break
+        }
+        
+        
+        let group = DispatchGroup()
+        //優先する処理
+        for item in completedArray {
+            let documentId = item.id
+            
+            group.enter()  // グループにエンター
+            self.db.collection("users").document(uid).collection(collection).document(documentId).delete() { error in
                 if let error = error {
                     print("Error removing document: \(error)")
                 }
+                group.leave()  // グループからリーブ
             }
-            fetchDataForCollection(collection)
         }
+        
+        // すべての非同期処理が完了した後に実行
+        group.notify(queue: .main) {
+            //2の処理
+            self.updateIndexesForCollection(labelNum: labelNum)
+        }
+        
+        
+        
+        //MARK: -
+        //        fetchDataForCollection(collection)
         //        renumber()
     }
     
     
-    ///index番号を振り直す
-    func updateIndexesForCollection(_ collectionName: String, items: [ItemDataType]) {
-        for (index, item) in items.enumerated() {
-            let documentId = item.id
-            self.db.collection(collectionName).document(documentId).updateData([
-                "index": index
-            ])
+    
+    
+
+    ///選んだタスクを削除する
+    func deleteSelectedTask(item:ItemDataType){
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        let collectionArray = ["label0Item","label1Item","label2Item"]
+        var itemIndex = 2
+        
+        let group = DispatchGroup()
+        group.enter()  // グループにエンター
+        //優先する処理
+        for (index, collection) in collectionArray.enumerated(){
+            db.collection("users").document(uid).collection(collection).document(item.id).delete() { error in
+                if let error = error {
+                    print("Error removing document: \(error)")
+                }else{
+                    itemIndex = index
+                }
+            }
+            
         }
-        fetchDataForCollection(collectionName)
+        group.leave()  // グループからリーブ
+        
+        // すべての非同期処理が完了した後に実行
+        group.notify(queue: .main) {
+            //2の処理
+            self.updateIndexesForCollection(labelNum: itemIndex)
+        }
+        
+        //MARK: -
+        //            fetchDataForCollection(collection)
+        //        renumber()
+    }
+    
+    
+    
+    
+    ///index番号を振り直す
+    func updateIndexesForCollection(labelNum: Int) {
+        
+        var collectionName: String
+        var array: [ItemDataType]
+        switch labelNum{
+        case 0:
+            collectionName = "label0Item"
+            array = label0Item
+        case 1:
+            collectionName = "label1Item"
+            array = label1Item
+        case 2:
+            collectionName = "label2Item"
+            array = label2Item
+        default:
+            collectionName = "label0Item"
+            array = label0Item
+        }
+        
+        
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        DispatchQueue.main.async {
+            for (index, item) in array.enumerated() {
+                let documentId = item.id
+                self.db.collection("users").document(uid).collection(collectionName).document(item.id).updateData([
+                    "index": index
+                ])
+            }
+            //            self.fetchDataForCollection(collectionName)
+        }
+        
+        //
     }
 }
 

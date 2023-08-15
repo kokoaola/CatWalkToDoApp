@@ -104,7 +104,7 @@ struct ShoppingList1: View {
         }
         
         filterdList.move(fromOffsets: offsets, toOffset: index)
-        itemVM.updateIndexesForCollection(label, items: filterdList)
+        itemVM.updateIndexesForCollection(labelNum: labelNum)
     }
 }
 
