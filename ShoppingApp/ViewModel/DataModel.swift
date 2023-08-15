@@ -58,18 +58,16 @@ class ItemViewModel: ObservableObject {
         db.collection("users").document(uid).collection(collectionName).order(by: "index").addSnapshotListener { (snapshot, error) in
             var tempArray = [ItemDataType]()
             if let snap = snapshot {
-                print("snap",snap.count)
                 for document in snap.documents {
                     let id = document.documentID
                     let title = document.get("title") as! String
                     let index = document.get("index") as! Int16
+                    let label = document.get("label") as! Int16
                     let checked = document.get("checked") as! Bool
                     let timeData = document.get("timestamp", serverTimestampBehavior: .estimate) as! Timestamp
                     let timestamp = timeData.dateValue()
-                    print(title)
                     
-                    tempArray.append(ItemDataType(id: id, title: title, index: index, checked: checked, timestamp: timestamp))
-                    print("1tempArray", tempArray.count)
+                    tempArray.append(ItemDataType(id: id, title: title, index: index,label: label, checked: checked, timestamp: timestamp))
                 }
             }
             switch collectionName {
@@ -112,6 +110,7 @@ class ItemViewModel: ObservableObject {
         let data = [
             "title": title,
             "index": newIndex,
+            "label": label,
             "checked": false,
             "timestamp": FieldValue.serverTimestamp()
         ] as [String : Any]
@@ -186,7 +185,7 @@ class ItemViewModel: ObservableObject {
     func changeTitle(item: ItemDataType, newTitle: String ,newLabel: Int){
         
         //ラベル番号が変更されたらアイテムを削除してから新規追加
-        if true{
+        if item.label != newLabel{
             deleteSelectedTask(item: item)
             addItem(title: newTitle, label: newLabel)
             
@@ -212,9 +211,9 @@ class ItemViewModel: ObservableObject {
             "title": newTitle
         ]){ error in
             if let error = error {
+                self.deleteSelectedTask(item: item)
+                self.addItem(title: newTitle, label: newLabel)
                 print("Error removing document: \(error)")
-            }else{
-                print("OK")
             }
         }
     }
@@ -266,49 +265,44 @@ class ItemViewModel: ObservableObject {
             //2の処理
             self.updateIndexesForCollection(labelNum: labelNum)
         }
-        
-        
-        
-        //MARK: -
-        //        fetchDataForCollection(collection)
-        //        renumber()
     }
     
     
     
     
-
-    ///選んだタスクを削除する
+    
+    ///選んだタスクを１つ削除する
     func deleteSelectedTask(item:ItemDataType){
+        let labelNum = item.label
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        let collectionArray = ["label0Item","label1Item","label2Item"]
-        var itemIndex = 2
+        var collectionName: String
+        switch labelNum{
+        case 0:
+            collectionName = "label0Item"
+        case 1:
+            collectionName = "label1Item"
+        case 2:
+            collectionName = "label2Item"
+        default:
+            collectionName = "label0Item"
+        }
         
         let group = DispatchGroup()
         group.enter()  // グループにエンター
         //優先する処理
-        for (index, collection) in collectionArray.enumerated(){
-            db.collection("users").document(uid).collection(collection).document(item.id).delete() { error in
-                if let error = error {
-                    print("Error removing document: \(error)")
-                }else{
-                    itemIndex = index
-                }
+        db.collection("users").document(uid).collection(collectionName).document(item.id).delete() { error in
+            if let error = error {
+                print("Error removing document: \(error)")
             }
-            
+            group.leave()  // グループからリーブ
         }
-        group.leave()  // グループからリーブ
         
         // すべての非同期処理が完了した後に実行
         group.notify(queue: .main) {
             //2の処理
-            self.updateIndexesForCollection(labelNum: itemIndex)
+            self.updateIndexesForCollection(labelNum: Int(labelNum))
         }
-        
-        //MARK: -
-        //            fetchDataForCollection(collection)
-        //        renumber()
     }
     
     
@@ -339,15 +333,11 @@ class ItemViewModel: ObservableObject {
         
         DispatchQueue.main.async {
             for (index, item) in array.enumerated() {
-                let documentId = item.id
                 self.db.collection("users").document(uid).collection(collectionName).document(item.id).updateData([
                     "index": index
                 ])
             }
-            //            self.fetchDataForCollection(collectionName)
         }
-        
-        //
     }
 }
 
