@@ -41,6 +41,7 @@ struct EditItemView: View {
     ///itemViewModelのための変数
     @EnvironmentObject var itemVM: ItemViewModel
     
+    @State private var showTooLongAlert = false
     
     
     var body: some View {
@@ -50,7 +51,7 @@ struct EditItemView: View {
                 
                 //ラベル選択用のピッカー
                 HStack{
-                    Text("追加先")
+                    Text("移動先")
                     Picker(selection: $newNum, label: Text("aaa")){
                         Text(label0)
                             .tag(0)
@@ -60,6 +61,7 @@ struct EditItemView: View {
                             .tag(2)
                     }
                     .pickerStyle(.segmented)
+                    
                 }
                 .padding(.top)
                 
@@ -81,24 +83,45 @@ struct EditItemView: View {
                 
                 //保存ボタン
                 Button(action: {
-                    
-                    //入力された値が空白以外なら配列に追加
-                    if !newName.isEmpty{
-                        itemVM.changeTitle(item: item, newTitle: newName, newLabel: newNum)
-                        
-                        if isFavorite{
-                            itemVM.changeFavoriteList(itemName: newName, delete: false)
-                            
-                            //お気に入りリストに存在するが、お気に入りスイッチがOFFになってる時
-                        }else if !isFavorite && itemVM.favoriteList.contains(newName){
-                            //お気に入りから削除する
-                            itemVM.changeFavoriteList(itemName: newName, delete: true)
-                        }
-                        dismiss() //追加後のページ破棄関数
+                    //入力された値が５０文字以上ならアラートを表示してリターン
+                    if newName.count >= 50{
+                        showTooLongAlert = true
+                        return
                     }
+                    
+                    
+                    //入力された値が空白ならリターン
+                    if newName.isEmpty{ return }
+                    
+                    //項目をデータベースに追加
+                    itemVM.changeTitle(item: item, newTitle: newName, newLabel: newNum)
+                    
+                    //お気に入りOnならお気に入りリストに追加
+                    if isFavorite{
+                        itemVM.changeFavoriteList(itemName: newName, delete: false)
+                        
+                        //お気に入りリストに存在するが、お気に入りスイッチがOFFになってる時
+                    }else if !isFavorite && itemVM.favoriteList.contains(newName){
+                        //お気に入りから削除する
+                        itemVM.changeFavoriteList(itemName: newName, delete: true)
+                    }
+                    
+                    dismiss() //追加後のページ破棄関数
+                    
+
                 },label: {
                     SaveButton() //ボタンデザインは別ファイル
                 })
+                
+                //買い物完了ボタンが押された後の確認アラート
+                .alert(isPresented: $showTooLongAlert){
+                    Alert(title: Text("項目名を短くしてください"),
+                          message: Text("50文字以内のみ登録可能です。"),
+                          //OKならチェックした項目をリストから削除
+                          dismissButton: .default(Text("OK")))
+                }
+                
+                
                 
                 .onAppear{
                     newName = item.title
@@ -123,6 +146,7 @@ struct EditItemView: View {
                         }),
                               secondaryButton: .cancel(Text("やめる"), action:{}))
                     }
+
                 
                 
                 //ツールバーの設置
@@ -168,10 +192,11 @@ struct EditItemView: View {
     
 }
 
-//struct EditItemView_Previews: PreviewProvider {
-//    static let item = ItemDataType(id: "A", title: "AA", index: 1, checked: false, timestamp: Date())
-//    static var previews: some View {
-//        EditItemView(oldLabel: 1, item: item)
-//            .environmentObject(ItemViewModel())
-//    }
-//}
+struct EditItemView_Previews: PreviewProvider {
+    @State static var num = 0
+    static let item = ItemDataType(id: "A", title: "AA", index: 1, label: 0, checked: false, timestamp: Date())
+    static var previews: some View {
+        EditItemView(oldLabel: 0, newNum: $num, item: item)
+            .environmentObject(ItemViewModel())
+    }
+}

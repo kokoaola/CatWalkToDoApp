@@ -47,6 +47,8 @@ struct List_mainView: View {
                                     .foregroundColor(.clear)
                                     .frame(width: UIScreen.main.bounds.width / 3.5, height: 30)
                                     .overlay(Text("\(labelArray[num])")
+                                        .font(.callout)
+                                             
                                         .foregroundColor(Color(selection == num ? UIColor.label : .gray)))
                                     .opacity(selection == num ? 1.0 : 0.4)
                                     .onTapGesture {
@@ -59,31 +61,36 @@ struct List_mainView: View {
                         }
                     }
                     
-                    
                     //買い物リストの中身は選択中のタブによって切り替える
                     TabView(selection: $selection) {
-                        ShoppingList1(filterdList: $itemVM.label0Item, labelNum: $selection)
+                        ListView(filterdList: $itemVM.label0Item, labelNum: $selection)
                             .tag(0)
-                        ShoppingList1(filterdList: $itemVM.label1Item, labelNum: $selection)
+                        ListView(filterdList: $itemVM.label1Item, labelNum: $selection)
                             .tag(1)
-                        ShoppingList1(filterdList: $itemVM.label2Item, labelNum: $selection)
+                        ListView(filterdList: $itemVM.label2Item, labelNum: $selection)
                             .tag(2)
                     }.tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                         .environmentObject(itemVM)
                     
                 }
                 
+                
                 VStack{
                     Spacer()
                     //買い物完了ボタン
                     Button(action: {
-                        showCompleteTaskAlert.toggle()
-                    }, label: {
-                        Buttons()
-                        //ボタン本体のデザインは別のファイル
-                    })
-                    .padding(.bottom, 20)
+                        showAddNewItemSheet = true
+                    }) {
+                        Image(systemName: "plus")
+                            .font(.title)
+                            .padding()
+                            .foregroundColor(.white)
+                            .background(.blue)
+                            .cornerRadius(30)
+                            .padding()
+                    }
                 }
+                
                 
                 //タスク新規追加用のシート
                 .sheet(isPresented: $showAddNewItemSheet, content: {
@@ -113,14 +120,16 @@ struct List_mainView: View {
             
             //キーボード閉じるボタン
             .toolbar {
-                //左上のプラスの追加ボタン
+                
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Spacer()
                     
                     Button(action: {
-                        showAddNewItemSheet = true
+                        showCompleteTaskAlert = true
                     }) {
-                        Image(systemName: "plus")
+                        Image(systemName: "trash")
+                            .foregroundColor(.red)
+                            .padding(30)
                     }
                 }
             }
@@ -132,5 +141,33 @@ struct List_mainView_Previews: PreviewProvider {
     static var previews: some View {
         List_mainView()
             .environmentObject(ItemViewModel())
+    }
+}
+
+
+struct CustomShape: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        
+        
+        // 左下の角を開始点として
+        path.move(to: CGPoint(x: rect.minX, y: rect.maxY))
+        
+        // 左上へ移動
+        path.addLine(to: CGPoint(x: rect.minX, y: rect.minY + 10))
+        path.addQuadCurve(to: CGPoint(x: rect.minX + 10, y: rect.minY), control: CGPoint(x: rect.minX, y: rect.minY))
+        
+        // 右上へ移動
+        path.addLine(to: CGPoint(x: rect.maxX - 10, y: rect.minY))
+        path.addQuadCurve(to: CGPoint(x: rect.maxX, y: rect.minY + 10), control: CGPoint(x: rect.maxX, y: rect.minY))
+        
+        // 右下へ移動
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
+        
+        // 下の辺は描画しないため、左下へ直接戻る
+//        path.addLine(to: CGPoint(x: rect.minX - 1.5, y: rect.maxY))
+
+        
+        return path
     }
 }

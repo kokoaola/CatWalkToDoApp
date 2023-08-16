@@ -16,6 +16,8 @@ class AppSetting{
     ///使用端末の縦画面サイズ
     static let screenHeight = UIScreen.main.bounds.height
     
+    ///文字数上限
+    static let maxLength = 50
     
     ///キーボード閉じるボタン
     static func colseKeyBoard(){
