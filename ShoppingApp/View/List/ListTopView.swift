@@ -31,51 +31,69 @@ struct List_mainView: View {
     ///itemViewModelのための変数
     @ObservedObject var itemVM = ItemViewModel()
     
+    ///猫動かす用
+    @State private var startAnimation: Bool = false
+    @State private var flip: Bool = true
     
     var body: some View {
+        let catSize = UIScreen.main.bounds.width / 6
+        
         NavigationView{
             //下部の完了ボタンを配置するためのZStack
             ZStack{
                 VStack {
-                    //上に表示される３つのラベル
+                    
                     HStack{
-                        ForEach(0 ..< 3) {num in
+                        
+//                        LottieView(filename: "cat", loop: .loop)
+//                            .frame(width: UIScreen.main.bounds.width / 6)
+//                            .offset(x: startAnimation ? UIScreen.main.bounds.width : -UIScreen.main.bounds.width)
+//                            .animation(.linear(duration: 6.0), value: startAnimation)
+//                            .zIndex(0.0)
+//                            .rotation3DEffect(.degrees(flip ? 0 : 180),
+//                                              axis: (x: 0, y: 1, z: 0))
 
+
+                        HStack{
+                            LottieView(filename: "cat", loop: .loop, shouldFlip: $flip)
+                                .zIndex(0.0)
+                                .frame(width: catSize)
+                                .offset(x: startAnimation ? UIScreen.main.bounds.width + catSize : 0 - catSize)
+                                .animation(.linear(duration: 7.0), value: startAnimation)
+                                .padding(.bottom, 1)
+
+                            
+                            //上に表示される３つのラベル
+                            ForEach(0 ..< 3) {num in
                                 //表示中だけラベルの色を変える
                                 CustomShape()
-//                                    .cornerRadius(15)
+                                //                                    .cornerRadius(15)
                                     .foregroundColor(.white)
                                     .frame(width: UIScreen.main.bounds.width / 3.5, height: 60)
                                     .onTapGesture {
                                         selection = num
                                     }
-                                
-//                                Color.white.frame(width: UIScreen.main.bounds.width / 3.5, height: 30)
-//
-//                                    .padding(.top, -20)
-//                                    .offset(y:-15)
-                            
-                            .opacity(selection == num ? 1.0 : 0.4)
-                            .overlay(Text("\(labelArray[num])")
-                                .font(.callout)
-                                .foregroundColor(Color(selection == num ? UIColor.label : .gray)))
-                            
-//                            .offset(y: 20)
-//                            .background(.red)
-//                            .cornerRadius(15)
-                            
-                        }
+                                    .overlay(Text("\(labelArray[num])")
+                                        .font(.callout)
+                                        .foregroundColor(Color(selection == num ? UIColor.label : .gray)))
+                                    .opacity(selection == num ? 1.0 : 0.5)
+                                    .zIndex(selection == num ? 1.0 : -1.0)
+
+
+                            }
+                        }.offset(x: -UIScreen.main.bounds.width / 10.5)
+
                     }
                     .padding(.bottom, -20)
                     .frame(height: 60)
                     
                     //買い物リストの中身は選択中のタブによって切り替える
                     TabView(selection: $selection) {
-                        ListView(filterdList: $itemVM.label0Item, labelNum: $selection)
+                        ListView(filterdList: $itemVM.label0Item, labelNum: $selection, startAnimation: $startAnimation, flip: $flip)
                             .tag(0)
-                        ListView(filterdList: $itemVM.label1Item, labelNum: $selection)
+                        ListView(filterdList: $itemVM.label1Item, labelNum: $selection, startAnimation: $startAnimation, flip: $flip)
                             .tag(1)
-                        ListView(filterdList: $itemVM.label2Item, labelNum: $selection)
+                        ListView(filterdList: $itemVM.label2Item, labelNum: $selection, startAnimation: $startAnimation, flip: $flip)
                             .tag(2)
                     }
                     

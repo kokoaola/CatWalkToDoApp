@@ -23,7 +23,12 @@ struct ListView: View {
     @EnvironmentObject var itemVM: ItemViewModel
     
     @State var list: [ItemDataType] = []
-
+    
+    
+    ///猫動かす用
+    @Binding var startAnimation: Bool
+    @Binding var flip: Bool
+    @State var isAnimating: Bool = false
     
     var body: some View {
         
@@ -59,7 +64,21 @@ struct ListView: View {
                 //セルタップでボックスにチェック
                 .contentShape(Rectangle())
                 .onTapGesture {
+
+                    
+                    if !isAnimating && !item.checked{
+                        self.flip.toggle()
+                        isAnimating = true
+                        withAnimation() {
+                            self.startAnimation.toggle()
+                        }
+                    }
+                    
                     itemVM.toggleCheck(item: item, labelNum: labelNum)
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 7) {
+                        isAnimating = false
+                    }
                 }
             }
             .onMove(perform: moveItem)
@@ -96,8 +115,10 @@ struct ListView: View {
 struct ShoppingList1_Previews: PreviewProvider {
     @State static var aaa  = 0
     @State static var a = [ItemDataType]()
+    @State static var startAnimation = false
+    @State static var flip = false
     static var previews: some View {
-        ListView(filterdList: $a, labelNum: $aaa)
+        ListView(filterdList: $a, labelNum: $aaa, startAnimation: $startAnimation, flip: $flip)
             .environmentObject(ItemViewModel())
     }
 }
