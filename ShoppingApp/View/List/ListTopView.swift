@@ -37,29 +37,37 @@ struct List_mainView: View {
             //下部の完了ボタンを配置するためのZStack
             ZStack{
                 VStack {
-                    
                     //上に表示される３つのラベル
                     HStack{
                         ForEach(0 ..< 3) {num in
-                            VStack{
+
                                 //表示中だけラベルの色を変える
-                                Rectangle()
-                                    .foregroundColor(.clear)
-                                    .frame(width: UIScreen.main.bounds.width / 3.5, height: 30)
-                                    .overlay(Text("\(labelArray[num])")
-                                        .font(.callout)
-                                             
-                                        .foregroundColor(Color(selection == num ? UIColor.label : .gray)))
-                                    .opacity(selection == num ? 1.0 : 0.4)
+                                CustomShape()
+//                                    .cornerRadius(15)
+                                    .foregroundColor(.white)
+                                    .frame(width: UIScreen.main.bounds.width / 3.5, height: 60)
                                     .onTapGesture {
                                         selection = num
                                     }
-                                Color.primary.frame(width: UIScreen.main.bounds.width / 5, height: 2)
-                                    .opacity(selection == num ? 1.0 : 0.0)
-                                    .padding(.top, -5)
-                            }
+                                
+//                                Color.white.frame(width: UIScreen.main.bounds.width / 3.5, height: 30)
+//
+//                                    .padding(.top, -20)
+//                                    .offset(y:-15)
+                            
+                            .opacity(selection == num ? 1.0 : 0.4)
+                            .overlay(Text("\(labelArray[num])")
+                                .font(.callout)
+                                .foregroundColor(Color(selection == num ? UIColor.label : .gray)))
+                            
+//                            .offset(y: 20)
+//                            .background(.red)
+//                            .cornerRadius(15)
+                            
                         }
                     }
+                    .padding(.bottom, -20)
+                    .frame(height: 60)
                     
                     //買い物リストの中身は選択中のタブによって切り替える
                     TabView(selection: $selection) {
@@ -69,15 +77,18 @@ struct List_mainView: View {
                             .tag(1)
                         ListView(filterdList: $itemVM.label2Item, labelNum: $selection)
                             .tag(2)
-                    }.tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                    }
+                    
+                    .background(.white)
+                    .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                         .environmentObject(itemVM)
                     
-                }
+                }.padding(.top, -10)
                 
                 
                 VStack{
                     Spacer()
-                    //買い物完了ボタン
+                    //追加ボタン
                     Button(action: {
                         showAddNewItemSheet = true
                     }) {
@@ -85,7 +96,7 @@ struct List_mainView: View {
                             .font(.title)
                             .padding()
                             .foregroundColor(.white)
-                            .background(.blue)
+                            .background(AppSetting.mainColor2)
                             .cornerRadius(30)
                             .padding()
                     }
@@ -115,10 +126,10 @@ struct List_mainView: View {
                     labelArray = [label0, label1, label2]
                 }
             }
-            
+            .background(LinearGradient(gradient: Gradient(colors: [AppSetting.mainColor1, AppSetting.mainColor2]), startPoint: .leading, endPoint: .trailing))
 //            .navigationBarItems(trailing: EditButton())
             
-            //キーボード閉じるボタン
+            //削除ボタン
             .toolbar {
                 
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
@@ -127,9 +138,10 @@ struct List_mainView: View {
                     Button(action: {
                         showCompleteTaskAlert = true
                     }) {
-                        Image(systemName: "trash")
-                            .foregroundColor(.red)
-                            .padding(30)
+                        Image(systemName: "trash.fill")
+                            .foregroundColor(.white)
+                            .padding(.bottom, 5)
+
                     }
                 }
             }

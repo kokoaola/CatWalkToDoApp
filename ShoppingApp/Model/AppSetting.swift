@@ -19,6 +19,12 @@ class AppSetting{
     ///文字数上限
     static let maxLength = 50
     
+    ///アプリのメインカラー1
+    static let mainColor1 = Color("reef1")
+    
+    ///アプリのメインカラー2
+    static let mainColor2 = Color("reef2")
+    
     ///キーボード閉じるボタン
     static func colseKeyBoard(){
         let keyWindow = UIApplication.shared.connectedScenes

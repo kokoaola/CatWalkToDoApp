@@ -39,7 +39,6 @@ struct ListView: View {
                     //タイトル表示
                     Text(item.title)
                         .strikethrough(item.checked ? true: false)
-                    Text("index: \(item.index)")
                     Spacer()
                     
                     //infoマーク表示
