@@ -26,9 +26,9 @@ struct ListView: View {
     
     
     ///猫動かす用
-    @Binding var startAnimation: Bool
+    @Binding var goRight: Bool
     @Binding var flip: Bool
-    @State var isAnimating: Bool = false
+    @Binding var shouldPlay: Bool
     
     var body: some View {
         
@@ -66,19 +66,20 @@ struct ListView: View {
                 .onTapGesture {
 
                     
-                    if !isAnimating && !item.checked{
+                    if !shouldPlay && !item.checked{
                         self.flip.toggle()
-                        isAnimating = true
+                        shouldPlay = true
                         withAnimation() {
-                            self.startAnimation.toggle()
+                            self.goRight.toggle()
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 8) {
+                            shouldPlay = false
                         }
                     }
                     
                     itemVM.toggleCheck(item: item, labelNum: labelNum)
                     
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 7) {
-                        isAnimating = false
-                    }
+
                 }
             }
             .onMove(perform: moveItem)
@@ -118,7 +119,7 @@ struct ShoppingList1_Previews: PreviewProvider {
     @State static var startAnimation = false
     @State static var flip = false
     static var previews: some View {
-        ListView(filterdList: $a, labelNum: $aaa, startAnimation: $startAnimation, flip: $flip)
+        ListView(filterdList: $a, labelNum: $aaa, goRight: $startAnimation, flip: $flip,shouldPlay: $flip)
             .environmentObject(ItemViewModel())
     }
 }

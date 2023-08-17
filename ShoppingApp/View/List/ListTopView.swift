@@ -32,8 +32,9 @@ struct List_mainView: View {
     @ObservedObject var itemVM = ItemViewModel()
     
     ///猫動かす用
-    @State private var startAnimation: Bool = false
+    @State private var goRight: Bool = false
     @State private var flip: Bool = true
+    @State private var shouldPlay: Bool = false
     
     var body: some View {
         let catSize = UIScreen.main.bounds.width / 6
@@ -42,24 +43,13 @@ struct List_mainView: View {
             //下部の完了ボタンを配置するためのZStack
             ZStack{
                 VStack {
-                    
                     HStack{
-                        
-//                        LottieView(filename: "cat", loop: .loop)
-//                            .frame(width: UIScreen.main.bounds.width / 6)
-//                            .offset(x: startAnimation ? UIScreen.main.bounds.width : -UIScreen.main.bounds.width)
-//                            .animation(.linear(duration: 6.0), value: startAnimation)
-//                            .zIndex(0.0)
-//                            .rotation3DEffect(.degrees(flip ? 0 : 180),
-//                                              axis: (x: 0, y: 1, z: 0))
-
-
                         HStack{
-                            LottieView(filename: "cat", loop: .loop, shouldFlip: $flip)
+                            LottieView(filename: "cat", loop: .loop, shouldFlip: $flip, shouldPlay: $shouldPlay)
                                 .zIndex(0.0)
                                 .frame(width: catSize)
-                                .offset(x: startAnimation ? UIScreen.main.bounds.width + catSize : 0 - catSize)
-                                .animation(.linear(duration: 7.0), value: startAnimation)
+                                .offset(x: goRight ? UIScreen.main.bounds.width + catSize : 0 - catSize)
+                                .animation(.linear(duration: 7.0), value: goRight)
                                 .padding(.bottom, 1)
 
                             
@@ -67,7 +57,6 @@ struct List_mainView: View {
                             ForEach(0 ..< 3) {num in
                                 //表示中だけラベルの色を変える
                                 CustomShape()
-                                //                                    .cornerRadius(15)
                                     .foregroundColor(.white)
                                     .frame(width: UIScreen.main.bounds.width / 3.5, height: 60)
                                     .onTapGesture {
@@ -75,8 +64,9 @@ struct List_mainView: View {
                                     }
                                     .overlay(Text("\(labelArray[num])")
                                         .font(.callout)
+                                        .fontWeight(.bold)
                                         .foregroundColor(Color(selection == num ? UIColor.label : .gray)))
-                                    .opacity(selection == num ? 1.0 : 0.5)
+                                    .opacity(selection == num ? 1.0 : 0.6)
                                     .zIndex(selection == num ? 1.0 : -1.0)
 
 
@@ -89,11 +79,11 @@ struct List_mainView: View {
                     
                     //買い物リストの中身は選択中のタブによって切り替える
                     TabView(selection: $selection) {
-                        ListView(filterdList: $itemVM.label0Item, labelNum: $selection, startAnimation: $startAnimation, flip: $flip)
+                        ListView(filterdList: $itemVM.label0Item, labelNum: $selection, goRight: $goRight, flip: $flip, shouldPlay: $shouldPlay)
                             .tag(0)
-                        ListView(filterdList: $itemVM.label1Item, labelNum: $selection, startAnimation: $startAnimation, flip: $flip)
+                        ListView(filterdList: $itemVM.label1Item, labelNum: $selection, goRight: $goRight, flip: $flip, shouldPlay: $shouldPlay)
                             .tag(1)
-                        ListView(filterdList: $itemVM.label2Item, labelNum: $selection, startAnimation: $startAnimation, flip: $flip)
+                        ListView(filterdList: $itemVM.label2Item, labelNum: $selection, goRight: $goRight, flip: $flip, shouldPlay: $shouldPlay)
                             .tag(2)
                     }
                     
