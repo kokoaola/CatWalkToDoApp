@@ -60,7 +60,6 @@ struct Keisan: View {
                     .padding()
                     .frame(width: AppSetting.screenWidth * 0.9)
                     .background(.white)
-                    
                     .cornerRadius(15)
                     
                     
@@ -72,19 +71,20 @@ struct Keisan: View {
                         }
                         .padding(.bottom)
                         
-                        
-                        Group{
                             Text("小さければ小さいほどお得です。\n単位は切り捨てです。")
-                        }
-                        .foregroundColor(Color(UIColor.systemGray))
+                            .opacity(0.9)
+                            .font(.callout)
                     }
                     .padding()
                     .frame(width: AppSetting.screenWidth * 0.9)
-                    
-                    .background(.white)
-                    
+                    .background(Color("usuigray"))
                     .cornerRadius(15)
-                    .padding()
+
+                    .overlay(
+                    RoundedRectangle(cornerRadius: 15)
+                        .stroke(.gray, lineWidth: 4)
+                    )
+
                     
                     
                 }
