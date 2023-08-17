@@ -20,7 +20,7 @@ struct ContentView: View {
                 //買い物リストビュー
                 List_mainView()
                     .tabItem{
-                        Label("買い物リスト", systemImage: "cart")
+                        Label("ToDoリスト", systemImage: "checklist")
                     }
                 
                 //単価計算ビュー
