@@ -12,6 +12,7 @@ struct ItemDataType:Identifiable, Codable  {
     public var id: String
     public var title: String
     public var index: Int16
+    public var label: Int16
     public var checked: Bool
     public var timestamp: Date
 }
