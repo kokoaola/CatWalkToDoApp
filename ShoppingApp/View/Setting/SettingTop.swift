@@ -12,7 +12,15 @@ import SwiftUI
 struct Setting_Top: View {
     var body: some View {
         NavigationView{
-            VStack{
+            
+                //上のナビゲーションバーっぽいセクション
+                VStack{
+                    LinearGradient(gradient: Gradient(colors: [AppSetting.mainColor1, AppSetting.mainColor2]), startPoint: .leading, endPoint: .trailing)
+                        .frame(height: AppSetting.screenHeight * 0.15)
+                        .overlay(
+                            Text("各種設定").font(.largeTitle).fontWeight(.bold).foregroundColor(.white).padding(.top, AppSetting.screenHeight * 0.05)
+                        )
+
                 List{
                     NavigationLink(destination: {
                         AddNewLabel_View()
@@ -32,7 +40,8 @@ struct Setting_Top: View {
                     }, label: {Text("プライバシーポリシー")})
                 }
             }
-            .navigationTitle(Text("各種設定"))
+                .ignoresSafeArea()
+//            .navigationTitle(Text("各種設定"))
             .navigationBarTitleDisplayMode(.inline)
         }.scrollContentBackground(.hidden)
         

@@ -141,15 +141,12 @@ struct List_mainView: View {
             .toolbar {
                 
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
-                    Spacer()
-                    
                     Button(action: {
                         showCompleteTaskAlert = true
                     }) {
                         Image(systemName: "trash.fill")
                             .foregroundColor(.white)
                             .padding(.bottom, 5)
-
                     }
                 }
             }
