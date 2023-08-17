@@ -11,9 +11,9 @@ import WebKit
 
 
 ///ウェブ上のプライバシーポリシーを表示する
-struct WebView: UIViewRepresentable {
+struct PrivacyPolicyView: UIViewRepresentable {
     ///URL
-    var urlString = "https://kokoaola.github.io/privacy.html"
+    var urlString = "https://kokoaola.github.io/privacyPolicy/privacyToDo.html"
     
     func makeUIView(context: Context) -> WKWebView{
         return WKWebView()
@@ -30,9 +30,9 @@ struct WebView: UIViewRepresentable {
 struct WebView_Previews: PreviewProvider {
     static var previews: some View {
         Group{
-            WebView()
+            PrivacyPolicyView()
                 .environment(\.locale, Locale(identifier:"en"))
-            WebView()
+            PrivacyPolicyView()
                 .environment(\.locale, Locale(identifier:"ja"))
         }
     }

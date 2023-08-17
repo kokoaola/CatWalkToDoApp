@@ -20,9 +20,16 @@ struct Setting_Top: View {
                     //                    NavigationLink(destination: {
                     //                        FavoriteList()
                     //                    }, label: {Text("お気に入りリスト編集")})
+                    
+                    
                     NavigationLink(destination: {
                         ContactWebView()
                     }, label: {Text("お問い合わせ")})
+                    
+                    
+                    NavigationLink(destination: {
+                        PrivacyPolicyView()
+                    }, label: {Text("プライバシーポリシー")})
                 }
             }
             .navigationTitle(Text("各種設定"))
