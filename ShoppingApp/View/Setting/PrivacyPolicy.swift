@@ -13,7 +13,7 @@ import WebKit
 ///ウェブ上のプライバシーポリシーを表示する
 struct PrivacyPolicyView: UIViewRepresentable {
     ///URL
-    var urlString = "https://kokoaola.github.io/privacy.html"
+    var urlString = "https://kokoaola.github.io/privacyPolicy/privacyToDo.html"
     
     func makeUIView(context: Context) -> WKWebView{
         return WKWebView()
