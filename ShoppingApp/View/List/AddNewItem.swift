@@ -33,6 +33,8 @@ struct AddNewItem: View {
     ///itemViewModelのための変数
     @EnvironmentObject var itemVM: ItemViewModel
     
+    @State private var showTooLongAlert = false
+    
     
     var body: some View {
         //ツールバー使用するためNavigationStack
@@ -67,49 +69,58 @@ struct AddNewItem: View {
                 .font(.footnote)
                 
                 
-                    //ラベル選択用のピッカー
-                    HStack{
-                        Text("追加先")
-                        Picker(selection: $newLabelNum, label: Text("aaa")){
-                            Text(label0)
-                                .tag(0)
-                            Text(label1)
-                                .tag(1)
-                            Text(label2)
-                                .tag(2)
-                        }
-                        .pickerStyle(.segmented)
+                //ラベル選択用のピッカー
+                HStack{
+                    Text("追加先")
+                    Picker(selection: $newLabelNum, label: Text("aaa")){
+                        Text(label0)
+                            .tag(0)
+                        Text(label1)
+                            .tag(1)
+                        Text(label2)
+                            .tag(2)
                     }
-                    
-                    
-                    //お気に入りに追加のスイッチ
-                    Toggle(isOn: $isFavorite){
-                        Text("お気に入りに追加")
-                    }
-                    
-                    
-                    //タイトル入力用テキストフィールド
-                    TextField("追加する項目", text: $newName)
-                        .frame(height: 40)
-                        .focused($isInputActive)
-                        .overlay(RoundedRectangle(cornerRadius: 1).stroke(Color(.tertiarySystemGroupedBackground), lineWidth: 1))
+                    .pickerStyle(.segmented)
+                }
+                
+                
+                //お気に入りに追加のスイッチ
+                Toggle(isOn: $isFavorite){
+                    Text("お気に入りに追加")
+                }
+                
+                
+                //タイトル入力用テキストフィールド
+                TextField("追加する項目", text: $newName)
+                    .frame(height: 40)
+                    .focused($isInputActive)
+                    .overlay(RoundedRectangle(cornerRadius: 1).stroke(Color(.tertiarySystemGroupedBackground), lineWidth: 1))
                 
                 //保存ボタン
                 Button(action: {
-                    //入力された値が空白以外なら配列に追加
-                    if !newName.isEmpty{
-                        itemVM.addItem(title: newName, label: newLabelNum)
-                        
-                        if isFavorite{
-                            itemVM.changeFavoriteList(itemName: newName, delete: false)
-                            
-                            //お気に入りリストに存在するが、お気に入りスイッチがOFFになってる時
-                        }else if !isFavorite && itemVM.favoriteList.contains(newName){
-                            //お気に入りから削除する
-                            itemVM.changeFavoriteList(itemName: newName, delete: true)
-                        }
-                        dismiss() //追加後はページ破棄
+                    
+                    //入力された値が５０文字以上ならアラートを表示してリターン
+                    if newName.count >= 50{
+                        showTooLongAlert = true
+                        return
                     }
+                    //入力された値が空白ならリターン
+                    if newName.isEmpty{ return }
+                    
+                    //項目をデータベースに追加
+                    itemVM.addItem(title: newName, label: newLabelNum)
+                    
+                    //お気に入りOnならお気に入りリストに追加
+                    if isFavorite{
+                        itemVM.changeFavoriteList(itemName: newName, delete: false)
+                        
+                        //お気に入りリストに存在するが、お気に入りスイッチがOFFになってる時
+                    }else if !isFavorite && itemVM.favoriteList.contains(newName){
+                        //お気に入りから削除する
+                        itemVM.changeFavoriteList(itemName: newName, delete: true)
+                    }
+                    dismiss() //追加後はページ破棄
+                    
                 },label: {
                     SaveButton() //ボタンデザインは別ファイル
                 }).padding()
@@ -141,6 +152,14 @@ struct AddNewItem: View {
             .navigationTitle("新規作成")
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(.visible, for: .navigationBar)
+            
+            //買い物完了ボタンが押された後の確認アラート
+            .alert(isPresented: $showTooLongAlert){
+                Alert(title: Text("項目名を短くしてください"),
+                      message: Text("50文字以内のみ登録可能です。"),
+                      //OKならチェックした項目をリストから削除
+                      dismissButton: .default(Text("OK")))
+            }
         }
     }
 }

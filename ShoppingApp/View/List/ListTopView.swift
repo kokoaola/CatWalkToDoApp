@@ -31,59 +31,85 @@ struct List_mainView: View {
     ///itemViewModelのための変数
     @ObservedObject var itemVM = ItemViewModel()
     
+    ///猫動かす用
+    @State private var goRight: Bool = false
+    @State private var flip: Bool = true
+    @State private var shouldPlay: Bool = false
     
     var body: some View {
+        let catSize = UIScreen.main.bounds.width / 6
+        
         NavigationView{
             //下部の完了ボタンを配置するためのZStack
             ZStack{
                 VStack {
-                    
-                    //上に表示される３つのラベル
                     HStack{
-                        ForEach(0 ..< 3) {num in
-                            VStack{
+                        HStack{
+                            LottieView(filename: "cat", loop: .loop, shouldFlip: $flip, shouldPlay: $shouldPlay)
+                                .zIndex(0.0)
+                                .frame(width: catSize)
+                                .offset(x: goRight ? UIScreen.main.bounds.width + catSize : 0 - catSize)
+                                .animation(.linear(duration: 7.0), value: goRight)
+                                .padding(.bottom, 1)
+
+                            
+                            //上に表示される３つのラベル
+                            ForEach(0 ..< 3) {num in
                                 //表示中だけラベルの色を変える
-                                Rectangle()
-                                    .foregroundColor(.clear)
-                                    .frame(width: UIScreen.main.bounds.width / 3.5, height: 30)
-                                    .overlay(Text("\(labelArray[num])")
-                                        .foregroundColor(Color(selection == num ? UIColor.label : .gray)))
-                                    .opacity(selection == num ? 1.0 : 0.4)
+                                CustomShape()
+                                    .foregroundColor(.white)
+                                    .frame(width: UIScreen.main.bounds.width / 3.5, height: 60)
                                     .onTapGesture {
                                         selection = num
                                     }
-                                Color.primary.frame(width: UIScreen.main.bounds.width / 5, height: 2)
-                                    .opacity(selection == num ? 1.0 : 0.0)
-                                    .padding(.top, -5)
+                                    .overlay(Text("\(labelArray[num])")
+                                        .font(.callout)
+                                        .fontWeight(.bold)
+                                        .foregroundColor(Color(selection == num ? UIColor.label : .gray)))
+                                    .opacity(selection == num ? 1.0 : 0.6)
+                                    .zIndex(selection == num ? 1.0 : -1.0)
+
+
                             }
-                        }
+                        }.offset(x: -UIScreen.main.bounds.width / 10.5)
+
                     }
-                    
+                    .padding(.bottom, -20)
+                    .frame(height: 60)
                     
                     //買い物リストの中身は選択中のタブによって切り替える
                     TabView(selection: $selection) {
-                        ShoppingList1(filterdList: $itemVM.label0Item, labelNum: $selection)
+                        ListView(filterdList: $itemVM.label0Item, labelNum: $selection, goRight: $goRight, flip: $flip, shouldPlay: $shouldPlay)
                             .tag(0)
-                        ShoppingList1(filterdList: $itemVM.label1Item, labelNum: $selection)
+                        ListView(filterdList: $itemVM.label1Item, labelNum: $selection, goRight: $goRight, flip: $flip, shouldPlay: $shouldPlay)
                             .tag(1)
-                        ShoppingList1(filterdList: $itemVM.label2Item, labelNum: $selection)
+                        ListView(filterdList: $itemVM.label2Item, labelNum: $selection, goRight: $goRight, flip: $flip, shouldPlay: $shouldPlay)
                             .tag(2)
-                    }.tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                    }
+                    
+                    .background(.white)
+                    .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                         .environmentObject(itemVM)
                     
-                }
+                }.padding(.top, -10)
+                
                 
                 VStack{
                     Spacer()
-                    //買い物完了ボタン
+                    //追加ボタン
                     Button(action: {
-                        showCompleteTaskAlert.toggle()
-                    }, label: {
-                        Buttons()
-                        //ボタン本体のデザインは別のファイル
-                    })
-                    .padding(.bottom, 20)
+                        showAddNewItemSheet = true
+                    }) {
+                        Image(systemName: "plus")
+                            .font(.title)
+                            .padding()
+                            .foregroundColor(.white)
+                            .background(AppSetting.mainColor2)
+                            .cornerRadius(30)
+                            .padding()
+                    }
                 }
+                
                 
                 //タスク新規追加用のシート
                 .sheet(isPresented: $showAddNewItemSheet, content: {
@@ -108,19 +134,22 @@ struct List_mainView: View {
                     labelArray = [label0, label1, label2]
                 }
             }
-            
+            .background(LinearGradient(gradient: Gradient(colors: [AppSetting.mainColor1, AppSetting.mainColor2]), startPoint: .leading, endPoint: .trailing))
 //            .navigationBarItems(trailing: EditButton())
             
-            //キーボード閉じるボタン
+            //削除ボタン
             .toolbar {
-                //左上のプラスの追加ボタン
+                
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Spacer()
                     
                     Button(action: {
-                        showAddNewItemSheet = true
+                        showCompleteTaskAlert = true
                     }) {
-                        Image(systemName: "plus")
+                        Image(systemName: "trash.fill")
+                            .foregroundColor(.white)
+                            .padding(.bottom, 5)
+
                     }
                 }
             }
@@ -132,5 +161,33 @@ struct List_mainView_Previews: PreviewProvider {
     static var previews: some View {
         List_mainView()
             .environmentObject(ItemViewModel())
+    }
+}
+
+
+struct CustomShape: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        
+        
+        // 左下の角を開始点として
+        path.move(to: CGPoint(x: rect.minX, y: rect.maxY))
+        
+        // 左上へ移動
+        path.addLine(to: CGPoint(x: rect.minX, y: rect.minY + 10))
+        path.addQuadCurve(to: CGPoint(x: rect.minX + 10, y: rect.minY), control: CGPoint(x: rect.minX, y: rect.minY))
+        
+        // 右上へ移動
+        path.addLine(to: CGPoint(x: rect.maxX - 10, y: rect.minY))
+        path.addQuadCurve(to: CGPoint(x: rect.maxX, y: rect.minY + 10), control: CGPoint(x: rect.maxX, y: rect.minY))
+        
+        // 右下へ移動
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
+        
+        // 下の辺は描画しないため、左下へ直接戻る
+//        path.addLine(to: CGPoint(x: rect.minX - 1.5, y: rect.maxY))
+
+        
+        return path
     }
 }
