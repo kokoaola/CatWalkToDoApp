@@ -22,6 +22,7 @@ struct Setting_Top: View {
                         )
 
                 List{
+                    Text("")
                     NavigationLink(destination: {
                         AddNewLabel_View()
                     }, label: {Text("ラベルの編集")})
@@ -39,6 +40,8 @@ struct Setting_Top: View {
                         PrivacyPolicyView()
                     }, label: {Text("プライバシーポリシー")})
                 }
+                .listStyle(.inset)
+                .padding(.top)
             }
                 .ignoresSafeArea()
 //            .navigationTitle(Text("各種設定"))

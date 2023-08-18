@@ -43,8 +43,11 @@ struct List_mainView: View {
             //下部の完了ボタンを配置するためのZStack
             ZStack{
                 VStack {
-                    HStack{
+                
+                    
+                    
                         HStack{
+                            //猫ちゃん
                             LottieView(filename: "cat", loop: .loop, shouldFlip: $flip, shouldPlay: $shouldPlay)
                                 .zIndex(0.0)
                                 .frame(width: catSize)
@@ -71,9 +74,9 @@ struct List_mainView: View {
 
 
                             }
-                        }.offset(x: -UIScreen.main.bounds.width / 10.5)
-
-                    }
+                        }
+                    
+                        .offset(x: -UIScreen.main.bounds.width / 10.5)
                     .padding(.bottom, -20)
                     .frame(height: 60)
                     
@@ -91,7 +94,7 @@ struct List_mainView: View {
                     .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                         .environmentObject(itemVM)
                     
-                }.padding(.top, -10)
+                }.padding(.top, 5)
                 
                 
                 VStack{
@@ -142,11 +145,12 @@ struct List_mainView: View {
                 
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Button(action: {
-                        showCompleteTaskAlert = true
+                        showCompleteTaskAlert.toggle()
                     }) {
-                        Image(systemName: "trash.fill")
-                            .foregroundColor(.white)
-                            .padding(.bottom, 5)
+                        Image(systemName: "trash.square.fill")
+                            .symbolRenderingMode(SymbolRenderingMode.palette)
+                            .font(.largeTitle)
+                            .foregroundStyle(.white, .gray)
                     }
                 }
             }
