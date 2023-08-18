@@ -7,24 +7,6 @@
 ///ボタンのデザインたち
 import SwiftUI
 
-//買い物完了ボタン
-struct Buttons: View {
-    var body: some View {
-        Capsule()
-            .frame(width: 170.0, height: 50)
-//            .cornerRadius(25)
-        
-            .foregroundColor(Color(UIColor.systemBackground))
-
-            .overlay(Text("タスクを完了する")
-                .foregroundColor(Color.primary))
-            .overlay(
-                Capsule()
-                    .stroke(Color.primary, lineWidth: 2))
-            //.font(.title3)
-            
-    }
-}
 
 //買い物リストの要素追加ボタン
 struct SaveButton: View {
@@ -34,26 +16,12 @@ struct SaveButton: View {
             .stroke(Color(UIColor.label), lineWidth: 1)
             .foregroundColor(Color(UIColor.systemBackground))
             .frame(width: 200, height: 50)
-            .overlay(Text("保存する")
+            .overlay(Text("Save")
                 .foregroundColor(Color(UIColor.label)))
             .font(.title)
             .font(.system(size: 50, weight: .semibold))
     }
 }
-
-//ボタンのラベル
-//struct LabelButton: View {
-//    var body: some View {
-//        Capsule()
-//            .stroke(Color(UIColor.label), lineWidth: 1)
-//            .foregroundColor(Color(UIColor.systemBackground))
-//            .frame(width: 200, height: 50)
-//            .overlay(Text("ラベル名を変更する")
-//                .foregroundColor(Color(UIColor.label)))
-//            .font(.title3)
-//            .font(.system(size: 50, weight: .semibold))
-//    }
-//}
 
 struct PeriodButton: View {
     let period: String
@@ -157,7 +125,6 @@ struct CompButton_Previews: PreviewProvider {
     static var cc = "aaaaa"
     static var previews: some View {
         VStack{
-            Buttons()
             SaveButton()
             PeriodButton(period: "aaa")
             FavoriteButton(title: "aaaaaaaaaaaaaaaaaa")

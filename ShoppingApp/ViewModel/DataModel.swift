@@ -119,9 +119,9 @@ class ItemViewModel: ObservableObject {
         // 新しいアイテムを追加
         db.collection("users").document(uid).collection(collectionName).addDocument(data: data) { (error) in
             if let err = error {
-                print("Error adding document: \(err)")
+//                print("Error adding document: \(err)")
             } else {
-                print("Document successfully added!")
+//                print("Document successfully added!")
             }
         }
     }
@@ -213,7 +213,7 @@ class ItemViewModel: ObservableObject {
             if let error = error {
                 self.deleteSelectedTask(item: item)
                 self.addItem(title: newTitle, label: newLabel)
-                print("Error removing document: \(error)")
+//                print("Error removing document: \(error)")
             }
         }
     }
@@ -254,7 +254,7 @@ class ItemViewModel: ObservableObject {
             group.enter()  // グループにエンター
             self.db.collection("users").document(uid).collection(collection).document(documentId).delete() { error in
                 if let error = error {
-                    print("Error removing document: \(error)")
+//                    print("Error removing document: \(error)")
                 }
                 group.leave()  // グループからリーブ
             }
@@ -293,7 +293,7 @@ class ItemViewModel: ObservableObject {
         //優先する処理
         db.collection("users").document(uid).collection(collectionName).document(item.id).delete() { error in
             if let error = error {
-                print("Error removing document: \(error)")
+//                print("Error removing document: \(error)")
             }
             group.leave()  // グループからリーブ
         }

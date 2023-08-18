@@ -10,9 +10,9 @@ import SwiftUI
 
 struct AddNewLabel_View: View {
     //ユーザーデフォルトから３つのラベルデータを取得
-    @AppStorage("label0") var label0 = "ラベル１"
-    @AppStorage("label1") var label1 = "ラベル２"
-    @AppStorage("label2") var label2 = "ラベル３"
+    @AppStorage("label0") var label0 = "1"
+    @AppStorage("label1") var label1 = "2"
+    @AppStorage("label2") var label2 = "3"
     //ページ破棄用のdismiss
     @Environment(\.dismiss) private var dismiss
     
@@ -26,17 +26,17 @@ struct AddNewLabel_View: View {
             
             Group{
                 HStack{
-                    Text("ラベル1")
+                    Text("Label1")
                     TextField("\(label0)", text: $newName0,
                               prompt: Text("\(newName0)"))}
                 
                 HStack{
-                    Text("ラベル2")
+                    Text("Label2")
                     TextField("\(label1)", text: $newName1,
                               prompt: Text("\(newName0)"))}
                 
                 HStack{
-                    Text("ラベル3")
+                    Text("Label3")
                     TextField("\(label2)", text: $newName2,
                               prompt: Text("\(newName0)"))}
             }.padding(.horizontal)

@@ -21,9 +21,9 @@ struct List_mainView: View {
     @State var showCompleteTaskAlert = false
     
     ///ユーザーデフォルトから３つのラベルデータを取得
-    @AppStorage("label0") var label0 = "ラベル１"
-    @AppStorage("label1") var label1 = "ラベル２"
-    @AppStorage("label2") var label2 = "ラベル３"
+    @AppStorage("label0") var label0 = "1"
+    @AppStorage("label1") var label1 = "2"
+    @AppStorage("label2") var label2 = "3"
     
     ///ラベル名を格納するための配列(ForEachで使用するため)
     @State var labelArray:[String] = ["" , "", ""]
@@ -122,8 +122,8 @@ struct List_mainView: View {
                 
                 //買い物完了ボタンが押された後の確認アラート
                 .alert(isPresented: $showCompleteTaskAlert){
-                    Alert(title: Text("タスクの完了"),
-                          message: Text("チェックした項目を削除しますか？"),
+                    Alert(title: Text("Task Completion"),
+                          message: Text("Do you want to delete the checked items?"),
                           //OKならチェックした項目をリストから削除
                           primaryButton: .default(Text("OK"), action: {
                         itemVM.completeTask(labelNum: selection)

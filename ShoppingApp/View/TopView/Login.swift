@@ -30,7 +30,7 @@ struct Login: View {
     func signInAnonymously() {
         Auth.auth().signInAnonymously { (authResult, error) in
             if let error = error {
-                print("Error signing in: \(error.localizedDescription)")
+//                print("Error signing in: \(error.localizedDescription)")
                 return
             }
             isSignedIn = true

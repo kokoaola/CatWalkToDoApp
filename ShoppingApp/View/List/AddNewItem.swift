@@ -11,9 +11,9 @@ import SwiftUI
 struct AddNewItem: View {
     
     ///ユーザーデフォルトから３つのラベルデータを取得
-    @AppStorage("label0") var label0 = "ラベル１"
-    @AppStorage("label1") var label1 = "ラベル２"
-    @AppStorage("label2") var label2 = "ラベル３"
+    @AppStorage("label0") var label0 = "1"
+    @AppStorage("label1") var label1 = "2"
+    @AppStorage("label2") var label2 = "3"
     
     ///キーボードフォーカス用変数（Doneボタン表示のため）
     @FocusState var isInputActive: Bool
@@ -44,7 +44,7 @@ struct AddNewItem: View {
                 VStack(spacing:0){
                     //お気に入り表示用タグ
                     HStack{
-                        Text("お気に入りから追加")
+                        Text("Add from Favorites")
                         Spacer()
                     }.padding(.vertical)
                     
@@ -71,8 +71,8 @@ struct AddNewItem: View {
                 
                 //ラベル選択用のピッカー
                 HStack{
-                    Text("追加先")
-                    Picker(selection: $newLabelNum, label: Text("aaa")){
+                    Text("Destination to Add")
+                    Picker(selection: $newLabelNum, label: Text("")){
                         Text(label0)
                             .tag(0)
                         Text(label1)
@@ -86,12 +86,12 @@ struct AddNewItem: View {
                 
                 //お気に入りに追加のスイッチ
                 Toggle(isOn: $isFavorite){
-                    Text("お気に入りに追加")
+                    Text("Add to Favorites")
                 }
                 
                 
                 //タイトル入力用テキストフィールド
-                TextField("追加する項目", text: $newName)
+                TextField("Task to Add", text: $newName)
                     .frame(height: 40)
                     .focused($isInputActive)
                     .overlay(RoundedRectangle(cornerRadius: 1).stroke(Color(.tertiarySystemGroupedBackground), lineWidth: 1))
@@ -132,7 +132,7 @@ struct AddNewItem: View {
                     .toolbar {
                         ToolbarItemGroup(placement: .keyboard) {
                             Spacer()
-                            Button("閉じる") {
+                            Button("Close") {
                                 isInputActive = false
                             }
                         }
@@ -140,7 +140,7 @@ struct AddNewItem: View {
                         //シート閉じるボタン
                         ToolbarItemGroup(placement: .navigationBarLeading) {
                             Spacer()
-                            Button("閉じる") {
+                            Button("Close") {
                                 dismiss()
                             }
                         }
@@ -149,14 +149,14 @@ struct AddNewItem: View {
             .padding()
             
             //ナビゲーションバーの設定
-            .navigationTitle("新規作成")
+            .navigationTitle("Create New")
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(.visible, for: .navigationBar)
             
             //買い物完了ボタンが押された後の確認アラート
             .alert(isPresented: $showTooLongAlert){
-                Alert(title: Text("項目名を短くしてください"),
-                      message: Text("50文字以内のみ登録可能です。"),
+                Alert(title: Text("Please shorten the item name."),
+                      message: Text("Only up to 50 characters can be registered."),
                       //OKならチェックした項目をリストから削除
                       dismissButton: .default(Text("OK")))
             }

@@ -29,7 +29,7 @@ struct Keisan: View {
                     LinearGradient(gradient: Gradient(colors: [AppSetting.mainColor1, AppSetting.mainColor2]), startPoint: .leading, endPoint: .trailing)
                         .frame(height: AppSetting.screenHeight * 0.15)
                         .overlay(
-                            Text("単価計算").font(.largeTitle).fontWeight(.bold).foregroundColor(.white).padding(.top, AppSetting.screenHeight * 0.05)
+                            Text("Unit Price Calculation").font(.largeTitle).fontWeight(.bold).foregroundColor(.white).padding(.top, AppSetting.screenHeight * 0.05)
                         )
                 Spacer()
                 }
@@ -37,21 +37,20 @@ struct Keisan: View {
                 
                 VStack(alignment: .center, spacing : 30){
                     
-                    
                     //テキストフィールドのセクション
                     VStack(spacing: 20){
                         //価格入力用のテキストフィールド
                         HStack{
-                            Text("商品の価格")
+                            Text("Product Price")
                                 .padding(.trailing)
-                            TextField("商品の価格を入力", value: $price, format: .currency(code: Locale.current.currency?.identifier ?? "JPY" ))
+                            TextField("Enter Price", value: $price, format: .currency(code: Locale.current.currency?.identifier ?? "USD" ))
                                 .focused($isInputActivePrice)
                         }
                         
                         //全体量入力用のテキストフィールド
                         HStack{
-                            Text("商品の全体量")
-                            TextField("ml、個数などを入力", value: $amount, format: .number)
+                            Text("Total Quantity")
+                            TextField("Enter in ml, count, etc.", value: $amount, format: .number)
                                 .focused($isInputActiveVolume)
                         }
                     }
@@ -62,16 +61,15 @@ struct Keisan: View {
                     .background(.white)
                     .cornerRadius(15)
                     
-                    
                     VStack{
                         //単価を計算して表示（小数点3桁より下は切り捨て）
                         VStack{
-                            Text("1つあたり").font(.title2).padding(.vertical, 5).padding(.trailing, 100)
+                            Text("Per Unit").font(.title2).padding(.vertical, 5).padding(.trailing, 100)
                             CurrencyText(value: keisan(price:price ?? 0, amount:amount ?? 0))
                         }
                         .padding(.bottom)
                         
-                            Text("小さければ小さいほどお得です。\n単位は切り捨てです。")
+                        Text("The smaller the value, the better the deal.\nValues are truncated.")
                             .opacity(0.9)
                             .font(.callout)
                     }
@@ -79,27 +77,24 @@ struct Keisan: View {
                     .frame(width: AppSetting.screenWidth * 0.9)
                     .background(Color("usuigray"))
                     .cornerRadius(15)
-
-                    .overlay(
-                    RoundedRectangle(cornerRadius: 15)
-                        .stroke(.gray, lineWidth: 4)
-                    )
-
                     
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 15)
+                            .stroke(.gray, lineWidth: 4)
+                    )
                     
                 }
                 //タップでキーボードを閉じる
                 .contentShape(Rectangle())
                 .onTapGesture {
-                    AppSetting.colseKeyBoard()
+                    AppSetting.closeKeyBoard()
                 }
-                
                 
                 //キーボード閉じるボタンを配置
                 .toolbar {
                     ToolbarItemGroup(placement: .keyboard) {
                         Spacer()
-                        Button(isInputActivePrice && !isInputActiveVolume ? "次へ" : "閉じる") {
+                        Button(isInputActivePrice && !isInputActiveVolume ? "Next" : "Close") {
                             if isInputActivePrice && !isInputActiveVolume{
                                 isInputActiveVolume = true
                             }else{
@@ -123,7 +118,6 @@ struct Keisan: View {
         }else if num.isNaN{
             return 0
         }else{
-            print(num)
             return num
         }
     }
