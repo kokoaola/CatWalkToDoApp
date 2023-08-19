@@ -21,9 +21,9 @@ struct List_mainView: View {
     @State var showCompleteTaskAlert = false
     
     ///ユーザーデフォルトから３つのラベルデータを取得
-    @AppStorage("label0") var label0 = "ラベル１"
-    @AppStorage("label1") var label1 = "ラベル２"
-    @AppStorage("label2") var label2 = "ラベル３"
+    @AppStorage("label0") var label0 = "1"
+    @AppStorage("label1") var label1 = "2"
+    @AppStorage("label2") var label2 = "3"
     
     ///ラベル名を格納するための配列(ForEachで使用するため)
     @State var labelArray:[String] = ["" , "", ""]
@@ -43,8 +43,11 @@ struct List_mainView: View {
             //下部の完了ボタンを配置するためのZStack
             ZStack{
                 VStack {
-                    HStack{
+                
+                    
+                    
                         HStack{
+                            //猫ちゃん
                             LottieView(filename: "cat", loop: .loop, shouldFlip: $flip, shouldPlay: $shouldPlay)
                                 .zIndex(0.0)
                                 .frame(width: catSize)
@@ -71,9 +74,9 @@ struct List_mainView: View {
 
 
                             }
-                        }.offset(x: -UIScreen.main.bounds.width / 10.5)
-
-                    }
+                        }
+                    
+                        .offset(x: -UIScreen.main.bounds.width / 10.5)
                     .padding(.bottom, -20)
                     .frame(height: 60)
                     
@@ -91,7 +94,7 @@ struct List_mainView: View {
                     .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                         .environmentObject(itemVM)
                     
-                }.padding(.top, -10)
+                }.padding(.top, 5)
                 
                 
                 VStack{
@@ -119,8 +122,8 @@ struct List_mainView: View {
                 
                 //買い物完了ボタンが押された後の確認アラート
                 .alert(isPresented: $showCompleteTaskAlert){
-                    Alert(title: Text("タスクの完了"),
-                          message: Text("チェックした項目を削除しますか？"),
+                    Alert(title: Text("Task Completion"),
+                          message: Text("Do you want to delete the checked items?"),
                           //OKならチェックした項目をリストから削除
                           primaryButton: .default(Text("OK"), action: {
                         itemVM.completeTask(labelNum: selection)
@@ -141,15 +144,13 @@ struct List_mainView: View {
             .toolbar {
                 
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
-                    Spacer()
-                    
                     Button(action: {
-                        showCompleteTaskAlert = true
+                        showCompleteTaskAlert.toggle()
                     }) {
-                        Image(systemName: "trash.fill")
-                            .foregroundColor(.white)
-                            .padding(.bottom, 5)
-
+                        Image(systemName: "trash.square.fill")
+                            .symbolRenderingMode(SymbolRenderingMode.palette)
+                            .font(.largeTitle)
+                            .foregroundStyle(.white, .gray)
                     }
                 }
             }

@@ -11,9 +11,9 @@ import SwiftUI
 ///アイテム編集用のシート
 struct EditItemView: View {
     ///ユーザーデフォルトから３つのラベルデータを取得
-    @AppStorage("label0") var label0 = "ラベル１"
-    @AppStorage("label1") var label1 = "ラベル２"
-    @AppStorage("label2") var label2 = "ラベル３"
+    @AppStorage("label0") var label0 = "1"
+    @AppStorage("label1") var label1 = "2"
+    @AppStorage("label2") var label2 = "3"
     
     ///キーボードフォーカス用変数（Doneボタン表示のため）
     @FocusState var isInputActive: Bool
@@ -51,8 +51,8 @@ struct EditItemView: View {
                 
                 //ラベル選択用のピッカー
                 HStack{
-                    Text("移動先")
-                    Picker(selection: $newNum, label: Text("aaa")){
+                    Text("Destination to Move")
+                    Picker(selection: $newNum, label: Text("")){
                         Text(label0)
                             .tag(0)
                         Text(label1)
@@ -68,14 +68,14 @@ struct EditItemView: View {
                 
                 //お気に入りに追加のトグルスイッチ
                 Toggle(isOn: $isFavorite){
-                    Text("お気に入りに追加")
+                    Text("Add to Favorites")
                 }
                 
                 
                 //タイトル入力用テキストフィールド
                 
                 //タイトル入力用テキストフィールド
-                TextField("追加する項目", text: $newName)
+                TextField("Task to Add", text: $newName)
                     .frame(height: 40)
                     .focused($isInputActive)
                     .overlay(RoundedRectangle(cornerRadius: 1).stroke(Color(.tertiarySystemGroupedBackground), lineWidth: 1))
@@ -115,8 +115,8 @@ struct EditItemView: View {
                 
                 //買い物完了ボタンが押された後の確認アラート
                 .alert(isPresented: $showTooLongAlert){
-                    Alert(title: Text("項目名を短くしてください"),
-                          message: Text("50文字以内のみ登録可能です。"),
+                    Alert(title: Text("Please shorten the item name."),
+                          message: Text("Only up to 50 characters can be registered."),
                           //OKならチェックした項目をリストから削除
                           dismissButton: .default(Text("OK")))
                 }
@@ -137,14 +137,14 @@ struct EditItemView: View {
                 
                 //削除ボタンが押された後の確認アラート
                     .alert(isPresented: $showDeleteAlert){
-                        Alert(title: Text("アイテムの削除"),
-                              message: Text("表示中のアイテムを削除しますか？"),
+                        Alert(title: Text("Delete Item"),
+                              message: Text("Do you want to delete the displayed item?"),
                               //OKならチェックした項目をリストから削除（未搭載）
-                              primaryButton: .destructive(Text("削除する"), action: {
+                              primaryButton: .destructive(Text("Delete"), action: {
                             itemVM.deleteSelectedTask(item: item)
                             dismiss()
                         }),
-                              secondaryButton: .cancel(Text("やめる"), action:{}))
+                              secondaryButton: .cancel(Text("Cancel"), action:{}))
                     }
 
                 
@@ -154,7 +154,7 @@ struct EditItemView: View {
                     .toolbar {
                         ToolbarItemGroup(placement: .keyboard) {
                             Spacer()
-                            Button("閉じる") {
+                            Button("Close") {
                                 isInputActive = false
                             }
                         }
@@ -162,7 +162,7 @@ struct EditItemView: View {
                         //シート閉じるボタン
                         ToolbarItemGroup(placement: .navigationBarLeading) {
                             Spacer()
-                            Button("閉じる") {
+                            Button("Close") {
                                 dismiss()
                             }
                         }
@@ -184,7 +184,7 @@ struct EditItemView: View {
             .padding()
             
             //ナビゲーションバーの設定
-            .navigationTitle("編集")
+            .navigationTitle("Edit")
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(.visible, for: .navigationBar)
         }

@@ -26,7 +26,7 @@ class AppSetting{
     static let mainColor2 = Color("reef2")
     
     ///キーボード閉じるボタン
-    static func colseKeyBoard(){
+    static func closeKeyBoard(){
         let keyWindow = UIApplication.shared.connectedScenes
             .filter({$0.activationState == .foregroundActive})
             .map({$0 as? UIWindowScene})

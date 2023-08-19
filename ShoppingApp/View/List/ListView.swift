@@ -72,7 +72,7 @@ struct ListView: View {
                         withAnimation() {
                             self.goRight.toggle()
                         }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 8) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 7.5) {
                             shouldPlay = false
                         }
                     }

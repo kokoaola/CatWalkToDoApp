@@ -23,6 +23,8 @@
 		3B95C62E2A8B19E300BC6376 /* GoogleSignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B95C62D2A8B19E300BC6376 /* GoogleSignInViewController.swift */; };
 		3BB0191B28E400830094AAD2 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB0191A28E400830094AAD2 /* ListView.swift */; };
 		3BB0191E28E428720094AAD2 /* SettingTop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB0191D28E428720094AAD2 /* SettingTop.swift */; };
+		3BB93D562A8F13690096CF37 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3BB93D582A8F13690096CF37 /* Localizable.strings */; };
+		3BB93D5C2A8F17EF0096CF37 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3BB93D5E2A8F17EF0096CF37 /* InfoPlist.strings */; };
 		3BCF53EA28E33A9E00E853D7 /* ShoppingAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BCF53E928E33A9E00E853D7 /* ShoppingAppApp.swift */; };
 		3BCF53EE28E33AA000E853D7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3BCF53ED28E33AA000E853D7 /* Assets.xcassets */; };
 		3BCF53F128E33AA000E853D7 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3BCF53F028E33AA000E853D7 /* Preview Assets.xcassets */; };
@@ -51,6 +53,10 @@
 		3B95C62D2A8B19E300BC6376 /* GoogleSignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInViewController.swift; sourceTree = "<group>"; };
 		3BB0191A28E400830094AAD2 /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
 		3BB0191D28E428720094AAD2 /* SettingTop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingTop.swift; sourceTree = "<group>"; };
+		3BB93D572A8F13690096CF37 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
+		3BB93D5D2A8F17EF0096CF37 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		3BB93D5F2A8F181A0096CF37 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		3BB93D602A8F18430096CF37 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3BCF53E628E33A9E00E853D7 /* ShoppingApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShoppingApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BCF53E928E33A9E00E853D7 /* ShoppingAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingAppApp.swift; sourceTree = "<group>"; };
 		3BCF53ED28E33AA000E853D7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -158,6 +164,8 @@
 				3BCF53F028E33AA000E853D7 /* Preview Assets.xcassets */,
 				3BED4A2F2A7D337D00E1CF32 /* GoogleService-Info.plist */,
 				3B4A739C2A8CCB97007E571D /* LottieView.swift */,
+				3BB93D582A8F13690096CF37 /* Localizable.strings */,
+				3BB93D5E2A8F17EF0096CF37 /* InfoPlist.strings */,
 				3B4A73A12A8CCC13007E571D /* cat.json */,
 			);
 			path = "Preview Content";
@@ -260,6 +268,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ja,
 			);
 			mainGroup = 3BCF53DD28E33A9E00E853D7;
 			packageReferences = (
@@ -281,6 +290,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3BB93D562A8F13690096CF37 /* Localizable.strings in Resources */,
+				3BB93D5C2A8F17EF0096CF37 /* InfoPlist.strings in Resources */,
 				3BCF53F128E33AA000E853D7 /* Preview Assets.xcassets in Resources */,
 				3B4A73A22A8CCC14007E571D /* cat.json in Resources */,
 				3BED4A302A7D337D00E1CF32 /* GoogleService-Info.plist in Resources */,
@@ -319,6 +330,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		3BB93D582A8F13690096CF37 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3BB93D572A8F13690096CF37 /* ja */,
+				3BB93D602A8F18430096CF37 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		3BB93D5E2A8F17EF0096CF37 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3BB93D5D2A8F17EF0096CF37 /* ja */,
+				3BB93D5F2A8F181A0096CF37 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		3BCF53F728E33AA000E853D7 /* Debug */ = {
@@ -443,25 +475,27 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ShoppingApp/Preview Content\"";
-				DEVELOPMENT_TEAM = 6876CTW4C6;
+				DEVELOPMENT_TEAM = 6CBTWMSXBM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ShoppingApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = amatnug.amatnug.ShoppingApp;
+				PRODUCT_BUNDLE_IDENTIFIER = amatnug.amatnug.ToDoApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -473,25 +507,27 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ShoppingApp/Preview Content\"";
-				DEVELOPMENT_TEAM = 6876CTW4C6;
+				DEVELOPMENT_TEAM = 6CBTWMSXBM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ShoppingApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = amatnug.amatnug.ShoppingApp;
+				PRODUCT_BUNDLE_IDENTIFIER = amatnug.amatnug.ToDoApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
