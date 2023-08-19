@@ -39,14 +39,17 @@ struct AddNewItem: View {
     var body: some View {
         //ツールバー使用するためNavigationStack
         NavigationStack{
-            VStack(spacing: 40.0){
+            VStack(spacing: 30.0){
                 
                 VStack(spacing:0){
-                    //お気に入り表示用タグ
-                    HStack{
-                        Text("Add from Favorites")
-                        Spacer()
-                    }.padding(.vertical)
+                    
+                    if !itemVM.favoriteList.isEmpty{
+                        //お気に入り表示用タグ
+                        HStack{
+                            Text("Add from Favorites")
+                            Spacer()
+                        }.padding(.bottom)
+                    }
                     
                     //タグ用のビュー
                     FlowLayout(spacing: 7) {
