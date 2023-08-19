@@ -1,0 +1,61 @@
+/* 
+  Localizable.strings
+  ShoppingApp
+
+  Created by koala panda on 2023/08/18.
+  
+*/
+
+
+//タブ
+"To-Do List" = "ToDoリスト";
+"Unit Price Calculation" = "単価計算";
+"Settings" = "設定";
+
+
+"Task Completion" = "タスクの完了";
+"Do you want to delete the checked items?" = "チェックした項目を削除しますか？";
+
+//AddNewItemSheet
+"Add from Favorites" = "お気に入りから追加";
+"Destination to Add" = "追加先";
+"Add to Favorites" = "お気に入りに追加";
+"Close" = "閉じる";
+"Task to Add" = "追加するタスク";
+"Create New" = "新規作成";
+"Please shorten the item name." = "項目名を短くしてください";
+"Only up to 50 characters can be registered." = "50文字以内のみ登録可能です。";
+"Destination to Move" = "移動先";
+"Delete Item" = "アイテムの削除";
+"Do you want to delete the displayed item?" = "表示中のアイテムを削除しますか？";
+"Delete" = "削除する";
+"Cancel" = "やめる";
+"Edit" = "編集";
+
+
+//単価計算
+"Unit Price Calculation" = "単価計算";
+"Product Price" = "商品の価格";
+"Enter Price" = "価格";
+"Total Quantity" = "商品の全体量";
+"Enter in ml, count, etc." = "ml、個数などを入力";
+"Per Unit" = "1つあたり";
+"The smaller the value, the better the deal.\nValues are truncated." = "小さければ小さいほどお得です。\n単位は切り捨てです。";
+"Close keyboard on tap" = "タップでキーボードを閉じる";
+"Next" = "次へ";
+"Close" = "閉じる";
+
+
+//設定
+"Edit Labels" = "ラベルの編集";
+"Contact Us" = "お問い合わせ";
+"Privacy Policy" = "プライバシーポリシー";
+
+//ラベル
+"Label1" = "ラベル1";
+"Label2" = "ラベル2";
+"Label3" = "ラベル3";
+
+
+//ボタン
+"Save" = "保存する";
