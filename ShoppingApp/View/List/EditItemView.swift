@@ -7,92 +7,123 @@
 
 import SwiftUI
 
+
+///アイテム編集用のシート
 struct EditItemView: View {
-    //ユーザーデフォルトから３つのラベルデータを取得
-    @AppStorage("label0") var label0 = "ラベル１"
-    @AppStorage("label1") var label1 = "ラベル２"
-    @AppStorage("label2") var label2 = "ラベル３"
-    
-    
-    @EnvironmentObject var itemVM: ItemViewModel
+    ///ユーザーデフォルトから３つのラベルデータを取得
+    @AppStorage("label0") var label0 = "1"
+    @AppStorage("label1") var label1 = "2"
+    @AppStorage("label2") var label2 = "3"
     
     ///キーボードフォーカス用変数（Doneボタン表示のため）
     @FocusState var isInputActive: Bool
     
-    //名前入力用の変数
-    @State var newName = ""
+    ///名前入力用の変数
+    @State private var newName = ""
     
-    //ラベル入力用の変数
-    @State var num = 0
+    let oldLabel: Int
     
-    //お気に入り追加用の変数
-    @State var isFavorite = false
+    ///ラベル入力用の変数
+    @Binding var newNum: Int
     
-    //ページ破棄用のdismiss
+    ///お気に入り追加用の変数
+    @State private var isFavorite = false
+    
+    ///ページ破棄用のdismiss
     @Environment(\.dismiss) private var dismiss
     
+    ///ItemViewModelに引数として渡すための変数
     @State var item: ItemDataType
     
-    @State var showDeleteAlert = false
+    ///削除ボタンが押された時の確認アラート表示フラグ
+    @State private var showDeleteAlert = false
     
+    ///itemViewModelのための変数
+    @EnvironmentObject var itemVM: ItemViewModel
+    
+    @State private var showTooLongAlert = false
     
     
     var body: some View {
-        
+        //ツールバー使用するためNavigationStack
         NavigationStack{
-            VStack(spacing: 10.0){
+            VStack(spacing: 40.0){
                 
-                
-                Group{
-                    ///ラベル選択用のピッカー
-                    HStack{
-                        Text("追加先")
-                        Picker(selection: $num, label: Text("aaa")){
-                            Text(label0)
-                                .tag(0)
-                            Text(label1)
-                                .tag(1)
-                            Text(label2)
-                                .tag(2)
-                        }
-                        .pickerStyle(.segmented)
+                //ラベル選択用のピッカー
+                HStack{
+                    Text("Destination to Move")
+                    Picker(selection: $newNum, label: Text("")){
+                        Text(label0)
+                            .tag(0)
+                        Text(label1)
+                            .tag(1)
+                        Text(label2)
+                            .tag(2)
                     }
+                    .pickerStyle(.segmented)
                     
-                    
-                    ///お気に入りに追加のスイッチ
-                    Toggle(isOn: $isFavorite){
-                        Text("お気に入り")
-                    }
-                    ///入力用テキストフィールド
-                    TextField("追加する項目", text: $newName)
-                        .focused($isInputActive)
-                        .overlay(RoundedRectangle(cornerRadius: 1).stroke(Color(UIColor.label), lineWidth: 0.1))
-                    
-                }.padding()
+                }
+                .padding(.top)
                 
-                ///追加ボタン
+                
+                //お気に入りに追加のトグルスイッチ
+                Toggle(isOn: $isFavorite){
+                    Text("Add to Favorites")
+                }
+                
+                
+                //タイトル入力用テキストフィールド
+                
+                //タイトル入力用テキストフィールド
+                TextField("Task to Add", text: $newName)
+                    .frame(height: 40)
+                    .focused($isInputActive)
+                    .overlay(RoundedRectangle(cornerRadius: 1).stroke(Color(.tertiarySystemGroupedBackground), lineWidth: 1))
+                
+                
+                //保存ボタン
                 Button(action: {
-                    //入力された値が空白以外なら配列に追加
-                    if !newName.isEmpty{
-                        itemVM.changeTitle(item: item, newTitle: newName, newLabel: num)
-                        
-                        if isFavorite{
-                            itemVM.changeFavoriteList(itemName: newName, delete: false)
-                            
-                            //お気に入りリストに存在するが、お気に入りスイッチがOFFになってる時
-                        }else if !isFavorite && itemVM.favoriteList.contains(newName){
-                            //お気に入りから削除する
-                            itemVM.changeFavoriteList(itemName: newName, delete: true)
-                        }
-                        dismiss() //追加後のページ破棄関数
+                    //入力された値が５０文字以上ならアラートを表示してリターン
+                    if newName.count >= 50{
+                        showTooLongAlert = true
+                        return
                     }
+                    
+                    
+                    //入力された値が空白ならリターン
+                    if newName.isEmpty{ return }
+                    
+                    //項目をデータベースに追加
+                    itemVM.changeTitle(item: item, newTitle: newName, newLabel: newNum)
+                    
+                    //お気に入りOnならお気に入りリストに追加
+                    if isFavorite{
+                        itemVM.changeFavoriteList(itemName: newName, delete: false)
+                        
+                        //お気に入りリストに存在するが、お気に入りスイッチがOFFになってる時
+                    }else if !isFavorite && itemVM.favoriteList.contains(newName){
+                        //お気に入りから削除する
+                        itemVM.changeFavoriteList(itemName: newName, delete: true)
+                    }
+                    
+                    dismiss() //追加後のページ破棄関数
+                    
+
                 },label: {
-                    TuikaButton() //ボタンデザインは別ファイル
+                    SaveButton() //ボタンデザインは別ファイル
                 })
-                .padding()
+                
+                //買い物完了ボタンが押された後の確認アラート
+                .alert(isPresented: $showTooLongAlert){
+                    Alert(title: Text("Please shorten the item name."),
+                          message: Text("Only up to 50 characters can be registered."),
+                          //OKならチェックした項目をリストから削除
+                          dismissButton: .default(Text("OK")))
+                }
+                
+                
+                
                 .onAppear{
-                    print(item)
-                    num = Int(item.label)
                     newName = item.title
                     if itemVM.favoriteList.contains(item.title){
                         isFavorite = true
@@ -100,21 +131,22 @@ struct EditItemView: View {
                         isFavorite = false
                     }
                 }
+
                 
                 Spacer()
                 
                 //削除ボタンが押された後の確認アラート
                     .alert(isPresented: $showDeleteAlert){
-                        Alert(title: Text("アイテムの削除"),
-                              message: Text("表示中のアイテムを削除しますか？"),
+                        Alert(title: Text("Delete Item"),
+                              message: Text("Do you want to delete the displayed item?"),
                               //OKならチェックした項目をリストから削除（未搭載）
-                              primaryButton: .destructive(Text("削除する"), action: {
-//                            itemVM.completeTask()
+                              primaryButton: .destructive(Text("Delete"), action: {
                             itemVM.deleteSelectedTask(item: item)
                             dismiss()
                         }),
-                              secondaryButton: .cancel(Text("やめる"), action:{}))
+                              secondaryButton: .cancel(Text("Cancel"), action:{}))
                     }
+
                 
                 
                 //ツールバーの設置
@@ -122,7 +154,7 @@ struct EditItemView: View {
                     .toolbar {
                         ToolbarItemGroup(placement: .keyboard) {
                             Spacer()
-                            Button("閉じる") {
+                            Button("Close") {
                                 isInputActive = false
                             }
                         }
@@ -130,7 +162,7 @@ struct EditItemView: View {
                         //シート閉じるボタン
                         ToolbarItemGroup(placement: .navigationBarLeading) {
                             Spacer()
-                            Button("閉じる") {
+                            Button("Close") {
                                 dismiss()
                             }
                         }
@@ -144,22 +176,27 @@ struct EditItemView: View {
                                 Image(systemName: "trash")
                                     .foregroundColor(.red)
                             }
-
                         }
-                        
                     }
                 
-                    
+                
             }
+            .padding()
+            
+            //ナビゲーションバーの設定
+            .navigationTitle("Edit")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(.visible, for: .navigationBar)
         }
     }
     
 }
 
 struct EditItemView_Previews: PreviewProvider {
-    static let item = ItemDataType(id: "A", title: "aaa", label: 2, checked: false, finished: false, timestamp: Date())
+    @State static var num = 0
+    static let item = ItemDataType(id: "A", title: "AA", index: 1, label: 0, checked: false, timestamp: Date())
     static var previews: some View {
-        EditItemView(item: item)
+        EditItemView(oldLabel: 0, newNum: $num, item: item)
             .environmentObject(ItemViewModel())
     }
 }

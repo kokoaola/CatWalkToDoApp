@@ -10,18 +10,23 @@
 
 import Foundation
 import FirebaseFirestore
+import SwiftUI
+import Firebase
 
 class ItemViewModel: ObservableObject {
-    @Published private(set) var itemList = [ItemDataType]()
     
     ///ラベルごとに分類したアイテム
-    @Published var filterdList0 = [ItemDataType]()
-    @Published var filterdList1 = [ItemDataType]()
-    @Published var filterdList2 = [ItemDataType]()
+    @Published  var label0Item = [ItemDataType]()
+    @Published  var label1Item = [ItemDataType]()
+    @Published  var label2Item = [ItemDataType]()
     
-    @Published var favoriteList:[String]
+    @Published var favoriteList = [String]()
     
     @Published var isBusy = false
+    
+    @Published var selectedTab = 0
+    
+    //    @Published var userSelectedLabel = 0
     
     ///ユーザーデフォルト用の変数
     private let defaults = UserDefaults.standard
@@ -30,66 +35,103 @@ class ItemViewModel: ObservableObject {
     
     let db = Firestore.firestore()
     
-    init() {
-        self.favoriteList = defaults.stringArray(forKey:favoriteListKey) ?? ["test"]
-        db.collection("items").order(by: "timestamp").addSnapshotListener { (snap, error) in
-
-            if let error = error {
-                print(error.localizedDescription)
-                return
-            }
-            if let snap = snap {
-                for item in snap.documentChanges {
-                    if item.type == .added {
-                        let id = item.document.documentID
-                        let title = item.document.get("title") as! String
-                        let label = item.document.get("label") as! Int16
-
-                        let checked = item.document.get("checked") as! Bool
-                        let finished = item.document.get("finished") as! Bool
-                        let timeData = item.document.get("timestamp", serverTimestampBehavior: .estimate) as! Timestamp
-                        let timestamp = timeData.dateValue()
-
-                        
-                        self.itemList.append(ItemDataType(id: id,title: title, label: label, checked: checked, finished: finished, timestamp: timestamp))
-                    }
+    
+    init(label0Item: [ItemDataType] = [ItemDataType](), label1Item: [ItemDataType] = [ItemDataType](), label2Item: [ItemDataType] = [ItemDataType](), favoriteList: [String] = [String](), isBusy: Bool = false) {
+        self.label0Item = label0Item
+        self.label1Item = label1Item
+        self.label2Item = label2Item
+        self.favoriteList = defaults.object(forKey:favoriteListKey) as? [String] ?? [String]()
+        self.isBusy = isBusy
+        
+        fetchDataForCollection("label0Item")
+        fetchDataForCollection("label1Item")
+        fetchDataForCollection("label2Item")
+        
+    }
+    
+    
+    ///引数で渡されたラベルに応じたデータをフェッチするメソッド
+    private func fetchDataForCollection(_ collectionName: String) {
+        
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        db.collection("users").document(uid).collection(collectionName).order(by: "index").addSnapshotListener { (snapshot, error) in
+            var tempArray = [ItemDataType]()
+            if let snap = snapshot {
+                for document in snap.documents {
+                    let id = document.documentID
+                    let title = document.get("title") as! String
+                    let index = document.get("index") as! Int16
+                    let label = document.get("label") as! Int16
+                    let checked = document.get("checked") as! Bool
+                    let timeData = document.get("timestamp", serverTimestampBehavior: .estimate) as! Timestamp
+                    let timestamp = timeData.dateValue()
+                    
+                    tempArray.append(ItemDataType(id: id, title: title, index: index,label: label, checked: checked, timestamp: timestamp))
                 }
-                
-                self.filterdList0 = self.itemList.filter { $0.label == 0 }
-                self.filterdList1 = self.itemList.filter { $0.label == 1 }
-                self.filterdList2 = self.itemList.filter { $0.label == 2 }
-
-                
+            }
+            switch collectionName {
+            case "label0Item":
+                self.label0Item = tempArray
+            case "label1Item":
+                self.label1Item = tempArray
+            case "label2Item":
+                self.label2Item = tempArray
+            default:
+                break
             }
         }
     }
+    
+    
     
     
     ///アイテムをデータベースに追加する
-    func addItem(title: String, label: Int16){
+    func addItem(title: String, label: Int){
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        let collectionName: String
+        var newIndex: Int
+        switch label{
+        case 0:
+            newIndex = self.label0Item.count
+            collectionName = "label0Item"
+        case 1:
+            newIndex = self.label1Item.count
+            collectionName = "label1Item"
+        case 2:
+            newIndex = self.label2Item.count
+            collectionName = "label2Item"
+        default:
+            newIndex = self.label0Item.count
+            collectionName = "label0Item"
+        }
+        
         let data = [
-            "label": label,
             "title": title,
-            "favorite": false,
+            "index": newIndex,
+            "label": label,
             "checked": false,
-            "finished": false,
             "timestamp": FieldValue.serverTimestamp()
         ] as [String : Any]
-
         
-        db.collection("items").addDocument(data: data) { error in
-            if let error = error {
-                print(error.localizedDescription)
-                return
+        
+        // 新しいアイテムを追加
+        db.collection("users").document(uid).collection(collectionName).addDocument(data: data) { (error) in
+            if let err = error {
+//                print("Error adding document: \(err)")
+            } else {
+//                print("Document successfully added!")
             }
-
         }
     }
     
     
+    
     ///達成フラグをtrueにして保存する
-    func toggleCheck(item: ItemDataType){
-        print(item.title, item.checked)
+    func toggleCheck(item: ItemDataType, labelNum: Int){
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
         let documentId = item.id
         let newCheckedStatus = !item.checked
         
@@ -97,25 +139,25 @@ class ItemViewModel: ObservableObject {
         updatedItem.checked = newCheckedStatus
         
         
-        let group = DispatchGroup() // DispatchGroupを作成
+        let collection: String
         
-        group.enter() // タスクが始まったことを通知
-        db.collection("items").document(documentId).updateData([
+        switch labelNum{
+        case 0:
+            collection = "label0Item"
+        case 1:
+            collection = "label1Item"
+        case 2:
+            collection = "label2Item"
+        default:
+            collection = "label0Item"
+        }
+        
+        db.collection("users").document(uid).collection(collection).document(documentId).updateData([
             "checked": newCheckedStatus
-        ]) { [weak self] error in
-            if let error = error {
-                print(error.localizedDescription)
-            }else{
-                print(item.title, item.checked)
-            }
-        }
-        group.leave()
-        
-        // 全てのタスクが終わった後に呼ばれる
-        group.notify(queue: .main) {
-            self.updateAllTasks()
-        }
+        ])
+        fetchDataForCollection(collection)
     }
+    
     
     
     ///お気に入りアイテムへ保存する
@@ -139,117 +181,162 @@ class ItemViewModel: ObservableObject {
     
     
     
-    ///完了したタスクの削除
-    func completeTask() {
-        let completeArray = itemList.filter { $0.checked == true }
-        
-        let group = DispatchGroup() // DispatchGroupを作成
-        group.enter() // タスクが始まったことを通知
-        
-        for item in completeArray {
-            db.collection("items").document(item.id).delete() { error in
-                if let error = error {
-                    print("Error removing document: \(error)")
-                }
-            }
-        }
-        group.leave() // タスクが終わったことを通知
-        
-        // 全てのタスクが終わった後に呼ばれる
-        group.notify(queue: .main) {
-            self.updateAllTasks()
-        }
-    }
-    
-    
-    
-    ///すべてのデータを再取得するメソッド
-    func updateAllTasks(){
-        isBusy = true
-        var tempItemList = [ItemDataType]()
-        
-        db.collection("items").order(by: "timestamp").addSnapshotListener { (snap, error) in
-            if let error = error {
-                print(error.localizedDescription)
-                return
-            }
-            if let snap = snap {
-                for item in snap.documentChanges {
-                    if item.type == .added {
-                        let id = item.document.documentID
-                        let title = item.document.get("title") as! String
-                        let label = item.document.get("label") as! Int16
-                        let checked = item.document.get("checked") as! Bool
-                        let finished = item.document.get("finished") as! Bool
-                        let timeData = item.document.get("timestamp", serverTimestampBehavior: .estimate) as! Timestamp
-                        let timestamp = timeData.dateValue()
-
-                        tempItemList.append(ItemDataType(id: id,title: title, label: label, checked: checked, finished: finished, timestamp: timestamp))
-                    }
-                }
-            }
-            DispatchQueue.main.async {
-                self.objectWillChange.send()
-                self.itemList = tempItemList
-                self.objectWillChange.send()
-                self.filterdList0 = self.itemList.filter { $0.label == 0 }
-                self.objectWillChange.send()
-                self.filterdList1 = self.itemList.filter { $0.label == 1 }
-                self.objectWillChange.send()
-                self.filterdList2 = self.itemList.filter { $0.label == 2 }
-            }
-        }
-        
-        self.isBusy = false
-        
-    }
-    
-    
     ///タイトルを変更して保存する
-    func changeTitle(item: ItemDataType, newTitle: String, newLabel: Int){
-        print(item.title, item.checked)
-        let documentId = item.id
+    func changeTitle(item: ItemDataType, newTitle: String ,newLabel: Int){
         
-        let group = DispatchGroup() // DispatchGroupを作成
-        group.enter() // タスクが始まったことを通知
-        db.collection("items").document(documentId).updateData([
-            "title": newTitle,
-            "label": Int16(newLabel)
-        ]) { [weak self] error in
-            if let error = error {
-                print(error.localizedDescription)
-            }else{
-                print(item.title, item.checked)
-            }
+        //ラベル番号が変更されたらアイテムを削除してから新規追加
+        if item.label != newLabel{
+            deleteSelectedTask(item: item)
+            addItem(title: newTitle, label: newLabel)
+            
+            return
         }
-        group.leave()
         
-        // 全てのタスクが終わった後に呼ばれる
-        group.notify(queue: .main) {
-            self.updateAllTasks()
+        var collection: String
+        switch newLabel{
+        case 0:
+            collection = "label0Item"
+        case 1:
+            collection = "label1Item"
+        case 2:
+            collection = "label2Item"
+        default:
+            collection = "label0Item"
+        }
+        
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        //アイテムのタイトル書き換え
+        db.collection("users").document(uid).collection(collection).document(item.id).updateData([
+            "title": newTitle
+        ]){ error in
+            if let error = error {
+                self.deleteSelectedTask(item: item)
+                self.addItem(title: newTitle, label: newLabel)
+//                print("Error removing document: \(error)")
+            }
         }
     }
     
     
     
-    func deleteSelectedTask(item:ItemDataType){
-        let completeArray = [item]
+    ///完了したタスクをまとめて削除
+    func completeTask(labelNum: Int) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        let group = DispatchGroup() // DispatchGroupを作成
-        group.enter() // タスクが始まったことを通知
+        var collection: String = ""
+        var completedArray: [ItemDataType] = []
+        var notCompletedArray: [ItemDataType] = []
         
-        for item in completeArray {
-            db.collection("items").document(item.id).delete() { error in
+        switch labelNum{
+        case 0:
+            collection = "label0Item"
+            completedArray = label0Item.filter { $0.checked == true }
+            notCompletedArray = label0Item.filter { $0.checked == false }
+        case 1:
+            collection = "label1Item"
+            completedArray = label1Item.filter { $0.checked == true }
+            notCompletedArray = label1Item.filter { $0.checked == false }
+        case 2:
+            collection = "label2Item"
+            completedArray = label2Item.filter { $0.checked == true }
+            notCompletedArray = label2Item.filter { $0.checked == false }
+        default:
+            break
+        }
+        
+        
+        let group = DispatchGroup()
+        //優先する処理
+        for item in completedArray {
+            let documentId = item.id
+            
+            group.enter()  // グループにエンター
+            self.db.collection("users").document(uid).collection(collection).document(documentId).delete() { error in
                 if let error = error {
-                    print("Error removing document: \(error)")
+//                    print("Error removing document: \(error)")
                 }
+                group.leave()  // グループからリーブ
             }
         }
-        group.leave() // タスクが終わったことを通知
         
-        // 全てのタスクが終わった後に呼ばれる
+        // すべての非同期処理が完了した後に実行
         group.notify(queue: .main) {
-            self.updateAllTasks()
+            //2の処理
+            self.updateIndexesForCollection(labelNum: labelNum)
+        }
+    }
+    
+    
+    
+    
+    
+    ///選んだタスクを１つ削除する
+    func deleteSelectedTask(item:ItemDataType){
+        let labelNum = item.label
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        var collectionName: String
+        switch labelNum{
+        case 0:
+            collectionName = "label0Item"
+        case 1:
+            collectionName = "label1Item"
+        case 2:
+            collectionName = "label2Item"
+        default:
+            collectionName = "label0Item"
+        }
+        
+        let group = DispatchGroup()
+        group.enter()  // グループにエンター
+        //優先する処理
+        db.collection("users").document(uid).collection(collectionName).document(item.id).delete() { error in
+            if let error = error {
+//                print("Error removing document: \(error)")
+            }
+            group.leave()  // グループからリーブ
+        }
+        
+        // すべての非同期処理が完了した後に実行
+        group.notify(queue: .main) {
+            //2の処理
+            self.updateIndexesForCollection(labelNum: Int(labelNum))
+        }
+    }
+    
+    
+    
+    
+    ///index番号を振り直す
+    func updateIndexesForCollection(labelNum: Int) {
+        
+        var collectionName: String
+        var array: [ItemDataType]
+        switch labelNum{
+        case 0:
+            collectionName = "label0Item"
+            array = label0Item
+        case 1:
+            collectionName = "label1Item"
+            array = label1Item
+        case 2:
+            collectionName = "label2Item"
+            array = label2Item
+        default:
+            collectionName = "label0Item"
+            array = label0Item
+        }
+        
+        
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        DispatchQueue.main.async {
+            for (index, item) in array.enumerated() {
+                self.db.collection("users").document(uid).collection(collectionName).document(item.id).updateData([
+                    "index": index
+                ])
+            }
         }
     }
 }

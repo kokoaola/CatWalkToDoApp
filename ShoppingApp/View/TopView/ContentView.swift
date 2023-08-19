@@ -8,24 +8,33 @@
 import SwiftUI
 import CoreData
 
+
+///アプリ起動時に表示されるビュー
 struct ContentView: View {
     
     var body: some View {
         VStack{
-            //下のタブビュー
+            //表示内容をタブビューで切り替える
             TabView{
+                
+                //買い物リストビュー
                 List_mainView()
                     .tabItem{
-                        Label("買い物リスト", systemImage: "cart")
+                        Label("To-Do List", systemImage: "checklist")
                     }
+                
+                //単価計算ビュー
                 Keisan().tabItem{
-                    Label("単価計算", systemImage: "arrow.2.squarepath")
+                    Label("Unit Price Calculation", systemImage: "arrow.2.squarepath")
                 }
+                
+                //設定ビュー
                 Setting_Top()
                     .tabItem{
-                        Label("設定", systemImage: "gearshape")
+                        Label("Settings", systemImage: "gearshape")
                     }
             }
+            .tint(AppSetting.mainColor1)
         }
     }
 }
@@ -35,6 +44,13 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        
+        Group{
+            ContentView()
+                .environment(\.locale, Locale(identifier:"en"))
+            ContentView()
+                .environment(\.locale, Locale(identifier:"ja"))
+        }
+
     }
 }
