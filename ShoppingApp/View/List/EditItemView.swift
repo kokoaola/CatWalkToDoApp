@@ -11,9 +11,9 @@ import SwiftUI
 ///アイテム編集用のシート
 struct EditItemView: View {
     ///ユーザーデフォルトから３つのラベルデータを取得
-    @AppStorage("label0") var label0 = "ラベル１"
-    @AppStorage("label1") var label1 = "ラベル２"
-    @AppStorage("label2") var label2 = "ラベル３"
+    @AppStorage("label0") var label0 = "1"
+    @AppStorage("label1") var label1 = "2"
+    @AppStorage("label2") var label2 = "3"
     
     ///キーボードフォーカス用変数（Doneボタン表示のため）
     @FocusState var isInputActive: Bool
@@ -41,6 +41,7 @@ struct EditItemView: View {
     ///itemViewModelのための変数
     @EnvironmentObject var itemVM: ItemViewModel
     
+    @State private var showTooLongAlert = false
     
     
     var body: some View {
@@ -50,8 +51,8 @@ struct EditItemView: View {
                 
                 //ラベル選択用のピッカー
                 HStack{
-                    Text("追加先")
-                    Picker(selection: $newNum, label: Text("aaa")){
+                    Text("Destination to Move")
+                    Picker(selection: $newNum, label: Text("")){
                         Text(label0)
                             .tag(0)
                         Text(label1)
@@ -60,20 +61,21 @@ struct EditItemView: View {
                             .tag(2)
                     }
                     .pickerStyle(.segmented)
+                    
                 }
                 .padding(.top)
                 
                 
                 //お気に入りに追加のトグルスイッチ
                 Toggle(isOn: $isFavorite){
-                    Text("お気に入りに追加")
+                    Text("Add to Favorites")
                 }
                 
                 
                 //タイトル入力用テキストフィールド
                 
                 //タイトル入力用テキストフィールド
-                TextField("追加する項目", text: $newName)
+                TextField("Task to Add", text: $newName)
                     .frame(height: 40)
                     .focused($isInputActive)
                     .overlay(RoundedRectangle(cornerRadius: 1).stroke(Color(.tertiarySystemGroupedBackground), lineWidth: 1))
@@ -81,24 +83,45 @@ struct EditItemView: View {
                 
                 //保存ボタン
                 Button(action: {
-                    
-                    //入力された値が空白以外なら配列に追加
-                    if !newName.isEmpty{
-                        itemVM.changeTitle(item: item, newTitle: newName, newLabel: newNum)
-                        
-                        if isFavorite{
-                            itemVM.changeFavoriteList(itemName: newName, delete: false)
-                            
-                            //お気に入りリストに存在するが、お気に入りスイッチがOFFになってる時
-                        }else if !isFavorite && itemVM.favoriteList.contains(newName){
-                            //お気に入りから削除する
-                            itemVM.changeFavoriteList(itemName: newName, delete: true)
-                        }
-                        dismiss() //追加後のページ破棄関数
+                    //入力された値が５０文字以上ならアラートを表示してリターン
+                    if newName.count >= 50{
+                        showTooLongAlert = true
+                        return
                     }
+                    
+                    
+                    //入力された値が空白ならリターン
+                    if newName.isEmpty{ return }
+                    
+                    //項目をデータベースに追加
+                    itemVM.changeTitle(item: item, newTitle: newName, newLabel: newNum)
+                    
+                    //お気に入りOnならお気に入りリストに追加
+                    if isFavorite{
+                        itemVM.changeFavoriteList(itemName: newName, delete: false)
+                        
+                        //お気に入りリストに存在するが、お気に入りスイッチがOFFになってる時
+                    }else if !isFavorite && itemVM.favoriteList.contains(newName){
+                        //お気に入りから削除する
+                        itemVM.changeFavoriteList(itemName: newName, delete: true)
+                    }
+                    
+                    dismiss() //追加後のページ破棄関数
+                    
+
                 },label: {
-                    TuikaButton() //ボタンデザインは別ファイル
+                    SaveButton() //ボタンデザインは別ファイル
                 })
+                
+                //買い物完了ボタンが押された後の確認アラート
+                .alert(isPresented: $showTooLongAlert){
+                    Alert(title: Text("Please shorten the item name."),
+                          message: Text("Only up to 50 characters can be registered."),
+                          //OKならチェックした項目をリストから削除
+                          dismissButton: .default(Text("OK")))
+                }
+                
+                
                 
                 .onAppear{
                     newName = item.title
@@ -114,15 +137,16 @@ struct EditItemView: View {
                 
                 //削除ボタンが押された後の確認アラート
                     .alert(isPresented: $showDeleteAlert){
-                        Alert(title: Text("アイテムの削除"),
-                              message: Text("表示中のアイテムを削除しますか？"),
+                        Alert(title: Text("Delete Item"),
+                              message: Text("Do you want to delete the displayed item?"),
                               //OKならチェックした項目をリストから削除（未搭載）
-                              primaryButton: .destructive(Text("削除する"), action: {
+                              primaryButton: .destructive(Text("Delete"), action: {
                             itemVM.deleteSelectedTask(item: item)
                             dismiss()
                         }),
-                              secondaryButton: .cancel(Text("やめる"), action:{}))
+                              secondaryButton: .cancel(Text("Cancel"), action:{}))
                     }
+
                 
                 
                 //ツールバーの設置
@@ -130,7 +154,7 @@ struct EditItemView: View {
                     .toolbar {
                         ToolbarItemGroup(placement: .keyboard) {
                             Spacer()
-                            Button("閉じる") {
+                            Button("Close") {
                                 isInputActive = false
                             }
                         }
@@ -138,7 +162,7 @@ struct EditItemView: View {
                         //シート閉じるボタン
                         ToolbarItemGroup(placement: .navigationBarLeading) {
                             Spacer()
-                            Button("閉じる") {
+                            Button("Close") {
                                 dismiss()
                             }
                         }
@@ -160,7 +184,7 @@ struct EditItemView: View {
             .padding()
             
             //ナビゲーションバーの設定
-            .navigationTitle("編集")
+            .navigationTitle("Edit")
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(.visible, for: .navigationBar)
         }
@@ -168,10 +192,11 @@ struct EditItemView: View {
     
 }
 
-//struct EditItemView_Previews: PreviewProvider {
-//    static let item = ItemDataType(id: "A", title: "AA", index: 1, checked: false, timestamp: Date())
-//    static var previews: some View {
-//        EditItemView(oldLabel: 1, item: item)
-//            .environmentObject(ItemViewModel())
-//    }
-//}
+struct EditItemView_Previews: PreviewProvider {
+    @State static var num = 0
+    static let item = ItemDataType(id: "A", title: "AA", index: 1, label: 0, checked: false, timestamp: Date())
+    static var previews: some View {
+        EditItemView(oldLabel: 0, newNum: $num, item: item)
+            .environmentObject(ItemViewModel())
+    }
+}

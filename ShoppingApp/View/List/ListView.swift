@@ -8,7 +8,7 @@
 import SwiftUI
 
 ///買い物リストのリスト部分
-struct ShoppingList1: View {
+struct ListView: View {
     ///引数で受け取る配列（リスト表示用）
     @Binding var filterdList: [ItemDataType]
     @Binding var labelNum: Int
@@ -23,21 +23,27 @@ struct ShoppingList1: View {
     @EnvironmentObject var itemVM: ItemViewModel
     
     @State var list: [ItemDataType] = []
-
+    
+    
+    ///猫動かす用
+    @Binding var goRight: Bool
+    @Binding var flip: Bool
+    @Binding var shouldPlay: Bool
     
     var body: some View {
         
         //買い物リスト本体
         List{
+            
             ForEach(filterdList){ item in
                 HStack{
+                    Text("")
                     //チェックボックス表示
                     Image(systemName: item.checked ? "checkmark.square.fill": "square")
                         .font(.title2)
                     //タイトル表示
                     Text(item.title)
                         .strikethrough(item.checked ? true: false)
-                    Text("index: \(item.index)")
                     Spacer()
                     
                     //infoマーク表示
@@ -49,22 +55,40 @@ struct ShoppingList1: View {
                             selectedItem = item
                             showEditSheet = true
                         }
+
                 }
                 .listRowBackground(Color.clear)
-                .opacity(item.checked ? 0.1 : 1)
+                .opacity(item.checked ? 0.3 : 1)
+                .padding(.vertical, 8)
                 
                 //セルタップでボックスにチェック
                 .contentShape(Rectangle())
                 .onTapGesture {
+
+                    
+                    if !shouldPlay && !item.checked{
+                        self.flip.toggle()
+                        shouldPlay = true
+                        withAnimation() {
+                            self.goRight.toggle()
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 7.5) {
+                            shouldPlay = false
+                        }
+                    }
+                    
                     itemVM.toggleCheck(item: item, labelNum: labelNum)
+                    
+
                 }
             }
             .onMove(perform: moveItem)
-
             
-            Spacer().frame(height: 40)
+            Spacer()
+                .frame(height: 40)
                 .listRowBackground(EmptyView())
         }
+        .listStyle(.sidebar)
 
         
         //タスク編集用のシート
@@ -81,22 +105,9 @@ struct ShoppingList1: View {
         .scrollContentBackground(.hidden)
     }
     
-    func moveItem(offsets: IndexSet, index: Int) {
-        let label: String
-        
-        switch labelNum{
-        case 0:
-            label = "label0Item"
-        case 1:
-            label = "label1Item"
-        case 2:
-            label = "label2Item"
-        default:
-            label = "label0Item"
-        }
-        
+    func moveItem(offsets: IndexSet, index: Int) {        
         filterdList.move(fromOffsets: offsets, toOffset: index)
-        itemVM.updateIndexesForCollection(label, items: filterdList)
+        itemVM.updateIndexesForCollection(labelNum: labelNum)
     }
 }
 
@@ -105,8 +116,10 @@ struct ShoppingList1: View {
 struct ShoppingList1_Previews: PreviewProvider {
     @State static var aaa  = 0
     @State static var a = [ItemDataType]()
+    @State static var startAnimation = false
+    @State static var flip = false
     static var previews: some View {
-        ShoppingList1(filterdList: $a, labelNum: $aaa)
+        ListView(filterdList: $a, labelNum: $aaa, goRight: $startAnimation, flip: $flip,shouldPlay: $flip)
             .environmentObject(ItemViewModel())
     }
 }
