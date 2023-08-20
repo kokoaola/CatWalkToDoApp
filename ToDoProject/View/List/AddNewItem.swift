@@ -122,6 +122,7 @@ struct AddNewItem: View {
                         //お気に入りから削除する
                         itemVM.changeFavoriteList(itemName: newName, delete: true)
                     }
+                    
                     dismiss() //追加後はページ破棄
                     
                 },label: {

@@ -121,6 +121,7 @@ class ItemViewModel: ObservableObject {
             if let err = error {
 //                print("Error adding document: \(err)")
             } else {
+                self.fetchDataForCollection(collectionName)
 //                print("Document successfully added!")
             }
         }
