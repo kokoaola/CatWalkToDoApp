@@ -4,7 +4,7 @@
 - Language：Swift
 - Version：5.7.2
 - Xcode：14.2
-- URL：[App Store](https://github.com/kokoaola/CatWalkToDoApp) 
+- URL：[App Store](https://apps.apple.com/jp/app/id6462782647) 
 - Architecture：MVVM
 - iOS:16.0以上
 
