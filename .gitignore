@@ -1,3 +1,7 @@
+GoogleService-Test-Info.plist
+GoogleService-Production-Info.plist
+
+
 
 #プロジェクトのカスタムschemeが保存されるディレクトリ
 xcuserdata/
