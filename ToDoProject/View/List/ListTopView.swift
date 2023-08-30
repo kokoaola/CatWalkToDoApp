@@ -97,6 +97,7 @@ struct List_mainView: View {
                 }.padding(.top, 5)
                 
                 
+                
                 VStack{
                     Spacer()
                     //追加ボタン

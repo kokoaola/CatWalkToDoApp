@@ -64,8 +64,6 @@ struct ListView: View {
                 //セルタップでボックスにチェック
                 .contentShape(Rectangle())
                 .onTapGesture {
-
-                    
                     if !shouldPlay && !item.checked{
                         self.flip.toggle()
                         shouldPlay = true
