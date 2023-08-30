@@ -25,6 +25,8 @@ class AppSetting{
     ///アプリのメインカラー2
     static let mainColor2 = Color("reef2")
     
+    static let fontColor = Color.black
+    
     ///キーボード閉じるボタン
     static func closeKeyBoard(){
         let keyWindow = UIApplication.shared.connectedScenes

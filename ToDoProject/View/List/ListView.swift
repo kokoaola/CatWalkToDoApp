@@ -88,6 +88,7 @@ struct ListView: View {
                 .frame(height: 40)
                 .listRowBackground(EmptyView())
         }
+        .foregroundColor(AppSetting.fontColor)
         .listStyle(.sidebar)
 
         
