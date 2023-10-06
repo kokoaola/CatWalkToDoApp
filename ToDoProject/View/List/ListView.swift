@@ -64,8 +64,6 @@ struct ListView: View {
                 //セルタップでボックスにチェック
                 .contentShape(Rectangle())
                 .onTapGesture {
-
-                    
                     if !shouldPlay && !item.checked{
                         self.flip.toggle()
                         shouldPlay = true
@@ -88,6 +86,7 @@ struct ListView: View {
                 .frame(height: 40)
                 .listRowBackground(EmptyView())
         }
+        .foregroundColor(AppSetting.fontColor)
         .listStyle(.sidebar)
 
         

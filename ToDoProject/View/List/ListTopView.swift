@@ -68,7 +68,7 @@ struct List_mainView: View {
                                     .overlay(Text("\(labelArray[num])")
                                         .font(.callout)
                                         .fontWeight(.bold)
-                                        .foregroundColor(Color(selection == num ? UIColor.label : .gray)))
+                                        .foregroundColor(Color(selection == num ? .black : .gray)))
                                     .opacity(selection == num ? 1.0 : 0.6)
                                     .zIndex(selection == num ? 1.0 : -1.0)
 
@@ -95,6 +95,7 @@ struct List_mainView: View {
                         .environmentObject(itemVM)
                     
                 }.padding(.top, 5)
+                
                 
                 
                 VStack{

@@ -129,6 +129,9 @@ struct AddNewItem: View {
                     SaveButton() //ボタンデザインは別ファイル
                 }).padding()
                 
+                    .onAppear{
+                        isInputActive = true
+                    }
                 Spacer()
                 
                 //ツールバーの設置
@@ -150,6 +153,7 @@ struct AddNewItem: View {
                         }
                     }
             }
+
             .padding()
             
             //ナビゲーションバーの設定

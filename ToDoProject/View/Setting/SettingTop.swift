@@ -22,24 +22,26 @@ struct Setting_Top: View {
                     )
                 
                 List{
-                    Text("")
-                    NavigationLink(destination: {
-                        AddNewLabel_View()
-                    }, label: {Text("Edit Labels")})
+                    Section{
+                        NavigationLink(destination: {
+                            AddNewLabel_View()
+                        }, label: {Text("Edit Labels")})
+                    }
                     
                     // NavigationLink(destination: {
                     //     FavoriteList()
                     // }, label: {Text("Edit Favorite List")})
-                    
-                    NavigationLink(destination: {
-                        ContactWebView()
-                    }, label: {Text("Contact Us")})
-                    
-                    NavigationLink(destination: {
-                        PrivacyPolicyView()
-                    }, label: {Text("Privacy Policy")})
+                    Section{
+                        NavigationLink(destination: {
+                            ContactWebView()
+                        }, label: {Text("Contact Us")})
+                        
+                        NavigationLink(destination: {
+                            PrivacyPolicyView()
+                        }, label: {Text("Privacy Policy")})
+                    }
                 }
-                .listStyle(.inset)
+                .listStyle(.grouped)
                 .padding(.top)
             }
                 .ignoresSafeArea()
