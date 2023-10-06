@@ -43,17 +43,35 @@ struct Keisan: View {
                         HStack{
                             Text("Product Price")
                                 .padding(.trailing)
-                            TextField("Enter Price", value: $price, format: .currency(code: Locale.current.currency?.identifier ?? "USD" ))
+//                            TextField("Enter Price", value: $price, format: .currency(code: Locale.current.currency?.identifier ?? "USD" ))
+                            TextField("Enter Price", value: $price, format: .currency(code: Locale.current.currency?.identifier ?? "USD"), prompt: Text("Enter Price").foregroundColor(Color.black.opacity(0.4)))
                                 .focused($isInputActivePrice)
+                                .textFieldStyle(.plain)
+                                .scrollContentBackground(.hidden)
+                                .background(.white)
+                                .padding(5)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 2)
+                                        .stroke(.gray, lineWidth: 1)
+                                )
                         }
                         
                         //全体量入力用のテキストフィールド
                         HStack{
                             Text("Total Quantity")
-                            TextField("Enter in ml, count, etc.", value: $amount, format: .number)
+                            TextField("Enter in ml, count, etc.", value: $amount, format: .number, prompt: Text("Enter in ml, count, etc.").foregroundColor(Color.black.opacity(0.4)))
                                 .focused($isInputActiveVolume)
+                                .textFieldStyle(.plain)
+                                .scrollContentBackground(.hidden)
+                                .background(.white)
+                                .padding(5)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 2)
+                                        .stroke(.gray, lineWidth: 1)
+                                )
                         }
                     }
+                    .foregroundColor(AppSetting.fontColor)
                     .keyboardType(.decimalPad)
                     .textFieldStyle(.roundedBorder)
                     .padding()
@@ -73,6 +91,7 @@ struct Keisan: View {
                             .opacity(0.9)
                             .font(.callout)
                     }
+                    .foregroundColor(AppSetting.fontColor)
                     .padding()
                     .frame(width: AppSetting.screenWidth * 0.9)
                     .background(Color("usuigray"))
@@ -105,6 +124,7 @@ struct Keisan: View {
                     }
                 }
             }
+            .background(.white)
             .ignoresSafeArea()
         }
     }

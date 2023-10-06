@@ -22,8 +22,8 @@ struct AddNewLabel_View: View {
     
     var body: some View {
         
-        VStack(spacing: 20.0){
-            
+        VStack(spacing: 30.0){
+            Spacer()
             Group{
                 HStack{
                     Text("Label1")
@@ -51,8 +51,8 @@ struct AddNewLabel_View: View {
                 SaveButton() //保存ボタンは別ファイル
             })
             .padding(.top, 40.0)
-            
-            
+            Spacer()
+            Spacer()
         }.textFieldStyle(.roundedBorder)
         .onAppear(){
             newName0 = label0
