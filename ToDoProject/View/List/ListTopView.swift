@@ -53,6 +53,8 @@ struct List_mainView: View {
                                 .frame(width: catSize)
                                 .offset(x: goRight ? UIScreen.main.bounds.width + catSize : 0 - catSize)
                                 .animation(.linear(duration: 7.0), value: goRight)
+                                .shadow(color:.black.opacity(0.5), radius: 3, x: 3, y: 3
+                                )
                                 .padding(.bottom, 1)
 
                             
@@ -61,7 +63,10 @@ struct List_mainView: View {
                                 //表示中だけラベルの色を変える
                                 CustomShape()
                                     .foregroundColor(.white)
+                                
                                     .frame(width: UIScreen.main.bounds.width / 3.5, height: 60)
+                                    .shadow(color:.black.opacity(selection == num ? 0.5 : 0.0001), radius: 3, x: 3, y: 3
+                                    )
                                     .onTapGesture {
                                         selection = num
                                     }
@@ -110,6 +115,8 @@ struct List_mainView: View {
                             .foregroundColor(.white)
                             .background(AppSetting.mainColor2)
                             .cornerRadius(30)
+                            .shadow(color:.black.opacity(0.3), radius: 3, x: 3, y: 3
+                            )
                             .padding()
                     }
                 }
@@ -152,6 +159,8 @@ struct List_mainView: View {
                             .symbolRenderingMode(SymbolRenderingMode.palette)
                             .font(.largeTitle)
                             .foregroundStyle(.white, .gray)
+                            .shadow(color:.black.opacity(0.5), radius: 3, x: 3, y: 3
+                            )
                     }
                 }
             }
