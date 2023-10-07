@@ -34,7 +34,7 @@ struct List_mainView: View {
     ///猫動かす用
     @State private var goRight: Bool = false
     @State private var flip: Bool = true
-    @State private var shouldPlay: Bool = false
+    @State private var startAnimation: Bool = false
     
     var body: some View {
         let catSize = UIScreen.main.bounds.width / 6
@@ -43,61 +43,66 @@ struct List_mainView: View {
             //下部の完了ボタンを配置するためのZStack
             ZStack{
                 VStack {
-                
                     
                     
-                        HStack{
-                            //猫ちゃん
-                            LottieView(filename: "cat", loop: .loop, shouldFlip: $flip, shouldPlay: $shouldPlay)
-                                .zIndex(0.0)
-                                .frame(width: catSize)
-                                .offset(x: goRight ? UIScreen.main.bounds.width + catSize : 0 - catSize)
-                                .animation(.linear(duration: 7.0), value: goRight)
-                                .shadow(color:.black.opacity(0.5), radius: 3, x: 3, y: 3
+                    
+                    HStack{
+                        //猫ちゃん
+                        LottieView(filename: "cat", loop: .loop, shouldFlip: $flip, startAnimation: $startAnimation)
+                            .frame(width: catSize)
+                        //.offset(x: goRight ? UIScreen.main.bounds.width + catSize : 0 - catSize)
+                            .position(x: goRight ? UIScreen.main.bounds.width + catSize * 2 / 2 : 0 - catSize, y: 40)
+                            .animation(.linear(duration: 7.0), value: goRight)
+                            .shadow(color:.black.opacity(0.5), radius: 3, x: 3, y: 3
+                            )
+                            .zIndex(1.0)
+                        //MARK: -
+                            .accessibilityElement(children: .ignore)
+                            .accessibilityLabel("歩く猫")
+                            .accessibilityAddTraits(.isImage)
+                        
+                        
+                        //上に表示される３つのラベル
+                        ForEach(0 ..< 3) {num in
+                            //表示中だけラベルの色を変える
+                            CustomShape()
+                                .foregroundColor(.white)
+                                .frame(width: UIScreen.main.bounds.width / 3.5, height: 60)
+                                .shadow(color:.black.opacity(selection == num ? 0.5 : 0.0001), radius: 3, x: 3, y: 3
                                 )
-                                .padding(.bottom, 1)
-
-                            
-                            //上に表示される３つのラベル
-                            ForEach(0 ..< 3) {num in
-                                //表示中だけラベルの色を変える
-                                CustomShape()
-                                    .foregroundColor(.white)
-                                
-                                    .frame(width: UIScreen.main.bounds.width / 3.5, height: 60)
-                                    .shadow(color:.black.opacity(selection == num ? 0.5 : 0.0001), radius: 3, x: 3, y: 3
-                                    )
-                                    .onTapGesture {
-                                        selection = num
-                                    }
-                                    .overlay(Text("\(labelArray[num])")
-                                        .font(.callout)
-                                        .fontWeight(.bold)
-                                        .foregroundColor(Color(selection == num ? .black : .gray)))
-                                    .opacity(selection == num ? 1.0 : 0.6)
-                                    .zIndex(selection == num ? 1.0 : -1.0)
-
-
-                            }
+                                .overlay(Text("\(labelArray[num])")
+                                    .font(.callout)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(Color(selection == num ? .black : .gray)))
+                                .opacity(selection == num ? 1.0 : 0.6)
+                            //タブは猫ちゃんの前後になるように表示
+                                .zIndex(selection == num ? 1.0 : -1.0)
+                                .contentShape(Rectangle())
+                                .onTapGesture {
+                                    selection = num
+                                }
+                                .accessibilityAddTraits(selection == num ? [.isSelected,
+                                                                            .isButton] : [.isButton])
                         }
+                    }
                     
-                        .offset(x: -UIScreen.main.bounds.width / 10.5)
+                    .offset(x: -UIScreen.main.bounds.width / 18.5)
                     .padding(.bottom, -20)
                     .frame(height: 60)
                     
                     //買い物リストの中身は選択中のタブによって切り替える
                     TabView(selection: $selection) {
-                        ListView(filterdList: $itemVM.label0Item, labelNum: $selection, goRight: $goRight, flip: $flip, shouldPlay: $shouldPlay)
+                        ListView(filterdList: $itemVM.label0Item, labelNum: $selection, goRight: $goRight, flip: $flip, shouldPlay: $startAnimation)
                             .tag(0)
-                        ListView(filterdList: $itemVM.label1Item, labelNum: $selection, goRight: $goRight, flip: $flip, shouldPlay: $shouldPlay)
+                        ListView(filterdList: $itemVM.label1Item, labelNum: $selection, goRight: $goRight, flip: $flip, shouldPlay: $startAnimation)
                             .tag(1)
-                        ListView(filterdList: $itemVM.label2Item, labelNum: $selection, goRight: $goRight, flip: $flip, shouldPlay: $shouldPlay)
+                        ListView(filterdList: $itemVM.label2Item, labelNum: $selection, goRight: $goRight, flip: $flip, shouldPlay: $startAnimation)
                             .tag(2)
                     }
                     
                     .background(.white)
                     .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-                        .environmentObject(itemVM)
+                    .environmentObject(itemVM)
                     
                 }.padding(.top, 5)
                 
@@ -146,7 +151,7 @@ struct List_mainView: View {
                 }
             }
             .background(LinearGradient(gradient: Gradient(colors: [AppSetting.mainColor1, AppSetting.mainColor2]), startPoint: .leading, endPoint: .trailing))
-//            .navigationBarItems(trailing: EditButton())
+            //            .navigationBarItems(trailing: EditButton())
             
             //削除ボタン
             .toolbar {
@@ -196,8 +201,8 @@ struct CustomShape: Shape {
         path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
         
         // 下の辺は描画しないため、左下へ直接戻る
-//        path.addLine(to: CGPoint(x: rect.minX - 1.5, y: rect.maxY))
-
+        //        path.addLine(to: CGPoint(x: rect.minX - 1.5, y: rect.maxY))
+        
         
         return path
     }
