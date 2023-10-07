@@ -39,7 +39,7 @@
 "Enter Price" = "価格";
 "Total Quantity" = "商品の全体量";
 "Enter in ml, count, etc." = "ml、個数などを入力";
-"Per Unit" = "1つあたり";
+"Per Unit" = "1単位あたり";
 "The smaller the value, the better the deal.\nValues are truncated." = "小さければ小さいほどお得です。\n単位は切り捨てです。";
 "Close keyboard on tap" = "タップでキーボードを閉じる";
 "Next" = "次へ";
@@ -47,6 +47,7 @@
 
 
 //設定
+"Setting" = "設定";
 "Edit Labels" = "ラベルの編集";
 "Contact Us" = "お問い合わせ";
 "Privacy Policy" = "プライバシーポリシー";

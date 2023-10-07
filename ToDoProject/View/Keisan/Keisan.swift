@@ -88,7 +88,7 @@ struct Keisan: View {
                         .padding(.bottom)
                         //MARK: -
                         .accessibilityElement(children: .combine)
-                        .accessibilityLabel("単位1つあたり" + AppSetting.currencyString(from: keisan(price:price ?? 0, amount:amount ?? 0)))
+                        .accessibilityLabel("1単位あたり" + AppSetting.currencyString(from: keisan(price:price ?? 0, amount:amount ?? 0)))
                         
                         
                         Text("The smaller the value, the better the deal.\nValues are truncated.")
