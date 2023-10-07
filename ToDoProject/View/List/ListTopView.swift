@@ -34,7 +34,7 @@ struct List_mainView: View {
     ///猫動かす用
     @State private var goRight: Bool = false
     @State private var flip: Bool = true
-    @State private var startAnimation: Bool = false
+    @State private var startMoving: Bool = false
     
     var body: some View {
         let catSize = UIScreen.main.bounds.width / 6
@@ -48,7 +48,7 @@ struct List_mainView: View {
                     
                     HStack{
                         //猫ちゃん
-                        LottieView(filename: "cat", loop: .loop, shouldFlip: $flip, startAnimation: $startAnimation)
+                        LottieView(filename: "cat", loop: .loop, shouldFlip: $flip, startAnimation: $startMoving)
                             .frame(width: catSize)
                         //.offset(x: goRight ? UIScreen.main.bounds.width + catSize : 0 - catSize)
                             .position(x: goRight ? UIScreen.main.bounds.width + catSize * 2 / 2 : 0 - catSize, y: 40)
@@ -83,7 +83,7 @@ struct List_mainView: View {
                                 }
                                 .accessibilityAddTraits(selection == num ? [.isSelected] : [])
                             //MARK: -
-                                .accessibilityLabel("\(labelArray[num])、タブ、3の\(num)")
+                                .accessibilityLabel("\(labelArray[num])、タブ")
                         }
                     }
                     .offset(x: -UIScreen.main.bounds.width / 18.5)
@@ -92,11 +92,11 @@ struct List_mainView: View {
                     
                     //買い物リストの中身は選択中のタブによって切り替える
                     TabView(selection: $selection) {
-                        ListView(filterdList: $itemVM.label0Item, labelNum: $selection, goRight: $goRight, flip: $flip, shouldPlay: $startAnimation)
+                        ListView(filterdList: $itemVM.label0Item, labelNum: $selection, goRight: $goRight, isFlip: $flip, isMoving: $startMoving)
                             .tag(0)
-                        ListView(filterdList: $itemVM.label1Item, labelNum: $selection, goRight: $goRight, flip: $flip, shouldPlay: $startAnimation)
+                        ListView(filterdList: $itemVM.label1Item, labelNum: $selection, goRight: $goRight, isFlip: $flip, isMoving: $startMoving)
                             .tag(1)
-                        ListView(filterdList: $itemVM.label2Item, labelNum: $selection, goRight: $goRight, flip: $flip, shouldPlay: $startAnimation)
+                        ListView(filterdList: $itemVM.label2Item, labelNum: $selection, goRight: $goRight, isFlip: $flip, isMoving: $startMoving)
                             .tag(2)
                     }
                     
