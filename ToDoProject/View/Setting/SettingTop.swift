@@ -13,8 +13,8 @@ struct Setting_Top: View {
     var body: some View {
         NavigationView{
             
-                //上のナビゲーションバーっぽいセクション
-            VStack{
+            //上のナビゲーションバーっぽいセクション
+            VStack(spacing:0){
                 LinearGradient(gradient: Gradient(colors: [AppSetting.mainColor1, AppSetting.mainColor2]), startPoint: .leading, endPoint: .trailing)
                     .frame(height: AppSetting.screenHeight * 0.15)
                     .overlay(
@@ -22,7 +22,7 @@ struct Setting_Top: View {
                             .accessibilityAddTraits(.isHeader)
                     )
                 
-                VStack{
+//                VStack{
                     List{
                         Section{
                             NavigationLink(destination: {
@@ -43,18 +43,18 @@ struct Setting_Top: View {
                             }, label: {Text("Privacy Policy")})
                         }
                     }
-                                    .listStyle(.insetGrouped)
+                    .listStyle(.insetGrouped)
                     
                     .padding(.top)
-                }
+//                }
                 //背景グラデーション設定
                 .scrollContentBackground(.hidden)
-                .background(Color(UIColor.systemRed))
-//                .modifier(background(.secondary).foregroundStyle(LinearGradient(gradient: Gradient(colors: [AppSetting.mainColor1, AppSetting.mainColor2]), startPoint: .leading, endPoint: .trailing)))
+                .background(AppSetting.mainColor1.opacity(0.1))
+                //                .modifier(background(.secondary).foregroundStyle(LinearGradient(gradient: Gradient(colors: [AppSetting.mainColor1, AppSetting.mainColor2]), startPoint: .leading, endPoint: .trailing)))
                 
                 
             }
-                .ignoresSafeArea()
+            .ignoresSafeArea()
             .navigationBarTitleDisplayMode(.inline)
         }
         
