@@ -30,6 +30,7 @@ struct Keisan: View {
                         .frame(height: AppSetting.screenHeight * 0.15)
                         .overlay(
                             Text("Unit Price Calculation").font(.largeTitle).fontWeight(.bold).foregroundColor(.white).padding(.top, AppSetting.screenHeight * 0.05)
+                                .accessibilityAddTraits(.isHeader)
                         )
                 Spacer()
                 }
@@ -43,7 +44,6 @@ struct Keisan: View {
                         HStack{
                             Text("Product Price")
                                 .padding(.trailing)
-//                            TextField("Enter Price", value: $price, format: .currency(code: Locale.current.currency?.identifier ?? "USD" ))
                             TextField("Enter Price", value: $price, format: .currency(code: Locale.current.currency?.identifier ?? "USD"), prompt: Text("Enter Price").foregroundColor(Color.black.opacity(0.4)))
                                 .focused($isInputActivePrice)
                                 .textFieldStyle(.plain)
@@ -86,6 +86,10 @@ struct Keisan: View {
                             CurrencyText(value: keisan(price:price ?? 0, amount:amount ?? 0))
                         }
                         .padding(.bottom)
+                        //MARK: -
+                        .accessibilityElement(children: .combine)
+                        .accessibilityLabel("単位1つあたり" + AppSetting.currencyString(from: keisan(price:price ?? 0, amount:amount ?? 0)))
+                        
                         
                         Text("The smaller the value, the better the deal.\nValues are truncated.")
                             .opacity(0.9)
@@ -155,21 +159,7 @@ struct CurrencyText: View {
     let value: Double
     
     var body: some View {
-        Text(currencyString(from: value))
+        Text(AppSetting.currencyString(from: value))
             .font(.largeTitle) // 文字サイズを大きく
-    }
-    
-    private func currencyString(from value: Double) -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.currencyCode = Locale.current.currency?.identifier
-        
-        // 日本円の場合の設定
-        if formatter.currencyCode == "JPY" {
-            formatter.minimumFractionDigits = 1
-            formatter.maximumFractionDigits = 3 // 小数点第三位まで表示
-        }
-        
-        return formatter.string(from: NSNumber(value: value)) ?? ""
     }
 }

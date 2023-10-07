@@ -32,7 +32,7 @@ struct EditItemView: View {
     ///ページ破棄用のdismiss
     @Environment(\.dismiss) private var dismiss
     
-    ///ItemViewModelに引数として渡すための変数
+    ///選択されたタスク、ItemViewModelに引数として渡すための変数
     @State var item: ItemDataType
     
     ///削除ボタンが押された時の確認アラート表示フラグ
@@ -165,6 +165,10 @@ struct EditItemView: View {
                             Button("Close") {
                                 dismiss()
                             }
+                            //MARK: -
+                            .accessibilityLabel("閉じる")
+                            .accessibilityHint("リストのページに戻る")
+                            .accessibilityAddTraits(.isButton)
                         }
                         
                         //削除ボタン
@@ -175,7 +179,12 @@ struct EditItemView: View {
                             } label: {
                                 Image(systemName: "trash")
                                     .foregroundColor(.red)
+                                    .padding(.horizontal, 8)
                             }
+                            //MARK: -
+                            .accessibilityLabel("削除")
+                            .accessibilityHint("\(item.title)をリストから削除する")
+                            .accessibilityAddTraits(.isButton)
                         }
                     }
                 
