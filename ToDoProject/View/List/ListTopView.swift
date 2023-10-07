@@ -81,11 +81,11 @@ struct List_mainView: View {
                                 .onTapGesture {
                                     selection = num
                                 }
-                                .accessibilityAddTraits(selection == num ? [.isSelected,
-                                                                            .isButton] : [.isButton])
+                                .accessibilityAddTraits(selection == num ? [.isSelected] : [])
+                            //MARK: -
+                                .accessibilityLabel("\(labelArray[num])、タブ、3の\(num)")
                         }
                     }
-                    
                     .offset(x: -UIScreen.main.bounds.width / 18.5)
                     .padding(.bottom, -20)
                     .frame(height: 60)
@@ -123,7 +123,13 @@ struct List_mainView: View {
                             .shadow(color:.black.opacity(0.3), radius: 3, x: 3, y: 3
                             )
                             .padding()
+                        
                     }
+                    //MARK: -
+                    .contentShape(Rectangle())
+                    .accessibilityLabel("追加")
+                    .accessibilityAddTraits(.isButton)
+                    .padding()
                 }
                 
                 
@@ -138,11 +144,13 @@ struct List_mainView: View {
                     Alert(title: Text("Task Completion"),
                           message: Text("Do you want to delete the checked items?"),
                           //OKならチェックした項目をリストから削除
-                          primaryButton: .default(Text("OK"), action: {
+                          //MARK: -
+                          primaryButton: .default(Text("削除する"), action: {
                         itemVM.completeTask(labelNum: selection)
                         
                     }),
-                          secondaryButton: .cancel(Text("Cansel"), action:{}))
+                          //MARK: -
+                          secondaryButton: .cancel(Text("戻る"), action:{}))
                 }
                 
                 //ビュー生成時にラベルを配列に追加する
@@ -167,6 +175,10 @@ struct List_mainView: View {
                             .shadow(color:.black.opacity(0.5), radius: 3, x: 3, y: 3
                             )
                     }
+                    //MARK: -
+                    .accessibilityLabel("削除")
+                    .accessibilityHint("完了したタスクをリストから削除する")
+                    .accessibilityAddTraits(.isButton)
                 }
             }
         }
