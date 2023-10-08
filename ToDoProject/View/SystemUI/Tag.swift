@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+
+//履歴のタグ用のビュー
 struct FlowLayout: Layout {
     var alignment: Alignment = .center
     var spacing: CGFloat?

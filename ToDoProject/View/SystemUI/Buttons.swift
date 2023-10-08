@@ -4,11 +4,11 @@
 //
 //  Created by koala panda on 2022/09/27.
 //
-///ボタンのデザインたち
+
 import SwiftUI
+///ボタンのデザインたち
 
-
-//買い物リストの要素追加ボタン
+///買い物リストの要素追加ボタン
 struct SaveButton: View {
     var body: some View {
         //ボタンのラベル
@@ -132,3 +132,4 @@ struct CompButton_Previews: PreviewProvider {
         }
     }
 }
+
