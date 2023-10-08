@@ -110,15 +110,18 @@ struct List_mainView: View {
                     Button(action: {
                         showAddNewItemSheet = true
                     }) {
-                        Image(systemName: "plus")
-                            .font(.title)
-                            .padding()
-                            .foregroundColor(.white)
-                            .background(AppSetting.mainColor2)
-                            .cornerRadius(30)
-                            .shadow(color:.black.opacity(0.3), radius: 3, x: 3, y: 3
-                            )
-                            .padding()
+                        
+                        CatAddButton(color: AppSetting.mainColor1)
+                        
+//                        Image(systemName: "plus")
+//                            .font(.title)
+//                            .padding()
+//                            .foregroundColor(.white)
+//                            .background(AppSetting.mainColor2)
+//                            .cornerRadius(30)
+//                            .shadow(color:.black.opacity(0.3), radius: 3, x: 3, y: 3
+//                            )
+//                            .padding()
                         
                     }
                     //VoiceOver
