@@ -123,13 +123,14 @@ struct List_mainView: View {
 //                            .padding()
                         
                     }
+                    
                     //VoiceOver
                     .contentShape(Rectangle())
                     .accessibilityLabel("Add new task")
                     .accessibilityAddTraits(.isButton)
                     .padding(5)
                 }
-                
+                .ignoresSafeArea(.keyboard, edges: .bottom)
                 
                 //タスク新規追加用のシート
                 .sheet(isPresented: $showAddNewItemSheet, content: {
