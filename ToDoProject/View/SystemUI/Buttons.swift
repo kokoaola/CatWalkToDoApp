@@ -15,19 +15,20 @@ struct CatAddButton:View{
     let color: Color
     var body: some View{
         ZStack{
-            Image(systemName: "arrowtriangle.up.fill")
-                .offset(x: 0,y: -28)
-                .rotationEffect(Angle(degrees: 30),anchor: .bottom)
-                .font(.largeTitle)
+            Image(systemName: "triangle.fill")
+                .offset(x: 0,y: -27)
+                .rotationEffect(Angle(degrees: 28),anchor: .bottom)
+                .font(.title)
                 .foregroundColor(color)
             
             
-            Image(systemName: "arrowtriangle.up.fill")
-                .offset(x: 0,y: -28)
-                .rotationEffect(Angle(degrees: 30),anchor: .bottom)
+            Image(systemName: "triangle.fill")
+                .offset(x: 0,y: -27)
+                .rotationEffect(Angle(degrees: 28),anchor: .bottom)
                 .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
-                .font(.largeTitle)
+                .font(.title)
                 .foregroundColor(color)
+            
             
             Image(systemName: "plus")
                 .font(.title)
