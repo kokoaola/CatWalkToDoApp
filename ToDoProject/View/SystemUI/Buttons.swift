@@ -36,8 +36,11 @@ struct CatAddButton:View{
                 .background(color)
                 .cornerRadius(30)
         }
+        .padding(.bottom, 5)
+        .padding([.horizontal, .top], 15)
         .compositingGroup()
         .shadow(color:.black.opacity(0.3), radius: 3, x: 3, y: 3)
+        .contentShape(Rectangle())
     }
 }
 

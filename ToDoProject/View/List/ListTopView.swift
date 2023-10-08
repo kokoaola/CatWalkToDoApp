@@ -111,8 +111,7 @@ struct List_mainView: View {
                         showAddNewItemSheet = true
                     }) {
                         
-                        CatAddButton(color: AppSetting.mainColor1)
-                        
+                        CatAddButton(color: AppSetting.mainColor2)
 //                        Image(systemName: "plus")
 //                            .font(.title)
 //                            .padding()
@@ -128,7 +127,7 @@ struct List_mainView: View {
                     .contentShape(Rectangle())
                     .accessibilityLabel("Add new task")
                     .accessibilityAddTraits(.isButton)
-                    .padding()
+                    .padding(5)
                 }
                 
                 
