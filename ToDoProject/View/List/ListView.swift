@@ -27,8 +27,8 @@ struct ListView: View {
     
     ///猫動かす用
     @Binding var goRight: Bool
-    @Binding var flip: Bool
-    @Binding var shouldPlay: Bool
+    @Binding var isFlip: Bool
+    @Binding var isMoving: Bool
     
     var body: some View {
         
@@ -37,58 +37,76 @@ struct ListView: View {
             
             ForEach(filterdList){ item in
                 HStack{
-                    Text("")
-                    //チェックボックス表示
-                    Image(systemName: item.checked ? "checkmark.square.fill": "square")
-                        .font(.title2)
-                    //タイトル表示
-                    Text(item.title)
-                        .strikethrough(item.checked ? true: false)
-                    Spacer()
+                    //１列の中でVoiceOverのタップ領域を分けるためのHStack
+                    HStack{
+                        Text("")
+                        //チェックボックス表示
+                        Image(systemName: item.checked ? "checkmark.square.fill": "square")
+                            .font(.title2)
+                        //タイトル表示
+                        Text(item.title)
+                            .strikethrough(item.checked ? true: false)
+                        Spacer()
+                    }
+                    .padding(.vertical, 10)
+                    .contentShape(Rectangle())
+                    //VoiceOver用
+                    //タスク名とチェック済みかどうかの読み上げ
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel(item.checked ? LocalizedStringKey("Checked,\(item.title)") : LocalizedStringKey("Unchecked,\(item.title)"))
+                    .accessibilityAddTraits(.isButton)
+                    .accessibilityRemoveTraits(.isSelected)
                     
-                    //infoマーク表示
+                    //編集マーク表示
                     Image(systemName: "square.and.pencil")
                         .foregroundColor(.gray)
                         .opacity(0.8)
-                    //infoマークタップで編集シート表示
+                    //編集マークタップで編集シート表示
                         .onTapGesture {
                             selectedItem = item
                             showEditSheet = true
                         }
-
+                    //VoiceOver用
+                        .padding(.vertical,10)
+                        .padding(.horizontal, 15)
+                        .contentShape(Rectangle())
+                        .accessibilityRemoveTraits(.isImage)
+                        .accessibilityAddTraits(.isButton)
+                        .accessibilityLabel("Edit")
+                        .accessibilityHint("Edit this task, \(item.title)")
+                    
+                    
                 }
                 .listRowBackground(Color.clear)
                 .opacity(item.checked ? 0.3 : 1)
-                .padding(.vertical, 8)
-                
+                //                .padding(.vertical, 8)
                 //セルタップでボックスにチェック
                 .contentShape(Rectangle())
                 .onTapGesture {
-                    if !shouldPlay && !item.checked{
-                        self.flip.toggle()
-                        shouldPlay = true
+                    if !isMoving && !item.checked{
+                        self.isFlip.toggle()
+                        isMoving = true
                         withAnimation() {
                             self.goRight.toggle()
                         }
                         DispatchQueue.main.asyncAfter(deadline: .now() + 7.5) {
-                            shouldPlay = false
+                            isMoving = false
                         }
                     }
-                    
                     itemVM.toggleCheck(item: item, labelNum: labelNum)
-                    
-
                 }
             }
             .onMove(perform: moveItem)
             
+            //新規追加ボタンと一番下のタスクが被らないようにするための空白
             Spacer()
                 .frame(height: 40)
                 .listRowBackground(EmptyView())
+                .accessibilityHidden(true)
         }
         .foregroundColor(AppSetting.fontColor)
         .listStyle(.sidebar)
-
+        .padding(.horizontal,-15)
         
         //タスク編集用のシート
         .sheet(isPresented: $showEditSheet, content: {
@@ -104,7 +122,7 @@ struct ListView: View {
         .scrollContentBackground(.hidden)
     }
     
-    func moveItem(offsets: IndexSet, index: Int) {        
+    func moveItem(offsets: IndexSet, index: Int) {
         filterdList.move(fromOffsets: offsets, toOffset: index)
         itemVM.updateIndexesForCollection(labelNum: labelNum)
     }
@@ -118,7 +136,7 @@ struct ShoppingList1_Previews: PreviewProvider {
     @State static var startAnimation = false
     @State static var flip = false
     static var previews: some View {
-        ListView(filterdList: $a, labelNum: $aaa, goRight: $startAnimation, flip: $flip,shouldPlay: $flip)
+        ListView(filterdList: $a, labelNum: $aaa, goRight: $startAnimation, isFlip: $flip,isMoving: $flip)
             .environmentObject(ItemViewModel())
     }
 }
