@@ -44,25 +44,22 @@ struct List_mainView: View {
             ZStack{
                 VStack {
                     
-                    
-                    
+                    //インデックスと動く猫ちゃんを並べたHStack
                     HStack{
                         //猫ちゃん
                         LottieView(filename: "cat", loop: .loop, shouldFlip: $flip, startAnimation: $startMoving)
                             .frame(width: catSize)
-                        //.offset(x: goRight ? UIScreen.main.bounds.width + catSize : 0 - catSize)
                             .position(x: goRight ? UIScreen.main.bounds.width + catSize * 2 / 2 : 0 - catSize, y: 40)
                             .animation(.linear(duration: 7.0), value: goRight)
-                            .shadow(color:.black.opacity(0.5), radius: 3, x: 3, y: 3
-                            )
+                            .shadow(color:.black.opacity(0.5), radius: 3, x: 3, y: 3)
                             .zIndex(1.0)
-                        //MARK: -
+                        //VoiceOver用
                             .accessibilityElement(children: .ignore)
                             .accessibilityLabel("Walking cat")
                             .accessibilityAddTraits(.isImage)
                         
                         
-                        //上に表示される３つのラベル
+                        //上に表示される３つのインデックス
                         ForEach(0 ..< 3) {num in
                             //表示中だけラベルの色を変える
                             CustomShape()
@@ -89,24 +86,24 @@ struct List_mainView: View {
                     .padding(.bottom, -20)
                     .frame(height: 60)
                     
-                    //買い物リストの中身は選択中のタブによって切り替える
-                    TabView(selection: $selection) {
-                        ListView(filterdList: $itemVM.label0Item, labelNum: $selection, goRight: $goRight, isFlip: $flip, isMoving: $startMoving)
-                            .tag(0)
-                        ListView(filterdList: $itemVM.label1Item, labelNum: $selection, goRight: $goRight, isFlip: $flip, isMoving: $startMoving)
-                            .tag(1)
-                        ListView(filterdList: $itemVM.label2Item, labelNum: $selection, goRight: $goRight, isFlip: $flip, isMoving: $startMoving)
-                            .tag(2)
-                    }
                     
-                    .background(.white)
-                    .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-                    .environmentObject(itemVM)
+                    //買い物リストの中身(選択中のタブによって切り替える)
+                        TabView(selection: $selection) {
+                            ListView(filterdList: $itemVM.label0Item, labelNum: $selection, goRight: $goRight, isFlip: $flip, isMoving: $startMoving)
+                                .tag(0)
+                            ListView(filterdList: $itemVM.label1Item, labelNum: $selection, goRight: $goRight, isFlip: $flip, isMoving: $startMoving)
+                                .tag(1)
+                            ListView(filterdList: $itemVM.label2Item, labelNum: $selection, goRight: $goRight, isFlip: $flip, isMoving: $startMoving)
+                                .tag(2)
+                        }
+                        .background(.white)
+                        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                        .environmentObject(itemVM)
                     
                 }.padding(.top, 5)
                 
                 
-                
+                //＋ボタン用のセクション
                 VStack{
                     Spacer()
                     //追加ボタン
@@ -156,9 +153,8 @@ struct List_mainView: View {
                 }
             }
             .background(LinearGradient(gradient: Gradient(colors: [AppSetting.mainColor1, AppSetting.mainColor2]), startPoint: .leading, endPoint: .trailing))
-            //            .navigationBarItems(trailing: EditButton())
             
-            //削除ボタン
+            //右上のゴミ箱マーク削除ボタン
             .toolbar {
                 
                 ToolbarItemGroup(placement: .navigationBarTrailing) {

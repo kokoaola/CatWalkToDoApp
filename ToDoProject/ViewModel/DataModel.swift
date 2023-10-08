@@ -26,8 +26,6 @@ class ItemViewModel: ObservableObject {
     
     @Published var selectedTab = 0
     
-    //    @Published var userSelectedLabel = 0
-    
     ///ユーザーデフォルト用の変数
     private let defaults = UserDefaults.standard
     ///ユーザーデフォルト用キー：目標用

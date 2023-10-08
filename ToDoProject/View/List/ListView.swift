@@ -75,11 +75,11 @@ struct ListView: View {
                         .accessibilityLabel("Edit")
                         .accessibilityHint("Edit this task, \(item.title)")
                     
-
+                    
                 }
                 .listRowBackground(Color.clear)
                 .opacity(item.checked ? 0.3 : 1)
-//                .padding(.vertical, 8)
+                //                .padding(.vertical, 8)
                 //セルタップでボックスにチェック
                 .contentShape(Rectangle())
                 .onTapGesture {
@@ -97,7 +97,6 @@ struct ListView: View {
                 }
             }
             .onMove(perform: moveItem)
-            
             
             //新規追加ボタンと一番下のタスクが被らないようにするための空白
             Spacer()
@@ -123,7 +122,7 @@ struct ListView: View {
         .scrollContentBackground(.hidden)
     }
     
-    func moveItem(offsets: IndexSet, index: Int) {        
+    func moveItem(offsets: IndexSet, index: Int) {
         filterdList.move(fromOffsets: offsets, toOffset: index)
         itemVM.updateIndexesForCollection(labelNum: labelNum)
     }
