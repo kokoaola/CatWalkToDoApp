@@ -56,6 +56,10 @@ class ItemViewModel: ObservableObject {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         db.collection("users").document(uid).collection(collectionName).order(by: "index").addSnapshotListener { (snapshot, error) in
+            if let error = error {
+                //                    print("Error removing document: \(error)")
+            }
+            
             var tempArray = [ItemDataType]()
             if let snap = snapshot {
                 for document in snap.documents {

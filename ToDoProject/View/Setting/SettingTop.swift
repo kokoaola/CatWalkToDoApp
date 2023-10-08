@@ -49,7 +49,7 @@ struct Setting_Top: View {
 //                }
                 //背景グラデーション設定
                 .scrollContentBackground(.hidden)
-                .background(AppSetting.mainColor1.opacity(0.1))
+                .background(.gray.opacity(0.1))
                 //                .modifier(background(.secondary).foregroundStyle(LinearGradient(gradient: Gradient(colors: [AppSetting.mainColor1, AppSetting.mainColor2]), startPoint: .leading, endPoint: .trailing)))
                 
                 

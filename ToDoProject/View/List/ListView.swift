@@ -53,8 +53,7 @@ struct ListView: View {
                     //VoiceOver用
                     //タスク名とチェック済みかどうかの読み上げ
                     .accessibilityElement(children: .combine)
-                    //MARK: -
-                    .accessibilityLabel("\(item.checked ? "チェック済み" : "未チェック")、\(item.title)")
+                    .accessibilityLabel(item.checked ? LocalizedStringKey("Checked,\(item.title)") : LocalizedStringKey("Unchecked,\(item.title)"))
                     .accessibilityAddTraits(.isButton)
                     .accessibilityRemoveTraits(.isSelected)
                     
@@ -73,9 +72,8 @@ struct ListView: View {
                         .contentShape(Rectangle())
                         .accessibilityRemoveTraits(.isImage)
                         .accessibilityAddTraits(.isButton)
-                    //MARK: -
-                        .accessibilityLabel("編集")
-                        .accessibilityHint("タスク、\(item.title)を編集する")
+                        .accessibilityLabel("Edit")
+                        .accessibilityHint("Edit this task, \(item.title)")
                     
 
                 }

@@ -24,7 +24,7 @@ struct Keisan: View {
     var body: some View {
         NavigationStack{
             ZStack{
-                //上のナビゲーションバーっぽいセクション
+                //上のヘッダーセクション
                 VStack{
                     LinearGradient(gradient: Gradient(colors: [AppSetting.mainColor1, AppSetting.mainColor2]), startPoint: .leading, endPoint: .trailing)
                         .frame(height: AppSetting.screenHeight * 0.15)
@@ -34,51 +34,56 @@ struct Keisan: View {
                         )
                 Spacer()
                 }
+        
                 
-                
-                VStack(alignment: .center, spacing : 30){
-                    
-                    //テキストフィールドのセクション
-                    VStack(spacing: 20){
+                VStack(alignment: .center, spacing : 50){
+
+                    //テキストフィールド2つのセクション
+                    VStack(spacing: 30){
                         //価格入力用のテキストフィールド
                         HStack{
                             Text("Product Price")
-                                .padding(.trailing)
+                                .fontWeight(.bold)
+                            
+                            Spacer()
+                            
                             TextField("Enter Price", value: $price, format: .currency(code: Locale.current.currency?.identifier ?? "USD"), prompt: Text("Enter Price").foregroundColor(Color.black.opacity(0.4)))
                                 .focused($isInputActivePrice)
-                                .textFieldStyle(.plain)
-                                .scrollContentBackground(.hidden)
-                                .background(.white)
                                 .padding(5)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 2)
-                                        .stroke(.gray, lineWidth: 1)
+                                        .stroke(.gray.opacity(0.5), lineWidth: 1)
                                 )
+                                .frame(width: AppSetting.screenWidth / 2)
                         }
                         
                         //全体量入力用のテキストフィールド
                         HStack{
                             Text("Total Quantity")
+                                .fontWeight(.bold)
+                            
+                            Spacer()
+                            
                             TextField("Enter in ml, count, etc.", value: $amount, format: .number, prompt: Text("Enter in ml, count, etc.").foregroundColor(Color.black.opacity(0.4)))
                                 .focused($isInputActiveVolume)
-                                .textFieldStyle(.plain)
-                                .scrollContentBackground(.hidden)
-                                .background(.white)
                                 .padding(5)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 2)
-                                        .stroke(.gray, lineWidth: 1)
+                                        .stroke(.gray.opacity(0.5), lineWidth: 1)
                                 )
+                                .frame(width: AppSetting.screenWidth / 2)
                         }
                     }
-                    .foregroundColor(AppSetting.fontColor)
                     .keyboardType(.decimalPad)
-                    .textFieldStyle(.roundedBorder)
-                    .padding()
-                    .frame(width: AppSetting.screenWidth * 0.9)
+                    .textFieldStyle(.plain)
+                    .scrollContentBackground(.hidden)
                     .background(.white)
-                    .cornerRadius(15)
+                    .foregroundColor(AppSetting.fontColor)
+                    .frame(width: AppSetting.screenWidth * 0.8)
+                    .padding(.vertical)
                     
+                    
+                    //計算結果を表示するセクション
                     VStack{
                         //単価を計算して表示（小数点3桁より下は切り捨て）
                         VStack{
@@ -88,23 +93,19 @@ struct Keisan: View {
                         .padding(.bottom)
                         //MARK: -
                         .accessibilityElement(children: .combine)
-                        .accessibilityLabel("1単位あたり" + AppSetting.currencyString(from: keisan(price:price ?? 0, amount:amount ?? 0)))
+                        .accessibilityLabel("\(AppSetting.currencyString(from: keisan(price:price ?? 0, amount:amount ?? 0))), Per Unit")
                         
                         
                         Text("The smaller the value, the better the deal.\nValues are truncated.")
                             .opacity(0.9)
                             .font(.callout)
                     }
-                    .foregroundColor(AppSetting.fontColor)
                     .padding()
-                    .frame(width: AppSetting.screenWidth * 0.9)
-                    .background(Color("usuigray"))
+                    .foregroundColor(AppSetting.fontColor)
+                    .frame(width: AppSetting.screenWidth * 0.8)
+                    .background(AppSetting.mainColor1.opacity(0.1))
                     .cornerRadius(15)
                     
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 15)
-                            .stroke(.gray, lineWidth: 4)
-                    )
                     
                 }
                 //タップでキーボードを閉じる

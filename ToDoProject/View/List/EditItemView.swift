@@ -47,11 +47,14 @@ struct EditItemView: View {
     var body: some View {
         //ツールバー使用するためNavigationStack
         NavigationStack{
-            VStack(spacing: 40.0){
+            VStack(spacing: 50.0){
                 
                 //ラベル選択用のピッカー
-                HStack{
-                    Text("Destination to Move")
+                VStack{
+                    HStack{
+                        Text("Destination to Move")
+                        Spacer()
+                    }
                     Picker(selection: $newNum, label: Text("")){
                         Text(label0)
                             .tag(0)
@@ -61,7 +64,6 @@ struct EditItemView: View {
                             .tag(2)
                     }
                     .pickerStyle(.segmented)
-                    
                 }
                 .padding(.top)
                 
@@ -165,9 +167,7 @@ struct EditItemView: View {
                             Button("Close") {
                                 dismiss()
                             }
-                            //MARK: -
-                            .accessibilityLabel("閉じる")
-                            .accessibilityHint("リストのページに戻る")
+                            .accessibilityLabel("Close")
                             .accessibilityAddTraits(.isButton)
                         }
                         
@@ -181,9 +181,8 @@ struct EditItemView: View {
                                     .foregroundColor(.red)
                                     .padding(.horizontal, 8)
                             }
-                            //MARK: -
-                            .accessibilityLabel("削除")
-                            .accessibilityHint("\(item.title)をリストから削除する")
+                            .accessibilityLabel("Delete")
+                            .accessibilityHint("Delete this task, \(item.title)")
                             .accessibilityAddTraits(.isButton)
                         }
                     }
