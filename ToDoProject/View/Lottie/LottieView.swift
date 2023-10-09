@@ -13,7 +13,7 @@ struct LottieView: UIViewRepresentable {
     let filename: String
     let loop: LottieLoopMode
     @Binding var shouldFlip: Bool  // 左右反転するか否かのフラグ
-    @Binding var shouldPlay: Bool  // アニメーションを開始/停止するかのフラグ
+    @Binding var startAnimation: Bool  // アニメーションを開始/停止するかのフラグ
     
     func makeUIView(context: UIViewRepresentableContext<LottieView>) -> UIView {
         let view = UIView(frame: .zero)
@@ -22,6 +22,9 @@ struct LottieView: UIViewRepresentable {
         animationView.animation = LottieAnimation.named(filename)
         animationView.contentMode = .scaleAspectFill
         animationView.loopMode = .repeat(10)
+        
+//        animationView.accessibilityLabel = "歩く猫ちゃん"
+//        animationView.accessibilityTraits = .image
         
         // shouldFlipがtrueの場合のみ反転を適用
         if shouldFlip {
@@ -41,7 +44,7 @@ struct LottieView: UIViewRepresentable {
     
     func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<LottieView>) {
         if let animationView = uiView.subviews.first as? LottieAnimationView {
-            if shouldPlay {
+            if startAnimation {
                 animationView.play()
             }
             

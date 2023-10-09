@@ -39,7 +39,7 @@ struct AddNewItem: View {
     var body: some View {
         //ツールバー使用するためNavigationStack
         NavigationStack{
-            VStack(spacing: 30.0){
+            VStack(spacing: 50.0){
                 
                 VStack(spacing:0){
                     
@@ -73,8 +73,11 @@ struct AddNewItem: View {
                 
                 
                 //ラベル選択用のピッカー
-                HStack{
-                    Text("Destination to Add")
+                VStack{
+                    HStack{
+                        Text("Destination to Add")
+                        Spacer()
+                    }
                     Picker(selection: $newLabelNum, label: Text("")){
                         Text(label0)
                             .tag(0)
@@ -85,7 +88,6 @@ struct AddNewItem: View {
                     }
                     .pickerStyle(.segmented)
                 }
-                
                 
                 //お気に入りに追加のスイッチ
                 Toggle(isOn: $isFavorite){
@@ -129,9 +131,9 @@ struct AddNewItem: View {
                     SaveButton() //ボタンデザインは別ファイル
                 }).padding()
                 
-                    .onAppear{
-                        isInputActive = true
-                    }
+                //                    .onAppear{
+                //                        isInputActive = true
+                //                    }
                 Spacer()
                 
                 //ツールバーの設置
@@ -150,10 +152,12 @@ struct AddNewItem: View {
                             Button("Close") {
                                 dismiss()
                             }
+                            .accessibilityLabel("Close")
+                            .accessibilityAddTraits(.isButton)
                         }
                     }
             }
-
+            
             .padding()
             
             //ナビゲーションバーの設定

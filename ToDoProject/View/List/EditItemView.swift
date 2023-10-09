@@ -32,7 +32,7 @@ struct EditItemView: View {
     ///ページ破棄用のdismiss
     @Environment(\.dismiss) private var dismiss
     
-    ///ItemViewModelに引数として渡すための変数
+    ///選択されたタスク、ItemViewModelに引数として渡すための変数
     @State var item: ItemDataType
     
     ///削除ボタンが押された時の確認アラート表示フラグ
@@ -47,11 +47,14 @@ struct EditItemView: View {
     var body: some View {
         //ツールバー使用するためNavigationStack
         NavigationStack{
-            VStack(spacing: 40.0){
+            VStack(spacing: 50.0){
                 
                 //ラベル選択用のピッカー
-                HStack{
-                    Text("Destination to Move")
+                VStack{
+                    HStack{
+                        Text("Destination to Move")
+                        Spacer()
+                    }
                     Picker(selection: $newNum, label: Text("")){
                         Text(label0)
                             .tag(0)
@@ -61,7 +64,6 @@ struct EditItemView: View {
                             .tag(2)
                     }
                     .pickerStyle(.segmented)
-                    
                 }
                 .padding(.top)
                 
@@ -165,6 +167,8 @@ struct EditItemView: View {
                             Button("Close") {
                                 dismiss()
                             }
+                            .accessibilityLabel("Close")
+                            .accessibilityAddTraits(.isButton)
                         }
                         
                         //削除ボタン
@@ -175,7 +179,11 @@ struct EditItemView: View {
                             } label: {
                                 Image(systemName: "trash")
                                     .foregroundColor(.red)
+                                    .padding(.horizontal, 8)
                             }
+                            .accessibilityLabel("Delete")
+                            .accessibilityHint("Delete this task, \(item.title)")
+                            .accessibilityAddTraits(.isButton)
                         }
                     }
                 

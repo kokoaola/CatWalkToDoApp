@@ -11,10 +11,27 @@
 "To-Do List" = "ToDoリスト";
 "Unit Price Calculation" = "単価計算";
 "Settings" = "設定";
+//VoiceOver
+"%@, tab" = "%@、タブ";
 
 
-"Task Completion" = "タスクの完了";
+//ToDo
+"Walking cat" = "歩く猫";
+"Add new task" = "追加";
 "Do you want to delete the checked items?" = "チェックした項目を削除しますか？";
+//VoiceOver
+"Remove all completed tasks from the list" = "完了したタスクをすべてリストから削除する";
+"Task Completion" = "タスクの完了";
+
+
+//ListView
+//VoiceOver
+"Checked,%@" = "チェック済み、%@";
+"Unchecked,%@" = "未チェック、%@";
+"Checked" = "チェック済み";
+"Unchecked" = "未チェック";
+"Edit this task, %@" = "タスク、%@を編集する";
+
 
 //AddNewItemSheet
 "Add from Favorites" = "お気に入りから追加";
@@ -25,12 +42,17 @@
 "Create New" = "新規作成";
 "Please shorten the item name." = "項目名を短くしてください";
 "Only up to 50 characters can be registered." = "50文字以内のみ登録可能です。";
+
+//EditItem
 "Destination to Move" = "移動先";
 "Delete Item" = "アイテムの削除";
 "Do you want to delete the displayed item?" = "表示中のアイテムを削除しますか？";
 "Delete" = "削除する";
 "Cancel" = "やめる";
 "Edit" = "編集";
+
+//EditItem
+"Delete this task, %@" = "タスク、%@を削除する";
 
 
 //単価計算
@@ -39,14 +61,15 @@
 "Enter Price" = "価格";
 "Total Quantity" = "商品の全体量";
 "Enter in ml, count, etc." = "ml、個数などを入力";
-"Per Unit" = "1つあたり";
+"Per Unit" = "1単位あたり";
 "The smaller the value, the better the deal.\nValues are truncated." = "小さければ小さいほどお得です。\n単位は切り捨てです。";
 "Close keyboard on tap" = "タップでキーボードを閉じる";
 "Next" = "次へ";
 "Close" = "閉じる";
-
+"%@, Per Unit" = "1単位あたり、%@";
 
 //設定
+"Setting" = "設定";
 "Edit Labels" = "ラベルの編集";
 "Contact Us" = "お問い合わせ";
 "Privacy Policy" = "プライバシーポリシー";
