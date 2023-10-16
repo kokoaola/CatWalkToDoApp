@@ -61,16 +61,16 @@ struct List_mainView: View {
                         
                         //上に表示される３つのインデックス
                         ForEach(0 ..< 3) {num in
-                            //表示中だけラベルの色を変える
                             CustomShape()
                                 .foregroundColor(.white)
                                 .frame(width: UIScreen.main.bounds.width / 3.5, height: 60)
-                                .shadow(color:.black.opacity(selection == num ? 0.5 : 0.0001), radius: 3, x: 3, y: 3
-                                )
+                                .shadow(color:.black.opacity(selection == num ? 0.5 : 0.0001), radius: 3, x: 3, y: 3)
+                            //ラベルの文字
                                 .overlay(Text("\(labelArray[num])")
                                     .font(.callout)
                                     .fontWeight(.bold)
                                     .foregroundColor(Color(selection == num ? .black : .gray)))
+                            //表示中だけラベルの色を濃くする
                                 .opacity(selection == num ? 1.0 : 0.6)
                             //タブは猫ちゃんの前後になるように表示
                                 .zIndex(selection == num ? 1.0 : -1.0)
