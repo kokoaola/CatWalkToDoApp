@@ -90,6 +90,7 @@ struct List_mainView: View {
                                     }
                                 //ラベル名長押しで編集用ウィンドウ表示
                                     .onLongPressGesture {
+                                        selection = num
 //                                        withAnimation {
                                             isEdit = true
 //                                        }
@@ -200,7 +201,7 @@ struct List_mainView: View {
             ///ラベル名がロングタップされたら編集用ウィンドウを表示
             if isEdit{
                 LinearGradient(gradient: Gradient(colors: [AppSetting.mainColor1, AppSetting.mainColor2]), startPoint: .leading, endPoint: .trailing).ignoresSafeArea().opacity(0.5)
-                EditLabelWindow(showAlert: $isEdit, showToast: $showToast, toastText: $toastText)
+                EditLabelWindow(showAlert: $isEdit, labelArray:$labelArray, labelNum: selection)
             }
         }
 

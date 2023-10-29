@@ -12,11 +12,11 @@ struct EditLabelWindow: View {
     ///自分自身の表示状態を格納するフラグ
     @Binding var showAlert: Bool
     
-    ///SettingViewでトーストポップアップを表示させるフラグ
-    @Binding var showToast: Bool
+    ///自分自身の表示状態を格納するフラグ
+    @Binding var labelArray:[String]
     
-    ///トースト内に表示する文章を格納する変数
-    @Binding var toastText: String
+    ///自分自身の表示状態を格納するフラグ
+    var labelNum = 0
     
     ///入力したテキストを格納する変数
     @State var editText: String = ""
@@ -24,11 +24,15 @@ struct EditLabelWindow: View {
     ///入力できる最大文字数
     let maxLength = 30
     
-    ///使用端末の横画面サイズ
-    let screenWidth = UIScreen.main.bounds.width
+    ///ユーザーデフォルト用変数
+    private let defaults = UserDefaults.standard
     
-    ///使用端末の縦画面サイズ
-    let screenHeight = UIScreen.main.bounds.height
+    @State var key = ""
+    
+    //ユーザーデフォルトから３つのラベルデータを取得
+    @AppStorage("label0") var label0 = "1"
+    @AppStorage("label1") var label1 = "2"
+    @AppStorage("label2") var label2 = "3"
     
     
     var body: some View {
@@ -62,7 +66,7 @@ struct EditLabelWindow: View {
                         showAlert = false
                     } label: {
                         Text("キャンセル")
-                            .frame(width: screenWidth / 3.5, height: screenWidth * 0.1)
+                            .frame(width: AppSetting.screenWidth / 3.5, height: AppSetting.screenWidth * 0.1)
                     }
                     .tint(.red)
                     
@@ -73,14 +77,28 @@ struct EditLabelWindow: View {
                         //                    if !editText.isEmpty && AppSetting.maxLengthOfTerm >= editText.count{
                         //                        userSettingViewModel.saveUserSettingGoal(isLong: isLong, goal: editText)
                         //                    }
-                        toastText = "目標を変更しました"
+                    
+                        
+                        switch labelNum {
+                        case 0:
+                            label0 = editText
+                        case 1:
+                            label1 = editText
+                        case 2:
+                            label2 = editText
+                        default:
+                            break
+                        }
+                        
+                        labelArray = [label0,label1,label2]
                         showAlert = false
-                        showToast = true
+                        
+
                     } label: {
                         Text("保存する")
-                            .frame(width: screenWidth / 3.5, height: screenWidth * 0.1)
+                            .frame(width: AppSetting.screenWidth / 3.5, height: AppSetting.screenWidth * 0.1)
                     }.tint(.green)
-                    //                    .disabled(editText.isEmpty || editText.count > maxLengthOfTerm)
+                            .disabled(editText.isEmpty || editText.count > maxLength)
                 }//HStackここまで
                 .foregroundColor(.white)
                 .buttonStyle(.borderedProminent)
@@ -95,21 +113,29 @@ struct EditLabelWindow: View {
             .padding()
         //ページ表示時に初期値として現在の目標をテキストエディターに入力
         .onAppear{
-            editText = "Test"
+                switch labelNum {
+                case 0:
+                    editText = label0
+                case 1:
+                    editText = label1
+                case 2:
+                    editText = label2
+                default:
+                    editText = "Error"
+                }
+//            editText = defaults.string(forKey:key) ?? ""
         }
     }
 }
 
-struct EditLabelWindow_Previews: PreviewProvider {
-    @State static var isEdit = false
-    @State static var showToast = false
-    @State static var toastText = "目標を変更しました"
-    static var previews: some View {
-        Group{
-            EditLabelWindow(showAlert: $isEdit,showToast: $showToast,toastText: $toastText)
-                .environment(\.locale, Locale(identifier:"en"))
-            EditLabelWindow(showAlert: $isEdit,showToast: $showToast,toastText: $toastText)
-                .environment(\.locale, Locale(identifier:"ja"))
-        }
-    }
-}
+//struct EditLabelWindow_Previews: PreviewProvider {
+//    @State static var isEdit = false
+//    static var previews: some View {
+//        Group{
+//            EditLabelWindow(showAlert: $isEdit)
+//                .environment(\.locale, Locale(identifier:"en"))
+//            EditLabelWindow(showAlert: $isEdit)
+//                .environment(\.locale, Locale(identifier:"ja"))
+//        }
+//    }
+//}
