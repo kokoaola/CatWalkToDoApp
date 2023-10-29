@@ -43,7 +43,7 @@ struct EditLabelWindow: View {
         VStack(alignment: .leading){
             
             //見出しの文言
-            Text("ラベルの変更")
+            Text("Edit custom label")
                 .frame(maxWidth: .infinity, alignment: .center)
                 .font(.title3)
             
@@ -56,11 +56,11 @@ struct EditLabelWindow: View {
                 .border(.gray, width: 1)
                 .frame(height: 80)
                 .opacity(editText.isEmpty ? 0.5 : 1)
-                .accessibilityLabel("ラベル名を変更するためのテキストフィールド")
+                .accessibilityLabel("Text field to change custom label name.")
                 .focused($isInputActive)
             
             //文字数オーバー時の警告
-            Text("\(maxLength)文字以内のみ設定可能です").font(.caption) .font(.caption)
+            Text("Only up to \(maxLength) characters can be set").font(.caption) .font(.caption)
                 .foregroundColor(editText.count > maxLength ? .red : .clear)
             
             
@@ -69,7 +69,7 @@ struct EditLabelWindow: View {
                 Button {
                     showAlert = false
                 } label: {
-                    Text("キャンセル")
+                    Text("Cancel")
                         .frame(width: AppSetting.screenWidth / 3.5, height: AppSetting.screenWidth * 0.1)
                 }
                 .tint(.red)
@@ -95,7 +95,7 @@ struct EditLabelWindow: View {
                     }
                     
                 } label: {
-                    Text("保存する")
+                    Text("Save")
                         .frame(width: AppSetting.screenWidth / 3.5, height: AppSetting.screenWidth * 0.1)
                 }.tint(.green)
                     .disabled(editText.isEmpty || editText.count > maxLength)

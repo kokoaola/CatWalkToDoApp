@@ -36,10 +36,8 @@ struct List_mainView: View {
     @State private var flip: Bool = true
     @State private var startMoving: Bool = false
     
-    ///ラベル編集用
+    ///ラベル編集アラート表示用フラグ
     @State var isEdit = false
-    @State var showToast = false
-    @State var toastText = "目標を変更しました"
     
     
     var body: some View {
@@ -71,7 +69,7 @@ struct List_mainView: View {
                             
                             //上に表示される３つのインデックス
                             ForEach(0 ..< 3) {num in
-                                CustomShape()
+                                IndexLabel()
                                     .foregroundColor(.white)
                                     .frame(width: UIScreen.main.bounds.width / 3.5, height: 60)
                                     .shadow(color:.black.opacity(selection == num ? 0.5 : 0.0001), radius: 3, x: 3, y: 3)
@@ -175,7 +173,8 @@ struct List_mainView: View {
                     
                 }
                 .background(LinearGradient(gradient: Gradient(colors: [AppSetting.mainColor1, AppSetting.mainColor2]), startPoint: .leading, endPoint: .trailing))
-                
+                //キーボードによるビューの押し上げをなくす
+                .ignoresSafeArea(.keyboard,edges: .all)
                 
                 //右上のゴミ箱マーク削除ボタン
                 .toolbar {
@@ -215,33 +214,5 @@ struct List_mainView_Previews: PreviewProvider {
     static var previews: some View {
         List_mainView()
             .environmentObject(ItemViewModel())
-    }
-}
-
-
-struct CustomShape: Shape {
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        
-        
-        // 左下の角を開始点として
-        path.move(to: CGPoint(x: rect.minX, y: rect.maxY))
-        
-        // 左上へ移動
-        path.addLine(to: CGPoint(x: rect.minX, y: rect.minY + 10))
-        path.addQuadCurve(to: CGPoint(x: rect.minX + 10, y: rect.minY), control: CGPoint(x: rect.minX, y: rect.minY))
-        
-        // 右上へ移動
-        path.addLine(to: CGPoint(x: rect.maxX - 10, y: rect.minY))
-        path.addQuadCurve(to: CGPoint(x: rect.maxX, y: rect.minY + 10), control: CGPoint(x: rect.maxX, y: rect.minY))
-        
-        // 右下へ移動
-        path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
-        
-        // 下の辺は描画しないため、左下へ直接戻る
-        //        path.addLine(to: CGPoint(x: rect.minX - 1.5, y: rect.maxY))
-        
-        
-        return path
     }
 }

@@ -13,7 +13,8 @@ struct SpeechBubbleView1: View{
         SpeechBubblePath()
             .frame(width: AppSetting.screenWidth * 0.8, height: AppSetting.screenWidth * 0.3)
             .padding(.top)
-            .foregroundColor(AppSetting.mainColor1.opacity(0.1))
+            .shadow(color:.black.opacity(1), radius: 5, x: 3, y: 3)
+            .foregroundColor(AppSetting.mainColor2).opacity(0.3)
     }
 }
 
@@ -23,9 +24,10 @@ struct SpeechBubbleView2: View{
     var body: some View {
         SpeechBubblePath()
             .rotation(Angle(degrees:180))
-            .frame(width: AppSetting.screenWidth * 0.8, height: AppSetting.screenWidth * 0.3)
+            .frame(width: AppSetting.screenWidth * 0.8, height: AppSetting.screenWidth * 0.2)
             .padding(.top)
-            .foregroundColor(AppSetting.mainColor2.opacity(0.1))
+            .shadow(color:.black.opacity(1), radius: 5, x: 3, y: 3)
+            .foregroundColor(AppSetting.mainColor1).opacity(0.3)
     }
 }
 

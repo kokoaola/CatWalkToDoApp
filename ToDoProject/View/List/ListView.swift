@@ -39,29 +39,37 @@ struct ListView: View {
                     .offset(x:0, y:-10)
                     .overlay{
                         VStack{
-                            Text("インデックスを長押しすると、\nラベル名の変更ができます" )
+                            Text("By long-pressing index,\nyou can edit label name.")
+                                .fontWeight(.bold)
                                 .lineSpacing(10)
                         }
                         .frame(width: AppSetting.screenWidth * 0.9, height: AppSetting.screenWidth * 0.3)
-                        .foregroundColor(.black)
+                        .foregroundColor(.black).opacity(0.6)
                     }
                 
                 
                 Spacer()
+                
+                
                 
                 SpeechBubbleView2()
                     .offset(x:0, y:-10)
                     .overlay{
                         VStack{
-                            Text("タスクの追加はここから" )
+                            Text("Add tasks from here.")
+                                .fontWeight(.bold)
                                 .lineSpacing(10)
                         }
                         .frame(width: AppSetting.screenWidth * 0.9, height: AppSetting.screenWidth * 0.3)
-                        .foregroundColor(.black)
+                        .foregroundColor(.black).opacity(0.6)
                     }
+                
+                
                 
                 Spacer()
                     .frame(height: 50)
+                
+                
             }
             .padding(.vertical, 50)
             ///保存されたアイテムが１つ以上あれば、リストにして表示
