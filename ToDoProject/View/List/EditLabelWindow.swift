@@ -22,63 +22,63 @@ struct EditLabelWindow: View {
     @State var editText: String = ""
     
     ///入力できる最大文字数
-    let maxLength = 30
+    let maxLength = 20
     
     ///ユーザーデフォルト用変数
     private let defaults = UserDefaults.standard
     
     @State var key = ""
     
-    //ユーザーデフォルトから３つのラベルデータを取得
+    ///ユーザーデフォルトから３つのラベルデータを取得
     @AppStorage("label0") var label0 = "1"
     @AppStorage("label1") var label1 = "2"
     @AppStorage("label2") var label2 = "3"
     
+    ///キーボードフォーカス用変数（Doneボタン表示のため）
+    @FocusState var isInputActive: Bool
+    
     
     var body: some View {
         
-            VStack(alignment: .leading){
+        VStack(alignment: .leading){
+            
+            //見出しの文言
+            Text("ラベルの変更")
+                .frame(maxWidth: .infinity, alignment: .center)
+                .font(.title3)
+            
+            //テキストエディタ
+            TextEditor(text: $editText)
+                .foregroundColor(Color(UIColor.black))
+                .tint(.black)
+                .scrollContentBackground(Visibility.hidden)
+                .background(.gray.opacity(0.5))
+                .border(.gray, width: 1)
+                .frame(height: 80)
+                .opacity(editText.isEmpty ? 0.5 : 1)
+                .accessibilityLabel("ラベル名を変更するためのテキストフィールド")
+                .focused($isInputActive)
+            
+            //文字数オーバー時の警告
+            Text("\(maxLength)文字以内のみ設定可能です").font(.caption) .font(.caption)
+                .foregroundColor(editText.count > maxLength ? .red : .clear)
+            
+            
+            HStack{
+                //キャンセルボタン
+                Button {
+                    showAlert = false
+                } label: {
+                    Text("キャンセル")
+                        .frame(width: AppSetting.screenWidth / 3.5, height: AppSetting.screenWidth * 0.1)
+                }
+                .tint(.red)
                 
-                //見出しの文言
-                Text("ラベルの変更")
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .font(.title3)
+                Spacer()
                 
-                //テキストエディタ
-                TextEditor(text: $editText)
-                    .foregroundColor(Color(UIColor.black))
-                    .tint(.black)
-                    .scrollContentBackground(Visibility.hidden)
-                    .background(.gray.opacity(0.5))
-                    .border(.gray, width: 1)
-                    .frame(height: 80)
-                    .opacity(editText.isEmpty ? 0.5 : 1)
-                    .accessibilityLabel("ラベル名を変更するためのテキストフィールド")
-                
-                //文字数オーバー時の警告
-                Text("\(maxLength)文字以内のみ設定可能です").font(.caption) .font(.caption)
-                    .foregroundColor(editText.count > maxLength ? .red : .clear)
-                
-                
-                HStack{
-                    //キャンセルボタン
-                    Button {
-                        showAlert = false
-                    } label: {
-                        Text("キャンセル")
-                            .frame(width: AppSetting.screenWidth / 3.5, height: AppSetting.screenWidth * 0.1)
-                    }
-                    .tint(.red)
-                    
-                    Spacer()
-                    
-                    //保存ボタン
-                    Button {
-                        //                    if !editText.isEmpty && AppSetting.maxLengthOfTerm >= editText.count{
-                        //                        userSettingViewModel.saveUserSettingGoal(isLong: isLong, goal: editText)
-                        //                    }
-                    
-                        
+                //保存ボタン
+                Button {
+                    if !editText.isEmpty && maxLength >= editText.count{
                         switch labelNum {
                         case 0:
                             label0 = editText
@@ -92,38 +92,50 @@ struct EditLabelWindow: View {
                         
                         labelArray = [label0,label1,label2]
                         showAlert = false
-                        
-
-                    } label: {
-                        Text("保存する")
-                            .frame(width: AppSetting.screenWidth / 3.5, height: AppSetting.screenWidth * 0.1)
-                    }.tint(.green)
-                            .disabled(editText.isEmpty || editText.count > maxLength)
-                }//HStackここまで
-                .foregroundColor(.white)
-                .buttonStyle(.borderedProminent)
-                .padding(.bottom)
+                    }
+                    
+                } label: {
+                    Text("保存する")
+                        .frame(width: AppSetting.screenWidth / 3.5, height: AppSetting.screenWidth * 0.1)
+                }.tint(.green)
+                    .disabled(editText.isEmpty || editText.count > maxLength)
                 
-            }//VStackここまで
+                
+                
+                //キーボード閉じるボタン
+                    .toolbar {
+                        ToolbarItemGroup(placement: .keyboard) {
+                            Spacer()
+                            Button("Close") {
+                                isInputActive = false
+                            }
+                        }
+                    }
+            }//HStackここまで
+            .foregroundColor(.white)
+            .buttonStyle(.borderedProminent)
+            .padding(.bottom)
             
-            .foregroundColor(.black)
-            .padding()
-            .background(.white)
-            .cornerRadius(15)
-            .padding()
+        }//VStackここまで
+        
+        .foregroundColor(.black)
+        .padding()
+        .background(.white)
+        .cornerRadius(15)
+        .padding()
         //ページ表示時に初期値として現在の目標をテキストエディターに入力
         .onAppear{
-                switch labelNum {
-                case 0:
-                    editText = label0
-                case 1:
-                    editText = label1
-                case 2:
-                    editText = label2
-                default:
-                    editText = "Error"
-                }
-//            editText = defaults.string(forKey:key) ?? ""
+            switch labelNum {
+            case 0:
+                editText = label0
+            case 1:
+                editText = label1
+            case 2:
+                editText = label2
+            default:
+                editText = "Error"
+            }
+            isInputActive = true
         }
     }
 }

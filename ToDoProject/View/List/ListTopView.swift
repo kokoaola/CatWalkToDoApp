@@ -169,6 +169,9 @@ struct List_mainView: View {
                     .onAppear(){
                         labelArray = [label0, label1, label2]
                     }
+                    .onDisappear(){
+                        isEdit = false
+                    }
                     
                 }
                 .background(LinearGradient(gradient: Gradient(colors: [AppSetting.mainColor1, AppSetting.mainColor2]), startPoint: .leading, endPoint: .trailing))
