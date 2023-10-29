@@ -36,58 +36,74 @@ struct List_mainView: View {
     @State private var flip: Bool = true
     @State private var startMoving: Bool = false
     
+    ///ラベル編集用
+    @State var isEdit = false
+    @State var showToast = false
+    @State var toastText = "目標を変更しました"
+    
+    
     var body: some View {
         let catSize = UIScreen.main.bounds.width / 6
         
-        NavigationView{
-            //下部の完了ボタンを配置するためのZStack
-            ZStack{
-                VStack {
+        
+        ZStack{
+            NavigationView{
+                //下部の完了ボタンを配置するためのZStack
+                ZStack{
                     
-                    //インデックスと動く猫ちゃんを並べたHStack
-                    HStack{
-                        //猫ちゃん
-                        LottieView(filename: "cat", loop: .loop, shouldFlip: $flip, startAnimation: $startMoving)
-                            .frame(width: catSize)
-                            .position(x: goRight ? UIScreen.main.bounds.width + catSize * 2 / 2 : 0 - catSize, y: 40)
-                            .animation(.linear(duration: 7.0), value: goRight)
-                            .shadow(color:.black.opacity(0.5), radius: 3, x: 3, y: 3)
-                            .zIndex(1.0)
-                        //VoiceOver用
-                            .accessibilityElement(children: .ignore)
-                            .accessibilityLabel("Walking cat")
-                            .accessibilityAddTraits(.isImage)
+                    ///ToDoリストとラベルの表示
+                    VStack {
                         
-                        
-                        //上に表示される３つのインデックス
-                        ForEach(0 ..< 3) {num in
-                            CustomShape()
-                                .foregroundColor(.white)
-                                .frame(width: UIScreen.main.bounds.width / 3.5, height: 60)
-                                .shadow(color:.black.opacity(selection == num ? 0.5 : 0.0001), radius: 3, x: 3, y: 3)
-                            //ラベルの文字
-                                .overlay(Text("\(labelArray[num])")
-                                    .font(.callout)
-                                    .fontWeight(.bold)
-                                    .foregroundColor(Color(selection == num ? .black : .gray)))
-                            //表示中だけラベルの色を濃くする
-                                .opacity(selection == num ? 1.0 : 0.6)
-                            //タブは猫ちゃんの前後になるように表示
-                                .zIndex(selection == num ? 1.0 : -1.0)
-                                .contentShape(Rectangle())
-                                .onTapGesture {
-                                    selection = num
-                                }
-                                .accessibilityAddTraits(selection == num ? [.isSelected] : [])
-                                .accessibilityLabel("\(labelArray[num]), tab")
+                        //インデックスと動く猫ちゃんを並べたHStack
+                        HStack{
+                            //猫ちゃん
+                            LottieView(filename: "cat", loop: .loop, shouldFlip: $flip, startAnimation: $startMoving)
+                                .frame(width: catSize)
+                                .position(x: goRight ? UIScreen.main.bounds.width + catSize * 2 / 2 : 0 - catSize, y: 40)
+                                .animation(.linear(duration: 7.0), value: goRight)
+                                .shadow(color:.black.opacity(0.5), radius: 3, x: 3, y: 3)
+                                .zIndex(1.0)
+                            //VoiceOver用
+                                .accessibilityElement(children: .ignore)
+                                .accessibilityLabel("Walking cat")
+                                .accessibilityAddTraits(.isImage)
+                            
+                            
+                            //上に表示される３つのインデックス
+                            ForEach(0 ..< 3) {num in
+                                CustomShape()
+                                    .foregroundColor(.white)
+                                    .frame(width: UIScreen.main.bounds.width / 3.5, height: 60)
+                                    .shadow(color:.black.opacity(selection == num ? 0.5 : 0.0001), radius: 3, x: 3, y: 3)
+                                //ラベルの文字
+                                    .overlay(Text("\(labelArray[num])")
+                                        .font(.callout)
+                                        .fontWeight(.bold)
+                                        .foregroundColor(Color(selection == num ? .black : .gray)))
+                                //表示中だけラベルの色を濃くする
+                                    .opacity(selection == num ? 1.0 : 0.6)
+                                //タブは猫ちゃんの前後になるように表示
+                                    .zIndex(selection == num ? 1.0 : -1.0)
+                                    .contentShape(Rectangle())
+                                    .onTapGesture {
+                                        selection = num
+                                    }
+                                //ラベル名長押しで編集用ウィンドウ表示
+                                    .onLongPressGesture {
+//                                        withAnimation {
+                                            isEdit = true
+//                                        }
+                                    }
+                                    .accessibilityAddTraits(selection == num ? [.isSelected] : [])
+                                    .accessibilityLabel("\(labelArray[num]), tab")
+                            }
                         }
-                    }
-                    .offset(x: -UIScreen.main.bounds.width / 18.5)
-                    .padding(.bottom, -20)
-                    .frame(height: 60)
-                    
-                    
-                    //買い物リストの中身(選択中のタブによって切り替える)
+                        .offset(x: -UIScreen.main.bounds.width / 18.5)
+                        .padding(.bottom, -20)
+                        .frame(height: 60)
+                        
+                        
+                        //買い物リストの中身(選択中のタブによって切り替える)
                         TabView(selection: $selection) {
                             ListView(filterdList: $itemVM.label0Item, labelNum: $selection, goRight: $goRight, isFlip: $flip, isMoving: $startMoving)
                                 .tag(0)
@@ -99,85 +115,95 @@ struct List_mainView: View {
                         .background(.white)
                         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                         .environmentObject(itemVM)
+                        
+                    }.padding(.top, 5)
+                    //編集用アラート表示中はタップ無効
+                        .disabled(isEdit)
+                        .accessibilityHidden(isEdit)
                     
-                }.padding(.top, 5)
-                
-                
-                //＋ボタン用のセクション
-                VStack{
-                    Spacer()
-                    //追加ボタン
-                    Button(action: {
-                        showAddNewItemSheet = true
-                    }) {
+                    
+                    ///＋ボタン用のセクション
+                    VStack{
+                        Spacer()
+                        //追加ボタン
+                        Button(action: {
+                            showAddNewItemSheet = true
+                        }) {
+                            CatAddButton(color: AppSetting.mainColor2)
+                        }
                         
-                        CatAddButton(color: AppSetting.mainColor2)
-//                        Image(systemName: "plus")
-//                            .font(.title)
-//                            .padding()
-//                            .foregroundColor(.white)
-//                            .background(AppSetting.mainColor2)
-//                            .cornerRadius(30)
-//                            .shadow(color:.black.opacity(0.3), radius: 3, x: 3, y: 3
-//                            )
-//                            .padding()
-                        
+                        //VoiceOver
+                        .contentShape(Rectangle())
+                        .accessibilityLabel("Add new task")
+                        .accessibilityAddTraits(.isButton)
+                        .padding(5)
+                    }
+                    .ignoresSafeArea(.keyboard, edges: .bottom)
+                    //編集用アラート表示中はタップ無効
+                    .disabled(isEdit)
+                    .accessibilityHidden(isEdit)
+                    
+                    
+                    
+                    
+                    //タスク新規追加用のシート
+                    .sheet(isPresented: $showAddNewItemSheet, content: {
+                        AddNewItem(newLabelNum: selection)
+                            .environmentObject(itemVM)
+                    })
+                    
+                    //買い物完了ボタンが押された後の確認アラート
+                    .alert(isPresented: $showCompleteTaskAlert){
+                        Alert(title: Text("Task Completion"),
+                              message: Text("Do you want to delete the checked items?"),
+                              //OKならチェックした項目をリストから削除
+                              primaryButton: .destructive(Text("Delete"), action: {
+                            itemVM.completeTask(labelNum: selection)
+                            
+                        }),
+                              secondaryButton: .cancel(Text("Cancel"), action:{}))
                     }
                     
-                    //VoiceOver
-                    .contentShape(Rectangle())
-                    .accessibilityLabel("Add new task")
-                    .accessibilityAddTraits(.isButton)
-                    .padding(5)
+                    //ビュー生成時にラベルを配列に追加する
+                    .onAppear(){
+                        labelArray = [label0, label1, label2]
+                    }
+                    
                 }
-                .ignoresSafeArea(.keyboard, edges: .bottom)
+                .background(LinearGradient(gradient: Gradient(colors: [AppSetting.mainColor1, AppSetting.mainColor2]), startPoint: .leading, endPoint: .trailing))
                 
-                //タスク新規追加用のシート
-                .sheet(isPresented: $showAddNewItemSheet, content: {
-                    AddNewItem(newLabelNum: selection)
-                        .environmentObject(itemVM)
-                })
                 
-                //買い物完了ボタンが押された後の確認アラート
-                .alert(isPresented: $showCompleteTaskAlert){
-                    Alert(title: Text("Task Completion"),
-                          message: Text("Do you want to delete the checked items?"),
-                          //OKならチェックした項目をリストから削除
-                          primaryButton: .destructive(Text("Delete"), action: {
-                        itemVM.completeTask(labelNum: selection)
-                        
-                    }),
-                          secondaryButton: .cancel(Text("Cancel"), action:{}))
+                //右上のゴミ箱マーク削除ボタン
+                .toolbar {
+                    
+                    ToolbarItemGroup(placement: .navigationBarTrailing) {
+                        Button(action: {
+                            showCompleteTaskAlert.toggle()
+                        }) {
+                            Image(systemName: "trash.square.fill")
+                                .symbolRenderingMode(SymbolRenderingMode.palette)
+                                .font(.largeTitle)
+                                .foregroundStyle(.white, .gray)
+                                .shadow(color:.black.opacity(0.5), radius: 3, x: 3, y: 3
+                                )
+                        }
+                        //VoiceOver
+                        .accessibilityLabel("Delete")
+                        .accessibilityHint("Remove all completed tasks from the list")
+                        .accessibilityAddTraits(.isButton)
+                    }
                 }
-                
-                //ビュー生成時にラベルを配列に追加する
-                .onAppear(){
-                    labelArray = [label0, label1, label2]
-                }
-            }
-            .background(LinearGradient(gradient: Gradient(colors: [AppSetting.mainColor1, AppSetting.mainColor2]), startPoint: .leading, endPoint: .trailing))
+            }.opacity(isEdit ? 0.3:1.0)
             
-            //右上のゴミ箱マーク削除ボタン
-            .toolbar {
-                
-                ToolbarItemGroup(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        showCompleteTaskAlert.toggle()
-                    }) {
-                        Image(systemName: "trash.square.fill")
-                            .symbolRenderingMode(SymbolRenderingMode.palette)
-                            .font(.largeTitle)
-                            .foregroundStyle(.white, .gray)
-                            .shadow(color:.black.opacity(0.5), radius: 3, x: 3, y: 3
-                            )
-                    }
-                    //VoiceOver
-                    .accessibilityLabel("Delete")
-                    .accessibilityHint("Remove all completed tasks from the list")
-                    .accessibilityAddTraits(.isButton)
-                }
+            
+            
+            ///ラベル名がロングタップされたら編集用ウィンドウを表示
+            if isEdit{
+                LinearGradient(gradient: Gradient(colors: [AppSetting.mainColor1, AppSetting.mainColor2]), startPoint: .leading, endPoint: .trailing).ignoresSafeArea().opacity(0.5)
+                EditLabelWindow(showAlert: $isEdit, showToast: $showToast, toastText: $toastText)
             }
         }
+
     }
 }
 

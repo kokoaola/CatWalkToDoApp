@@ -57,6 +57,7 @@ struct ListView: View {
                     .accessibilityAddTraits(.isButton)
                     .accessibilityRemoveTraits(.isSelected)
                     
+                    
                     //編集マーク表示
                     Image(systemName: "square.and.pencil")
                         .foregroundColor(.gray)
