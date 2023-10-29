@@ -8,16 +8,27 @@
 import SwiftUI
 
 ///吹き出しのビュー
-struct SpeechBubbleView: View{
+struct SpeechBubbleView1: View{
     var body: some View {
         SpeechBubblePath()
-            .rotation(Angle(degrees: 180))
-            .foregroundColor(.white)
-            .frame(width: AppSetting.screenWidth * 0.9, height: AppSetting.screenWidth * 0.3)
-            .opacity(0.8)
+            .frame(width: AppSetting.screenWidth * 0.8, height: AppSetting.screenWidth * 0.3)
             .padding(.top)
+            .foregroundColor(AppSetting.mainColor1.opacity(0.1))
     }
 }
+
+
+///吹き出しのビュー
+struct SpeechBubbleView2: View{
+    var body: some View {
+        SpeechBubblePath()
+            .rotation(Angle(degrees:180))
+            .frame(width: AppSetting.screenWidth * 0.8, height: AppSetting.screenWidth * 0.3)
+            .padding(.top)
+            .foregroundColor(AppSetting.mainColor2.opacity(0.1))
+    }
+}
+
 
 
 ///吹き出しのパス
@@ -66,8 +77,8 @@ struct SpeechBubblePath: Shape {
     }
 }
 
-struct SpeechBubble_Previews: PreviewProvider {
-    static var previews: some View {
-        SpeechBubbleView()
-    }
-}
+//struct SpeechBubble_Previews: PreviewProvider {
+//    static var previews: some View {
+//        SpeechBubbleView()
+//    }
+//}

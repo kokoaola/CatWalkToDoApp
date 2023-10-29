@@ -32,95 +32,129 @@ struct ListView: View {
     
     var body: some View {
         
-        //買い物リスト本体
-        List{
-            
-            ForEach(filterdList){ item in
-                HStack{
-                    //１列の中でVoiceOverのタップ領域を分けるためのHStack
+        ///保存されたアイテムが空ならチュートリアル吹き出しを表示
+        if filterdList.isEmpty{
+            VStack{
+                SpeechBubbleView1()
+                    .offset(x:0, y:-10)
+                    .overlay{
+                        VStack{
+                            Text("インデックスを長押しすると、\nラベル名の変更ができます" )
+                                .lineSpacing(10)
+                        }
+                        .frame(width: AppSetting.screenWidth * 0.9, height: AppSetting.screenWidth * 0.3)
+                        .foregroundColor(.black)
+                    }
+                
+                
+                Spacer()
+                
+                SpeechBubbleView2()
+                    .offset(x:0, y:-10)
+                    .overlay{
+                        VStack{
+                            Text("タスクの追加はここから" )
+                                .lineSpacing(10)
+                        }
+                        .frame(width: AppSetting.screenWidth * 0.9, height: AppSetting.screenWidth * 0.3)
+                        .foregroundColor(.black)
+                    }
+                
+                Spacer()
+                    .frame(height: 50)
+            }
+            .padding(.vertical, 50)
+            ///保存されたアイテムが１つ以上あれば、リストにして表示
+        }else{
+            //買い物リスト本体
+            List{
+                
+                ForEach(filterdList){ item in
                     HStack{
-                        Text("")
-                        //チェックボックス表示
-                        Image(systemName: item.checked ? "checkmark.square.fill": "square")
-                            .font(.title2)
-                        //タイトル表示
-                        Text(item.title)
-                            .strikethrough(item.checked ? true: false)
-                        Spacer()
-                    }
-                    .padding(.vertical, 10)
-                    .contentShape(Rectangle())
-                    //VoiceOver用
-                    //タスク名とチェック済みかどうかの読み上げ
-                    .accessibilityElement(children: .combine)
-                    .accessibilityLabel(item.checked ? LocalizedStringKey("Checked,\(item.title)") : LocalizedStringKey("Unchecked,\(item.title)"))
-                    .accessibilityAddTraits(.isButton)
-                    .accessibilityRemoveTraits(.isSelected)
-                    
-                    
-                    //編集マーク表示
-                    Image(systemName: "square.and.pencil")
-                        .foregroundColor(.gray)
-                        .opacity(0.8)
-                    //編集マークタップで編集シート表示
-                        .onTapGesture {
-                            selectedItem = item
-                            showEditSheet = true
+                        //１列の中でVoiceOverのタップ領域を分けるためのHStack
+                        HStack{
+                            Text("")
+                            //チェックボックス表示
+                            Image(systemName: item.checked ? "checkmark.square.fill": "square")
+                                .font(.title2)
+                            //タイトル表示
+                            Text(item.title)
+                                .strikethrough(item.checked ? true: false)
+                            Spacer()
                         }
-                    //VoiceOver用
-                        .padding(.vertical,10)
-                        .padding(.horizontal, 15)
+                        .padding(.vertical, 10)
                         .contentShape(Rectangle())
-                        .accessibilityRemoveTraits(.isImage)
+                        //VoiceOver用
+                        //タスク名とチェック済みかどうかの読み上げ
+                        .accessibilityElement(children: .combine)
+                        .accessibilityLabel(item.checked ? LocalizedStringKey("Checked,\(item.title)") : LocalizedStringKey("Unchecked,\(item.title)"))
                         .accessibilityAddTraits(.isButton)
-                        .accessibilityLabel("Edit")
-                        .accessibilityHint("Edit this task, \(item.title)")
-                    
-                    
-                }
-                .listRowBackground(Color.clear)
-                .opacity(item.checked ? 0.3 : 1)
-                //                .padding(.vertical, 8)
-                //セルタップでボックスにチェック
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    if !isMoving && !item.checked{
-                        self.isFlip.toggle()
-                        isMoving = true
-                        withAnimation() {
-                            self.goRight.toggle()
-                        }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 7.5) {
-                            isMoving = false
-                        }
+                        .accessibilityRemoveTraits(.isSelected)
+                        
+                        
+                        //編集マーク表示
+                        Image(systemName: "square.and.pencil")
+                            .foregroundColor(.gray)
+                            .opacity(0.8)
+                        //編集マークタップで編集シート表示
+                            .onTapGesture {
+                                selectedItem = item
+                                showEditSheet = true
+                            }
+                        //VoiceOver用
+                            .padding(.vertical,10)
+                            .padding(.horizontal, 15)
+                            .contentShape(Rectangle())
+                            .accessibilityRemoveTraits(.isImage)
+                            .accessibilityAddTraits(.isButton)
+                            .accessibilityLabel("Edit")
+                            .accessibilityHint("Edit this task, \(item.title)")
+                        
+                        
                     }
-                    itemVM.toggleCheck(item: item, labelNum: labelNum)
+                    .listRowBackground(Color.clear)
+                    .opacity(item.checked ? 0.3 : 1)
+                    //                .padding(.vertical, 8)
+                    //セルタップでボックスにチェック
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        if !isMoving && !item.checked{
+                            self.isFlip.toggle()
+                            isMoving = true
+                            withAnimation() {
+                                self.goRight.toggle()
+                            }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 7.5) {
+                                isMoving = false
+                            }
+                        }
+                        itemVM.toggleCheck(item: item, labelNum: labelNum)
+                    }
                 }
+                .onMove(perform: moveItem)
+                
+                //新規追加ボタンと一番下のタスクが被らないようにするための空白
+                Spacer()
+                    .frame(height: 40)
+                    .listRowBackground(EmptyView())
+                    .accessibilityHidden(true)
             }
-            .onMove(perform: moveItem)
+            .foregroundColor(AppSetting.fontColor)
+            .listStyle(.sidebar)
+            .padding(.horizontal,-15)
             
-            //新規追加ボタンと一番下のタスクが被らないようにするための空白
-            Spacer()
-                .frame(height: 40)
-                .listRowBackground(EmptyView())
-                .accessibilityHidden(true)
+            //タスク編集用のシート
+            .sheet(isPresented: $showEditSheet, content: {
+                if let item = selectedItem {
+                    EditItemView(oldLabel: labelNum, newNum: $labelNum, item: item).environmentObject(itemVM)
+                }
+            })
+            
+            //処理中はタップ不可
+            .disabled(itemVM.isBusy)
+            //背景色変える
+            .scrollContentBackground(.hidden)
         }
-        .foregroundColor(AppSetting.fontColor)
-        .listStyle(.sidebar)
-        .padding(.horizontal,-15)
-        
-        //タスク編集用のシート
-        .sheet(isPresented: $showEditSheet, content: {
-            if let item = selectedItem {
-                EditItemView(oldLabel: labelNum, newNum: $labelNum, item: item).environmentObject(itemVM)
-            }
-        })
-        
-        //処理中はタップ不可
-        .disabled(itemVM.isBusy)
-        
-        //背景色変える
-        .scrollContentBackground(.hidden)
     }
     
     func moveItem(offsets: IndexSet, index: Int) {
