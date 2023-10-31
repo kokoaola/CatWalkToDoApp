@@ -31,6 +31,15 @@
 "Checked" = "チェック済み";
 "Unchecked" = "未チェック";
 "Edit this task, %@" = "タスク、%@を編集する";
+"Text field to change custom label name." = "ラベル名を変更するためのテキストフィールド";
+
+//Tutorial
+"By long-pressing index,\nyou can edit label name." = "インデックスを長押しすると、\nラベル名の変更ができます";
+"Add tasks from here." = "タスクの追加はここから";
+
+//EditLabel
+"Only up to %lld characters can be set" = "%lld文字以内のみ設定可能です";
+"Edit custom label" = "ラベル名の変更";
 
 
 //AddNewItemSheet
@@ -39,7 +48,7 @@
 "Add to Favorites" = "お気に入りに追加";
 "Close" = "閉じる";
 "Task to Add" = "追加するタスク";
-"Create New" = "新規作成";
+"Create New Task" = "新規作成";
 "Please shorten the item name." = "項目名を短くしてください";
 "Only up to 50 characters can be registered." = "50文字以内のみ登録可能です。";
 
