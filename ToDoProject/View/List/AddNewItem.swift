@@ -161,7 +161,7 @@ struct AddNewItem: View {
             .padding()
             
             //ナビゲーションバーの設定
-            .navigationTitle("Create New")
+            .navigationTitle("Create New Task")
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(.visible, for: .navigationBar)
             
