@@ -6,14 +6,14 @@
 //
 
 
-
-
-import Foundation
 import FirebaseFirestore
 import SwiftUI
 import Firebase
 
+
+
 class ItemViewModel: ObservableObject {
+    private let firebaseService = FirebaseDataService()
     
     ///ラベルごとに分類したアイテム
     @Published  var label0Item = [ItemDataType]()
@@ -34,58 +34,25 @@ class ItemViewModel: ObservableObject {
     let db = Firestore.firestore()
     
     
-    init(label0Item: [ItemDataType] = [ItemDataType](), label1Item: [ItemDataType] = [ItemDataType](), label2Item: [ItemDataType] = [ItemDataType](), favoriteList: [String] = [String](), isBusy: Bool = false) {
-        self.label0Item = label0Item
-        self.label1Item = label1Item
-        self.label2Item = label2Item
+    init() {
         self.favoriteList = defaults.object(forKey:favoriteListKey) as? [String] ?? [String]()
         self.isBusy = isBusy
-        
-        fetchDataForCollection("label0Item")
-        fetchDataForCollection("label1Item")
-        fetchDataForCollection("label2Item")
-        
+        fetchData()
     }
     
     
-    ///引数で渡されたラベルに応じたデータをフェッチするメソッド
-    private func fetchDataForCollection(_ collectionName: String) {
-        
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        
-        db.collection("users").document(uid).collection(collectionName).order(by: "index").addSnapshotListener { (snapshot, error) in
-            if let error = error {
-                //                    print("Error removing document: \(error)")
-            }
-            
-            var tempArray = [ItemDataType]()
-            if let snap = snapshot {
-                for document in snap.documents {
-                    let id = document.documentID
-                    let title = document.get("title") as! String
-                    let index = document.get("index") as! Int16
-                    let label = document.get("label") as! Int16
-                    let checked = document.get("checked") as! Bool
-                    let timeData = document.get("timestamp", serverTimestampBehavior: .estimate) as! Timestamp
-                    let timestamp = timeData.dateValue()
-                    
-                    tempArray.append(ItemDataType(id: id, title: title, index: index,label: label, checked: checked, timestamp: timestamp))
-                }
-            }
-            switch collectionName {
-            case "label0Item":
-                self.label0Item = tempArray
-            case "label1Item":
-                self.label1Item = tempArray
-            case "label2Item":
-                self.label2Item = tempArray
-            default:
-                break
-            }
+    ///データをフェッチするメソッド
+    private func fetchData() {
+        firebaseService.fetchDataForCollection("label0Item") { [weak self] items in
+            self?.label0Item = items
+        }
+        firebaseService.fetchDataForCollection("label1Item") { [weak self] items in
+            self?.label1Item = items
+        }
+        firebaseService.fetchDataForCollection("label2Item") { [weak self] items in
+            self?.label2Item = items
         }
     }
-    
-    
     
     
     ///アイテムをデータベースに追加する
@@ -121,10 +88,9 @@ class ItemViewModel: ObservableObject {
         // 新しいアイテムを追加
         db.collection("users").document(uid).collection(collectionName).addDocument(data: data) { (error) in
             if let err = error {
-//                print("Error adding document: \(err)")
             } else {
-                self.fetchDataForCollection(collectionName)
-//                print("Document successfully added!")
+//                self.fetchDataForCollection(collectionName)
+                self.fetchData()
             }
         }
     }
@@ -158,7 +124,8 @@ class ItemViewModel: ObservableObject {
         db.collection("users").document(uid).collection(collection).document(documentId).updateData([
             "checked": newCheckedStatus
         ])
-        fetchDataForCollection(collection)
+//        fetchDataForCollection(collection)
+        self.fetchData()
     }
     
     
