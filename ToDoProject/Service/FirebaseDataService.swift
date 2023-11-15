@@ -13,18 +13,20 @@ import Firebase
 class FirebaseDataService {
     let db = Firestore.firestore()
     private let collectionNames = ["label0Item", "label1Item", "label2Item"]
+//    private let collectionNames = ["label0Item", "label1Item", "label2Item"]
     
     ///引数で渡されたラベルに応じたデータをフェッチするメソッド
-    //非同期処理では、処理の結果がすぐには利用できないためコールバックパターンを使用する
-    //コールバック関数を通じてitemsを返す
-    func fetchDataForCollection(_ collectionName: String, completion: @escaping ([ItemDataType]) -> Void) {
+    //非同期処理では、処理の結果がすぐには利用できないためコールバックパターンを使用し、コールバック関数を通じてitemsを返す
+    func fetchDataForCollection(_ label: Int, completion: @escaping ([ItemDataType]) -> Void) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        let collectionName = collectionNames[label]
         
         //ユーザーのIDを使用してコレクションにアクセス
         db.collection("users").document(uid).collection(collectionName).order(by: "index").addSnapshotListener { (snapshot, error) in
             var items = [ItemDataType]()
             
-            if let error = error {
+            if error != nil {
             }
             
             var tempArray = [ItemDataType]()

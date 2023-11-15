@@ -37,40 +37,41 @@ class ItemViewModel: ObservableObject {
     init() {
         self.favoriteList = defaults.object(forKey:favoriteListKey) as? [String] ?? [String]()
         self.isBusy = isBusy
-        fetchData()
+        fetchAllData()
     }
     
     
-    ///データをフェッチするメソッド
-    private func fetchData() {
-        firebaseService.fetchDataForCollection("label0Item") { [weak self] items in
+    ///すべてのデータをフェッチするメソッド
+    private func fetchAllData() {
+        firebaseService.fetchDataForCollection(0) { [weak self] items in
             self?.label0Item = items
         }
-        firebaseService.fetchDataForCollection("label1Item") { [weak self] items in
+        firebaseService.fetchDataForCollection(1) { [weak self] items in
             self?.label1Item = items
         }
-        firebaseService.fetchDataForCollection("label2Item") { [weak self] items in
+        firebaseService.fetchDataForCollection(2) { [weak self] items in
             self?.label2Item = items
         }
     }
     
     
-    ///アイテムをデータベースに追加する
-    func addNewItem(title: String, label: Int) async{
-        var itemCount = 0
-        switch label{
-        case 0:
-            itemCount = self.label0Item.count
-        case 1:
-            itemCount = self.label1Item.count
-        case 2:
-            itemCount = self.label2Item.count
-        default:
-            itemCount = self.label0Item.count
+    
+    ///選択したデータをフェッチするメソッド
+    private func fetchSelectedData(_ label:Int) {
+        firebaseService.fetchDataForCollection(label) { [weak self] items in
+            self?.label0Item = items
         }
-        
-        await firebaseService.addItemToCollection(title: title, label: label, count: itemCount)
-        fetchData()
+    }
+    
+    
+    ///アイテムをデータベースに追加するメソッド
+    func addNewItem(title: String, label: Int) async{
+        //アイテム総数を取得
+        let itemCounts = [self.label0Item.count, self.label1Item.count, self.label2Item.count]
+        //データベースへの書き込み
+        await firebaseService.addItemToCollection(title: title, label: label, count: itemCounts[label])
+        //追加したコレクションをリロード
+        fetchSelectedData(label)
     }
     
     
@@ -98,11 +99,20 @@ class ItemViewModel: ObservableObject {
             collection = "label0Item"
         }
         
-        db.collection("users").document(uid).collection(collection).document(documentId).updateData([
+        
+        db.collection("users").document(uid).collection(collection).document(item.id).updateData([
             "checked": newCheckedStatus
-        ])
+        ]){ error in
+            if let error = error {
+                print("Error updating document: \(error)")
+                // エラー処理をここで行う
+            } else {
+                // 成功時の処理をここで行う
+            }
+        }
+        
 //        fetchDataForCollection(collection)
-        self.fetchData()
+        self.fetchAllData()
     }
     
     
@@ -154,13 +164,11 @@ class ItemViewModel: ObservableObject {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         //アイテムのタイトル書き換え
-        await db.collection("users").document(uid).collection(collection).document(item.id).updateData([
+        db.collection("users").document(uid).collection(collection).document(item.id).updateData([
             "title": newTitle
         ]){ error in
-            if let error = error {
+            if error != nil {
                 self.deleteSelectedTask(item: item)
-//                await self.addNewItem(title: newTitle, label: newLabel)
-//                print("Error removing document: \(error)")
             }
         }
     }
