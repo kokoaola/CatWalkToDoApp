@@ -112,8 +112,12 @@ struct AddNewItem: View {
                     //入力された値が空白ならリターン
                     if newName.isEmpty{ return }
                     
-                    //項目をデータベースに追加
-                    itemVM.addItem(title: newName, label: newLabelNum)
+                    
+                    Task{                    //項目をデータベースに追加
+                        await itemVM.addNewItem(title: newName, label: newLabelNum)
+                       
+                    }
+
                     
                     //お気に入りOnならお気に入りリストに追加
                     if isFavorite{

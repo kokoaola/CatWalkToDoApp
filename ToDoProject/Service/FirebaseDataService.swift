@@ -12,6 +12,7 @@ import Firebase
 
 class FirebaseDataService {
     let db = Firestore.firestore()
+    private let collectionNames = ["label0Item", "label1Item", "label2Item"]
     
     ///引数で渡されたラベルに応じたデータをフェッチするメソッド
     //非同期処理では、処理の結果がすぐには利用できないためコールバックパターンを使用する
@@ -24,7 +25,6 @@ class FirebaseDataService {
             var items = [ItemDataType]()
             
             if let error = error {
-                //                    print("Error removing document: \(error)")
             }
             
             var tempArray = [ItemDataType]()
@@ -43,21 +43,34 @@ class FirebaseDataService {
                     tempArray.append(ItemDataType(id: id, title: title, index: index,label: label, checked: checked, timestamp: timestamp))
                 }
             }
-//            switch collectionName {
-//            case "label0Item":
-//                self.label0Item = tempArray
-//            case "label1Item":
-//                self.label1Item = tempArray
-//            case "label2Item":
-//                self.label2Item = tempArray
-//            default:
-//                break
-//            }
             items = tempArray
             completion(items)
         }
     }
     
     // 他のFirebase関連メソッド（addItem, toggleCheck, etc.）もここに移動
+    
+    ///アイテムをデータベースに追加する
+    func addItemToCollection(title: String, label: Int, count: Int) async{
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        //コレクション名を取得
+        let collectionName = collectionNames[label]
+        
+        let data = [
+            "title": title,
+            "index": count + 1,
+            "label": label,
+            "checked": false,
+            "timestamp": FieldValue.serverTimestamp()
+        ] as [String : Any]
+
+        
+        // 新しいアイテムを追加
+        db.collection("users").document(uid).collection(collectionName).addDocument(data: data){ (error) in
+            if let err = error {
+            }
+        }
+    }
+    
 }
 

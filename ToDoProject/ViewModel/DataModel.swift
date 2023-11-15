@@ -56,45 +56,22 @@ class ItemViewModel: ObservableObject {
     
     
     ///アイテムをデータベースに追加する
-    func addItem(title: String, label: Int){
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        
-        let collectionName: String
-        var newIndex: Int
+    func addNewItem(title: String, label: Int) async{
+        var itemCount = 0
         switch label{
         case 0:
-            newIndex = self.label0Item.count
-            collectionName = "label0Item"
+            itemCount = self.label0Item.count
         case 1:
-            newIndex = self.label1Item.count
-            collectionName = "label1Item"
+            itemCount = self.label1Item.count
         case 2:
-            newIndex = self.label2Item.count
-            collectionName = "label2Item"
+            itemCount = self.label2Item.count
         default:
-            newIndex = self.label0Item.count
-            collectionName = "label0Item"
+            itemCount = self.label0Item.count
         }
         
-        let data = [
-            "title": title,
-            "index": newIndex,
-            "label": label,
-            "checked": false,
-            "timestamp": FieldValue.serverTimestamp()
-        ] as [String : Any]
-        
-        
-        // 新しいアイテムを追加
-        db.collection("users").document(uid).collection(collectionName).addDocument(data: data) { (error) in
-            if let err = error {
-            } else {
-//                self.fetchDataForCollection(collectionName)
-                self.fetchData()
-            }
-        }
+        await firebaseService.addItemToCollection(title: title, label: label, count: itemCount)
+        fetchData()
     }
-    
     
     
     ///達成フラグをtrueにして保存する
@@ -152,12 +129,12 @@ class ItemViewModel: ObservableObject {
     
     
     ///タイトルを変更して保存する
-    func changeTitle(item: ItemDataType, newTitle: String ,newLabel: Int){
+    func changeTitle(item: ItemDataType, newTitle: String ,newLabel: Int) async{
         
         //ラベル番号が変更されたらアイテムを削除してから新規追加
         if item.label != newLabel{
             deleteSelectedTask(item: item)
-            addItem(title: newTitle, label: newLabel)
+            await addNewItem(title: newTitle, label: newLabel)
             
             return
         }
@@ -177,12 +154,12 @@ class ItemViewModel: ObservableObject {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         //アイテムのタイトル書き換え
-        db.collection("users").document(uid).collection(collection).document(item.id).updateData([
+        await db.collection("users").document(uid).collection(collection).document(item.id).updateData([
             "title": newTitle
         ]){ error in
             if let error = error {
                 self.deleteSelectedTask(item: item)
-                self.addItem(title: newTitle, label: newLabel)
+//                await self.addNewItem(title: newTitle, label: newLabel)
 //                print("Error removing document: \(error)")
             }
         }
