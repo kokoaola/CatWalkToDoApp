@@ -67,96 +67,47 @@ extension ItemViewModel{
     }
     
     
-    ///アイテムをデータベースに追加するメソッド
+    ///アイテムをデータベースに新規追加するメソッド
     func addNewItem(title: String, label: Int) async{
         //アイテム総数を取得
         let itemCounts = [self.label0Item.count, self.label1Item.count, self.label2Item.count]
         //データベースへの書き込み
-        await firebaseService.addItemToCollection(title: title, label: label, count: itemCounts[label])
+        await firebaseService.addItemToCollection(title: title, label: label, index: itemCounts[label])
         //追加したコレクションをリロード
         fetchSelectedData(label)
     }
     
     
-    ///達成フラグをtrueにして保存する
-    func toggleCheck(item: ItemDataType, labelNum: Int){
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        
-        let documentId = item.id
+    ///達成フラグを変更して保存する
+    func toggleItemCheckStatus(item: ItemDataType, labelNum: Int){
+        //達成フラグを反転
         let newCheckedStatus = !item.checked
-        
-        var updatedItem = item
-        updatedItem.checked = newCheckedStatus
-        
-        
-        let collection: String
-        
-        switch labelNum{
-        case 0:
-            collection = "label0Item"
-        case 1:
-            collection = "label1Item"
-        case 2:
-            collection = "label2Item"
-        default:
-            collection = "label0Item"
-        }
-        
-        
-        db.collection("users").document(uid).collection(collection).document(item.id).updateData([
-            "checked": newCheckedStatus
-        ]){ error in
-            if let error = error {
-                print("Error updating document: \(error)")
-                // エラー処理をここで行う
-            } else {
-                // 成功時の処理をここで行う
-            }
-        }
-        
-//        fetchDataForCollection(collection)
-        self.fetchAllData()
+        //updateItemInCollectionメソッドを呼び出す
+        firebaseService.updateItemInCollection(label:labelNum, isChecked: newCheckedStatus, item: item )
+        //コレクションをリロード
+        self.fetchSelectedData(labelNum)
     }
-    
-    
-    
-
     
     
     
     ///タイトルを変更して保存する
     func changeTitle(item: ItemDataType, newTitle: String ,newLabel: Int) async{
-        
         //ラベル番号が変更されたらアイテムを削除してから新規追加
         if item.label != newLabel{
+            //アイテムを削除
             deleteSelectedTask(item: item)
-            await addNewItem(title: newTitle, label: newLabel)
-            
+            //データベースへの書き込み
+            await firebaseService.addItemToCollection(title: newTitle, label: newLabel, index: Int(item.index))
             return
         }
         
-        var collection: String
-        switch newLabel{
-        case 0:
-            collection = "label0Item"
-        case 1:
-            collection = "label1Item"
-        case 2:
-            collection = "label2Item"
-        default:
-            collection = "label0Item"
-        }
+        var newItem = item
+        newItem.title = newTitle
         
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        
-        //アイテムのタイトル書き換え
-        db.collection("users").document(uid).collection(collection).document(item.id).updateData([
-            "title": newTitle
-        ]){ error in
-            if error != nil {
-                self.deleteSelectedTask(item: item)
-            }
-        }
+        //updateItemInCollectionメソッドを呼び出す
+        firebaseService.updateItemInCollection2(oldItem: item, newItem: newItem)
+        //コレクションをリロード
+        self.fetchAllData()
     }
     
     

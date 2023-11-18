@@ -12,9 +12,12 @@ import Firebase
 
 class FirebaseDataService {
     let db = Firestore.firestore()
+    let uid = Auth.auth().currentUser?.uid
     private let collectionNames = ["label0Item", "label1Item", "label2Item"]
-//    private let collectionNames = ["label0Item", "label1Item", "label2Item"]
-    
+}
+
+
+    extension FirebaseDataService{
     ///引数で渡されたラベルに応じたデータをフェッチするメソッド
     //非同期処理では、処理の結果がすぐには利用できないためコールバックパターンを使用し、コールバック関数を通じてitemsを返す
     func fetchDataForCollection(_ label: Int, completion: @escaping ([ItemDataType]) -> Void) {
@@ -50,17 +53,16 @@ class FirebaseDataService {
         }
     }
     
-    // 他のFirebase関連メソッド（addItem, toggleCheck, etc.）もここに移動
     
     ///アイテムをデータベースに追加する
-    func addItemToCollection(title: String, label: Int, count: Int) async{
+    func addItemToCollection(title: String, label: Int, index: Int) async{
         guard let uid = Auth.auth().currentUser?.uid else { return }
         //コレクション名を取得
         let collectionName = collectionNames[label]
         
         let data = [
             "title": title,
-            "index": count + 1,
+            "index": index + 1,
             "label": label,
             "checked": false,
             "timestamp": FieldValue.serverTimestamp()
@@ -74,10 +76,50 @@ class FirebaseDataService {
         }
     }
     
-//データベース内のアイテムを更新する
-    func updateItemInCollection(isChecked: Bool, label: Int){
         
+///データベース内のアイテムを更新する
+        func updateItemInCollection(label: Int, isChecked: Bool, item: ItemDataType){
+        var updatedItem = item
+        updatedItem.checked = isChecked
+        
+        
+            //コレクション名を取得
+            let collectionName = collectionNames[label]
+        
+        
+        db.collection("users").document(uid!).collection(collectionName).document(item.id).updateData([
+            "checked": isChecked
+        ]){ error in
+            if let error = error {
+                print("Error updating document: \(error)")
+                // エラー処理をここで行う
+            } else {
+                // 成功時の処理をここで行う
+            }
+        }
     }
+        
+        
+        
+        ///データベース内のアイテムを更新する
+        func updateItemInCollection2(oldItem: ItemDataType, newItem: ItemDataType){
+            
+            //コレクション名を取得
+            let collectionName = collectionNames[Int(oldItem.label)]
+            
+            
+            db.collection("users").document(uid!).collection(collectionName).document(oldItem.id).updateData([
+                "checked": newItem.checked,
+                "title": newItem.title
+            ]){ error in
+                if let error = error {
+                    print("Error updating document: \(error)")
+                    // エラー処理をここで行う
+                } else {
+                    // 成功時の処理をここで行う
+                }
+            }
+        }
     
     
 //データベースからアイテムを削除する
