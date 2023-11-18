@@ -39,8 +39,11 @@ class ItemViewModel: ObservableObject {
         self.isBusy = isBusy
         fetchAllData()
     }
+}
+
     
-    
+
+extension ItemViewModel{
     ///すべてのデータをフェッチするメソッド
     private func fetchAllData() {
         firebaseService.fetchDataForCollection(0) { [weak self] items in
@@ -117,24 +120,7 @@ class ItemViewModel: ObservableObject {
     
     
     
-    ///お気に入りアイテムへ保存する
-    func changeFavoriteList(itemName: String, delete: Bool){
-        
-        if delete{
-            let newArray = favoriteList.filter { $0 != itemName }
-            objectWillChange.send()
-            favoriteList = newArray
-        }else{
-            if favoriteList.contains(itemName){
-                return
-            }
-            
-            objectWillChange.send()
-            favoriteList.append(itemName)
-        }
-        
-        defaults.set(favoriteList, forKey: favoriteListKey)
-    }
+
     
     
     
@@ -222,10 +208,6 @@ class ItemViewModel: ObservableObject {
         }
     }
     
-    
-    
-    
-    
     ///選んだタスクを１つ削除する
     func deleteSelectedTask(item:ItemDataType){
         let labelNum = item.label
@@ -296,3 +278,25 @@ class ItemViewModel: ObservableObject {
     }
 }
 
+
+
+extension ItemViewModel{
+    ///タスク名をお気に入りへ保存するメソッド
+    func changeFavoriteList(itemName: String, delete: Bool){
+        
+        if delete{
+            let newArray = favoriteList.filter { $0 != itemName }
+            objectWillChange.send()
+            favoriteList = newArray
+        }else{
+            if favoriteList.contains(itemName){
+                return
+            }
+            
+            objectWillChange.send()
+            favoriteList.append(itemName)
+        }
+        
+        defaults.set(favoriteList, forKey: favoriteListKey)
+    }
+}
