@@ -74,5 +74,21 @@ class FirebaseDataService {
         }
     }
     
+//データベース内のアイテムを更新する
+    func updateItemInCollection(isChecked: Bool, label: Int){
+        
+    }
+    
+    
+//データベースからアイテムを削除する
+    func deleteOneItemFromCollection(item:ItemDataType){
+        
+    }
+    
+    //データベースからアイテムを削除する
+    func deleteAllItemFromCollection(){
+        
+    }
+    
 }
 
