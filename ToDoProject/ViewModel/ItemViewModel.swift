@@ -81,11 +81,14 @@ extension ItemViewModel{
     ///達成フラグを変更して保存する
     func toggleItemCheckStatus(item: ItemDataType, labelNum: Int){
         //達成フラグを反転
-        let newCheckedStatus = !item.checked
+        var newItem = item
+        newItem.checked = !item.checked
+        
         //updateItemInCollectionメソッドを呼び出す
-        firebaseService.updateItemInCollection(label:labelNum, isChecked: newCheckedStatus, item: item )
+        firebaseService.updateItemInCollection2(oldItem: item, newItem: newItem)
+        
         //コレクションをリロード
-        self.fetchSelectedData(labelNum)
+        self.fetchAllData()
     }
     
     
@@ -109,6 +112,16 @@ extension ItemViewModel{
         //コレクションをリロード
         self.fetchAllData()
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
