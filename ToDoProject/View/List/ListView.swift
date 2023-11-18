@@ -136,7 +136,7 @@ struct ListView: View {
                                 isMoving = false
                             }
                         }
-                        itemVM.toggleItemCheckStatus(item: item, labelNum: labelNum)
+                        itemVM.toggleItemCheckStatus(item: item)
                     }
                 }
                 .onMove(perform: moveItem)

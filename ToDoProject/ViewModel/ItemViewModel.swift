@@ -79,21 +79,18 @@ extension ItemViewModel{
     
     
     ///達成フラグを変更して保存する
-    func toggleItemCheckStatus(item: ItemDataType, labelNum: Int){
-        //達成フラグを反転
-        var newItem = item
-        newItem.checked = !item.checked
+    func toggleItemCheckStatus(item: ItemDataType){
         
         //updateItemInCollectionメソッドを呼び出す
-        firebaseService.updateItemInCollection2(oldItem: item, newItem: newItem)
+        firebaseService.updateItemInCollection(oldItem: item, newCheckedStatus: !item.checked, newTitle: item.title)
         
         //コレクションをリロード
-        self.fetchAllData()
+        self.fetchSelectedData(Int(item.label))
     }
     
     
     
-    ///タイトルを変更して保存する
+    ///タイトルとラベル番号を変更して保存する
     func changeTitle(item: ItemDataType, newTitle: String ,newLabel: Int) async{
         //ラベル番号が変更されたらアイテムを削除してから新規追加
         if item.label != newLabel{
@@ -104,11 +101,8 @@ extension ItemViewModel{
             return
         }
         
-        var newItem = item
-        newItem.title = newTitle
-        
         //updateItemInCollectionメソッドを呼び出す
-        firebaseService.updateItemInCollection2(oldItem: item, newItem: newItem)
+        firebaseService.updateItemInCollection(oldItem: item, newCheckedStatus: item.checked, newTitle: newTitle)
         //コレクションをリロード
         self.fetchAllData()
     }
@@ -209,7 +203,7 @@ extension ItemViewModel{
     
     
     
-    ///index番号を振り直す
+    ///並び替え時にindex番号を振り直す
     func updateIndexesForCollection(labelNum: Int) {
         
         var collectionName: String

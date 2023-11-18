@@ -17,7 +17,7 @@ class FirebaseDataService {
 }
 
 
-    extension FirebaseDataService{
+extension FirebaseDataService{
     ///引数で渡されたラベルに応じたデータをフェッチするメソッド
     //非同期処理では、処理の結果がすぐには利用できないためコールバックパターンを使用し、コールバック関数を通じてitemsを返す
     func fetchDataForCollection(_ label: Int, completion: @escaping ([ItemDataType]) -> Void) {
@@ -67,7 +67,7 @@ class FirebaseDataService {
             "checked": false,
             "timestamp": FieldValue.serverTimestamp()
         ] as [String : Any]
-
+        
         
         // 新しいアイテムを追加
         db.collection("users").document(uid).collection(collectionName).addDocument(data: data){ (error) in
@@ -76,19 +76,18 @@ class FirebaseDataService {
         }
     }
     
+    
+    
+    ///データベース内のアイテムを更新する
+    func updateItemInCollection(oldItem: ItemDataType, newCheckedStatus:Bool, newTitle: String){
         
-///データベース内のアイテムを更新する
-        func updateItemInCollection(label: Int, isChecked: Bool, item: ItemDataType){
-        var updatedItem = item
-        updatedItem.checked = isChecked
-        
-        
-            //コレクション名を取得
-            let collectionName = collectionNames[label]
+        //コレクション名を取得
+        let collectionName = collectionNames[Int(oldItem.label)]
         
         
-        db.collection("users").document(uid!).collection(collectionName).document(item.id).updateData([
-            "checked": isChecked
+        db.collection("users").document(uid!).collection(collectionName).document(oldItem.id).updateData([
+            "checked": newCheckedStatus,
+            "title": newTitle
         ]){ error in
             if let error = error {
                 print("Error updating document: \(error)")
@@ -98,31 +97,11 @@ class FirebaseDataService {
             }
         }
     }
-        
-        
-        
-        ///データベース内のアイテムを更新する
-        func updateItemInCollection2(oldItem: ItemDataType, newItem: ItemDataType){
-            
-            //コレクション名を取得
-            let collectionName = collectionNames[Int(oldItem.label)]
-            
-            
-            db.collection("users").document(uid!).collection(collectionName).document(oldItem.id).updateData([
-                "checked": newItem.checked,
-                "title": newItem.title
-            ]){ error in
-                if let error = error {
-                    print("Error updating document: \(error)")
-                    // エラー処理をここで行う
-                } else {
-                    // 成功時の処理をここで行う
-                }
-            }
-        }
     
     
-//データベースからアイテムを削除する
+    
+    
+    //データベースからアイテムを削除する
     func deleteOneItemFromCollection(item:ItemDataType){
         
     }
