@@ -61,6 +61,7 @@ struct List_mainView: View {
                                 .animation(.linear(duration: 7.0), value: goRight)
                                 .shadow(color:.black.opacity(0.5), radius: 3, x: 3, y: 3)
                                 .zIndex(1.0)
+                                .allowsHitTesting(false)
                             //VoiceOver用
                                 .accessibilityElement(children: .ignore)
                                 .accessibilityLabel("Walking cat")
