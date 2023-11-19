@@ -62,7 +62,17 @@ extension ItemViewModel{
     ///選択したデータをフェッチするメソッド
     private func fetchSelectedData(_ label:Int) {
         firebaseService.fetchDataForCollection(label) { [weak self] items in
-            self?.label0Item = items
+            switch label{
+            case 0:
+                self?.label0Item = items
+            case 1:
+                self?.label1Item = items
+            case 2:
+                self?.label2Item = items
+            default:
+                return
+            }
+            
         }
     }
     
@@ -101,7 +111,7 @@ extension ItemViewModel{
             let arrayAfterChanging = allDataArray[newLabel]
             
             //データベースからアイテムを削除
-            deleteSelectedTask(item: item)
+            deleteOneTask(item: item)
             
             //削除したコレクションのインデックス番号振り直し
             firebaseService.updateIndexesForCollection(labelNum: Int(item.label), dataArray: arrayBeforeChanging)
@@ -124,8 +134,8 @@ extension ItemViewModel{
     ///index番号を振り直す
     func updateIndexesForCollection(labelNum: Int) {
         //配列を取得
-        var allDataArray = [label0Item, label1Item, label2Item]
-        var targetArray = allDataArray[labelNum]
+        let allDataArray = [label0Item, label1Item, label2Item]
+        let targetArray = allDataArray[labelNum]
         
         firebaseService.updateIndexesForCollection(labelNum: labelNum, dataArray: targetArray)
     }
@@ -134,94 +144,41 @@ extension ItemViewModel{
     
     
     
-    
-    
-    
     ///完了したタスクをまとめて削除
-    func completeTask(labelNum: Int) {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
+    func deleteCompletedTask(labelNum: Int) {
+        //配列を取得
+        let allDataArray = [label0Item, label1Item, label2Item]
+        let targetArray = allDataArray[labelNum]
         
-        var collection: String = ""
         var completedArray: [ItemDataType] = []
-        var notCompletedArray: [ItemDataType] = []
+        completedArray = targetArray.filter { $0.checked == true }
         
-        switch labelNum{
-        case 0:
-            collection = "label0Item"
-            completedArray = label0Item.filter { $0.checked == true }
-            notCompletedArray = label0Item.filter { $0.checked == false }
-        case 1:
-            collection = "label1Item"
-            completedArray = label1Item.filter { $0.checked == true }
-            notCompletedArray = label1Item.filter { $0.checked == false }
-        case 2:
-            collection = "label2Item"
-            completedArray = label2Item.filter { $0.checked == true }
-            notCompletedArray = label2Item.filter { $0.checked == false }
-        default:
-            break
-        }
-        
-        
-        let group = DispatchGroup()
-        //優先する処理
-        for item in completedArray {
-            let documentId = item.id
-            
-            group.enter()  // グループにエンター
-            self.db.collection("users").document(uid).collection(collection).document(documentId).delete() { error in
-                if let error = error {
-//                    print("Error removing document: \(error)")
-                }
-                group.leave()  // グループからリーブ
-            }
-        }
-        
-        // すべての非同期処理が完了した後に実行
-        group.notify(queue: .main) {
-            //2の処理
-            self.updateIndexesForCollection(labelNum: labelNum)
-        }
+        //削除用関数を呼び出す
+        firebaseService.deleteItemFromCollection(labelNum: labelNum, items: completedArray)
+        //インデックス番号の振り直し
+        firebaseService.updateIndexesForCollection(labelNum: labelNum, dataArray: targetArray)
+        //コレクションをリロード
+        fetchSelectedData(labelNum)
     }
+    
     
     ///選んだタスクを１つ削除する
-    func deleteSelectedTask(item:ItemDataType){
-        let labelNum = item.label
-        guard let uid = Auth.auth().currentUser?.uid else { return }
+    func deleteOneTask(item:ItemDataType){
+        //操作するラベルの番号を取得
+        let labelNumber = Int(item.label)
         
-        var collectionName: String
-        switch labelNum{
-        case 0:
-            collectionName = "label0Item"
-        case 1:
-            collectionName = "label1Item"
-        case 2:
-            collectionName = "label2Item"
-        default:
-            collectionName = "label0Item"
-        }
+        //削除用関数を呼び出して削除を実行
+        firebaseService.deleteItemFromCollection(labelNum: labelNumber, items: [item])
         
-        let group = DispatchGroup()
-        group.enter()  // グループにエンター
-        //優先する処理
-        db.collection("users").document(uid).collection(collectionName).document(item.id).delete() { error in
-            if let error = error {
-//                print("Error removing document: \(error)")
-            }
-            group.leave()  // グループからリーブ
-        }
+        //インデックス番号の振り直し
+        let allDataArray = [label0Item, label1Item, label2Item]
+        let targetArray = allDataArray[labelNumber]
+        firebaseService.updateIndexesForCollection(labelNum: labelNumber, dataArray: targetArray)
         
-        // すべての非同期処理が完了した後に実行
-        group.notify(queue: .main) {
-            //2の処理
-            self.updateIndexesForCollection(labelNum: Int(labelNum))
-        }
+        //コレクションをリロード
+        fetchSelectedData(labelNumber)
+        
     }
-    
-    
-    
-    
-
 }
 
 

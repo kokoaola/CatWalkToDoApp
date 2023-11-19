@@ -146,7 +146,7 @@ struct EditItemView: View {
                               message: Text("Do you want to delete the displayed item?"),
                               //OKならチェックした項目をリストから削除（未搭載）
                               primaryButton: .destructive(Text("Delete"), action: {
-                            itemVM.deleteSelectedTask(item: item)
+                            itemVM.deleteOneTask(item: item)
                             dismiss()
                         }),
                               secondaryButton: .cancel(Text("Cancel"), action:{}))

@@ -118,14 +118,30 @@ extension FirebaseDataService{
     
     
     //データベースからアイテムを削除する
-    func deleteOneItemFromCollection(item:ItemDataType){
+    func deleteItemFromCollection(labelNum: Int, items:[ItemDataType]){
         
+        //操作したいコレクション名を取得
+        let subCollectionName = subCollectionNames[labelNum]
+        
+        let group = DispatchGroup()
+        //優先する処理
+        for item in items {
+            // グループにエンター
+            group.enter()
+            //該当するidのアイテムを削除
+            self.db.collection(self.collectionName).document(self.uid!).collection(subCollectionName).document(item.id).delete() { error in
+                if let error = error {
+                    //                    print("Error removing document: \(error)")
+                }
+                group.leave()  // グループからリーブ
+            }
+        }
     }
     
     //データベースからアイテムを削除する
-    func deleteAllItemFromCollection(){
-        
-    }
+//    func deleteAllItemFromCollection(){
+//
+//    }
     
 }
 

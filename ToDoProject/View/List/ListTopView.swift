@@ -157,7 +157,7 @@ struct List_mainView: View {
                               message: Text("Do you want to delete the checked items?"),
                               //OKならチェックした項目をリストから削除
                               primaryButton: .destructive(Text("Delete"), action: {
-                            itemVM.completeTask(labelNum: selection)
+                            itemVM.deleteCompletedTask(labelNum: selection)
                             
                         }),
                               secondaryButton: .cancel(Text("Cancel"), action:{}))
