@@ -85,7 +85,7 @@ extension FirebaseDataService{
         let collectionName = collectionNames[Int(oldItem.label)]
         
         
-        db.collection("users").document(uid!).collection(collectionName).document(oldItem.id).updateData([
+        db.collection("users").document(self.uid!).collection(collectionName).document(oldItem.id).updateData([
             "checked": newCheckedStatus,
             "title": newTitle
         ]){ error in
@@ -94,6 +94,24 @@ extension FirebaseDataService{
                 // エラー処理をここで行う
             } else {
                 // 成功時の処理をここで行う
+            }
+        }
+    }
+    
+    
+    
+    ///index番号を振り直す
+    func updateIndexesForCollection(labelNum: Int, dataArray:[ItemDataType]) {
+        
+        //コレクション名を取得
+        let collectionName = collectionNames[labelNum]
+        
+        //順番にIndexを振り直して保存する
+        DispatchQueue.main.async {
+            for (index, item) in dataArray.enumerated() {
+                self.db.collection("users").document(self.uid!).collection(collectionName).document(item.id).updateData([
+                    "index": index
+                ])
             }
         }
     }

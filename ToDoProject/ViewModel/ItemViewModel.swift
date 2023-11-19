@@ -92,25 +92,43 @@ extension ItemViewModel{
     
     ///タイトルとラベル番号を変更して保存する
     func changeTitle(item: ItemDataType, newTitle: String ,newLabel: Int) async{
+        
         //ラベル番号が変更されたらアイテムを削除してから新規追加
         if item.label != newLabel{
-            //アイテムを削除
+            //ラベル番号変更前後の配列を取得
+            var allDataArray = [label0Item, label1Item, label2Item]
+            let arrayBeforeChanging = allDataArray[Int(item.label)]
+            let arrayAfterChanging = allDataArray[newLabel]
+            
+            //データベースからアイテムを削除
             deleteSelectedTask(item: item)
-            //データベースへの書き込み
-            await firebaseService.addItemToCollection(title: newTitle, label: newLabel, index: Int(item.index))
+            
+            //削除したコレクションのインデックス番号振り直し
+            firebaseService.updateIndexesForCollection(labelNum: Int(item.label), dataArray: arrayBeforeChanging)
+            
+            //データベースへの新規書き込み
+            await firebaseService.addItemToCollection(title: newTitle, label: newLabel, index: arrayAfterChanging.count)
+            
             return
         }
         
         //updateItemInCollectionメソッドを呼び出す
         firebaseService.updateItemInCollection(oldItem: item, newCheckedStatus: item.checked, newTitle: newTitle)
         //コレクションをリロード
-        self.fetchAllData()
+        self.fetchSelectedData(Int(item.label))
+        self.fetchSelectedData(newLabel)
     }
     
     
     
-    
-    
+    ///index番号を振り直す
+    func updateIndexesForCollection(labelNum: Int) {
+        //配列を取得
+        var allDataArray = [label0Item, label1Item, label2Item]
+        var targetArray = allDataArray[labelNum]
+        
+        firebaseService.updateIndexesForCollection(labelNum: labelNum, dataArray: targetArray)
+    }
     
     
     
@@ -203,44 +221,14 @@ extension ItemViewModel{
     
     
     
-    ///並び替え時にindex番号を振り直す
-    func updateIndexesForCollection(labelNum: Int) {
-        
-        var collectionName: String
-        var array: [ItemDataType]
-        switch labelNum{
-        case 0:
-            collectionName = "label0Item"
-            array = label0Item
-        case 1:
-            collectionName = "label1Item"
-            array = label1Item
-        case 2:
-            collectionName = "label2Item"
-            array = label2Item
-        default:
-            collectionName = "label0Item"
-            array = label0Item
-        }
-        
-        
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        
-        DispatchQueue.main.async {
-            for (index, item) in array.enumerated() {
-                self.db.collection("users").document(uid).collection(collectionName).document(item.id).updateData([
-                    "index": index
-                ])
-            }
-        }
-    }
+
 }
 
 
 
 extension ItemViewModel{
     ///タスク名をお気に入りへ保存するメソッド
-    func changeFavoriteList(itemName: String, delete: Bool){
+    func addFavoriteList(itemName: String, delete: Bool){
         
         if delete{
             let newArray = favoriteList.filter { $0 != itemName }

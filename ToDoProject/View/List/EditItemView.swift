@@ -103,12 +103,12 @@ struct EditItemView: View {
                     
                     //お気に入りOnならお気に入りリストに追加
                     if isFavorite{
-                        itemVM.changeFavoriteList(itemName: newName, delete: false)
+                        itemVM.addFavoriteList(itemName: newName, delete: false)
                         
                         //お気に入りリストに存在するが、お気に入りスイッチがOFFになってる時
                     }else if !isFavorite && itemVM.favoriteList.contains(newName){
                         //お気に入りから削除する
-                        itemVM.changeFavoriteList(itemName: newName, delete: true)
+                        itemVM.addFavoriteList(itemName: newName, delete: true)
                     }
                     
                     dismiss() //追加後のページ破棄関数
