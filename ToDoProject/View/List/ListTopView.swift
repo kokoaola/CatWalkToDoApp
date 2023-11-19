@@ -10,8 +10,10 @@ import SwiftUI
 
 
 struct List_mainView: View {
+    ///itemViewModelのための変数
+    @ObservedObject var itemVM = ItemViewModel()
     
-    ///項目追加シート用のBool
+    ///タスク追加シート管理用のフラグ
     @State private var showAddNewItemSheet = false
     
     ///ラベル選択用のプロパティ
@@ -28,21 +30,18 @@ struct List_mainView: View {
     ///ラベル名を格納するための配列(ForEachで使用するため)
     @State var labelArray:[String] = ["" , "", ""]
     
-    ///itemViewModelのための変数
-    @ObservedObject var itemVM = ItemViewModel()
-    
     ///猫動かす用
     @State private var goRight: Bool = false
     @State private var flip: Bool = true
     @State private var startMoving: Bool = false
     
-    ///ラベル編集アラート表示用フラグ
+    ///ラベル編集アラート管理用のフラグ
     @State var isEdit = false
     
     
     var body: some View {
-        let catSize = UIScreen.main.bounds.width / 6
-        
+        ///猫のサイズ
+        let catSize = AppSetting.screenWidth / 6
         
         ZStack{
             NavigationView{
@@ -54,7 +53,7 @@ struct List_mainView: View {
                         
                         //インデックスと動く猫ちゃんを並べたHStack
                         HStack{
-                            //猫ちゃん
+                            //猫のアニメーション
                             LottieView(filename: "cat", loop: .loop, shouldFlip: $flip, startAnimation: $startMoving)
                                 .frame(width: catSize)
                                 .position(x: goRight ? UIScreen.main.bounds.width + catSize * 2 / 2 : 0 - catSize, y: 40)

@@ -22,11 +22,9 @@ class ItemViewModel: ObservableObject {
     
     @Published var favoriteList = [String]()
     
-    @Published var selectedTab = 0
-    
     ///ユーザーデフォルト用の変数
     private let defaults = UserDefaults.standard
-    ///ユーザーデフォルト用キー：目標用
+    ///ユーザーデフォルト用キー
     private let favoriteListKey = "favoriteList"
     
     
@@ -160,9 +158,6 @@ extension ItemViewModel{
     }
     
     
-    
-    
-    
     ///完了したタスクをまとめて削除
     func deleteCompletedTask(labelNum: Int) {
         //完了したタスクの配列を取得
@@ -194,7 +189,6 @@ extension ItemViewModel{
         
         //コレクションをリロード
         fetchSelectedData(labelNumber)
-        
     }
 }
 
@@ -215,6 +209,7 @@ extension ItemViewModel{
         //ユーザーデフォルトに保存
         defaults.set(favoriteList, forKey: favoriteListKey)
     }
+    
     
     ///タスク名をお気に入りから削除するメソッド
     func deleteFavoriteList(_ title: String){

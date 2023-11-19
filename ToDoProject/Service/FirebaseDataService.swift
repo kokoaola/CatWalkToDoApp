@@ -11,10 +11,11 @@ import Firebase
 
 
 class FirebaseDataService {
+    //データベース操作用のプロパティ
     private let db = Firestore.firestore()
+    private let collectionName = "users"
     private let uid = Auth.auth().currentUser?.uid
     private let subCollectionNames = ["label0Item", "label1Item", "label2Item"]
-    private let collectionName = "users"
 }
 
 
@@ -29,6 +30,7 @@ extension FirebaseDataService{
             var items = [ItemDataType]()
             
             if error != nil {
+                return
             }
             
             var tempArray = [ItemDataType]()
@@ -69,7 +71,8 @@ extension FirebaseDataService{
         
         // 新しいアイテムを追加
         db.collection(self.collectionName).document(self.uid!).collection(subCollectionName).addDocument(data: data){ (error) in
-            if let err = error {
+            if error != nil {
+                return
             }
         }
     }
@@ -89,9 +92,11 @@ extension FirebaseDataService{
         ]){ error in
             if let error = error {
                 print("Error updating document: \(error)")
-                // エラー処理をここで行う
+                // エラー処理
+                return
             } else {
-                // 成功時の処理をここで行う
+                // 成功時の処理
+                return
             }
         }
     }
@@ -130,10 +135,11 @@ extension FirebaseDataService{
             group.enter()
             //該当するidのアイテムを削除
             self.db.collection(self.collectionName).document(self.uid!).collection(subCollectionName).document(item.id).delete() { error in
-                if let error = error {
-                    //                    print("Error removing document: \(error)")
+                if error != nil {
+                    return
                 }
-                group.leave()  // グループからリーブ
+                // グループからリーブ
+                group.leave()
             }
         }
     }
