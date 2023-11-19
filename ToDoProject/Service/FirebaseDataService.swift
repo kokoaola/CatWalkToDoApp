@@ -11,22 +11,21 @@ import Firebase
 
 
 class FirebaseDataService {
-    let db = Firestore.firestore()
-    let uid = Auth.auth().currentUser?.uid
-    private let collectionNames = ["label0Item", "label1Item", "label2Item"]
+    private let db = Firestore.firestore()
+    private let uid = Auth.auth().currentUser?.uid
+    private let subCollectionNames = ["label0Item", "label1Item", "label2Item"]
+    private let collectionName = "users"
 }
 
 
 extension FirebaseDataService{
-    ///引数で渡されたラベルに応じたデータをフェッチするメソッド
+    ///引数で渡されたラベルに応じたデータを取得するメソッド
     //非同期処理では、処理の結果がすぐには利用できないためコールバックパターンを使用し、コールバック関数を通じてitemsを返す
     func fetchDataForCollection(_ label: Int, completion: @escaping ([ItemDataType]) -> Void) {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        
-        let collectionName = collectionNames[label]
+        let subCollectionName = subCollectionNames[label]
         
         //ユーザーのIDを使用してコレクションにアクセス
-        db.collection("users").document(uid).collection(collectionName).order(by: "index").addSnapshotListener { (snapshot, error) in
+        db.collection(self.collectionName).document(self.uid!).collection(subCollectionName).order(by: "index").addSnapshotListener { (snapshot, error) in
             var items = [ItemDataType]()
             
             if error != nil {
@@ -56,9 +55,8 @@ extension FirebaseDataService{
     
     ///アイテムをデータベースに追加する
     func addItemToCollection(title: String, label: Int, index: Int) async{
-        guard let uid = Auth.auth().currentUser?.uid else { return }
         //コレクション名を取得
-        let collectionName = collectionNames[label]
+        let subCollectionName = subCollectionNames[label]
         
         let data = [
             "title": title,
@@ -70,7 +68,7 @@ extension FirebaseDataService{
         
         
         // 新しいアイテムを追加
-        db.collection("users").document(uid).collection(collectionName).addDocument(data: data){ (error) in
+        db.collection(self.collectionName).document(self.uid!).collection(subCollectionName).addDocument(data: data){ (error) in
             if let err = error {
             }
         }
@@ -82,10 +80,10 @@ extension FirebaseDataService{
     func updateItemInCollection(oldItem: ItemDataType, newCheckedStatus:Bool, newTitle: String){
         
         //コレクション名を取得
-        let collectionName = collectionNames[Int(oldItem.label)]
+        let subCollectionName = subCollectionNames[Int(oldItem.label)]
         
         
-        db.collection("users").document(self.uid!).collection(collectionName).document(oldItem.id).updateData([
+        db.collection(self.collectionName).document(self.uid!).collection(subCollectionName).document(oldItem.id).updateData([
             "checked": newCheckedStatus,
             "title": newTitle
         ]){ error in
@@ -104,12 +102,12 @@ extension FirebaseDataService{
     func updateIndexesForCollection(labelNum: Int, dataArray:[ItemDataType]) {
         
         //コレクション名を取得
-        let collectionName = collectionNames[labelNum]
+        let subCollectionName = subCollectionNames[labelNum]
         
         //順番にIndexを振り直して保存する
         DispatchQueue.main.async {
             for (index, item) in dataArray.enumerated() {
-                self.db.collection("users").document(self.uid!).collection(collectionName).document(item.id).updateData([
+                self.db.collection(self.collectionName).document(self.uid!).collection(subCollectionName).document(item.id).updateData([
                     "index": index
                 ])
             }
