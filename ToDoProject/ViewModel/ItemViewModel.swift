@@ -15,7 +15,7 @@ import Firebase
 class ItemViewModel: ObservableObject {
     private let firebaseService = FirebaseDataService()
     
-    ///ラベルごとに分類したアイテム
+    ///ラベルごとに分類したリスト
     @Published  var label0Item = [ItemDataType]()
     @Published  var label1Item = [ItemDataType]()
     @Published  var label2Item = [ItemDataType]()
@@ -40,7 +40,10 @@ class ItemViewModel: ObservableObject {
 
     
 
+
+
 extension ItemViewModel{
+    
     ///すべてのデータをフェッチするメソッド
     private func fetchAllData() {
         firebaseService.fetchDataForCollection(0) { [weak self] items in
@@ -53,7 +56,6 @@ extension ItemViewModel{
             self?.label2Item = items
         }
     }
-    
     
     
     ///選択したデータをフェッチするメソッド
@@ -69,17 +71,19 @@ extension ItemViewModel{
             default:
                 return
             }
-            
         }
     }
     
     
     ///アイテムをデータベースに新規追加するメソッド
     func addNewItem(title: String, label: Int) async{
-        //アイテム総数を取得
-        let itemCounts = [self.label0Item.count, self.label1Item.count, self.label2Item.count]
+        //追加するインデックス番号を取得
+        let allDataArray = [label0Item, label1Item, label2Item]
+        let newIndex = allDataArray[label].count
+        
         //データベースへの書き込み
-        await firebaseService.addItemToCollection(title: title, label: label, index: itemCounts[label])
+        await firebaseService.addItemToCollection(title: title, label: label, index: newIndex)
+        
         //追加したコレクションをリロード
         fetchSelectedData(label)
     }
@@ -87,9 +91,10 @@ extension ItemViewModel{
     
     ///達成フラグを変更して保存する
     func toggleItemCheckStatus(item: ItemDataType){
-        
+        //Bool値を反転
+        let newStatus = !item.checked
         //updateItemInCollectionメソッドを呼び出す
-        firebaseService.updateItemInCollection(oldItem: item, newCheckedStatus: !item.checked, newTitle: item.title)
+        firebaseService.updateItemInCollection(oldItem: item, newCheckedStatus: newStatus, newTitle: item.title)
         
         //コレクションをリロード
         self.fetchSelectedData(Int(item.label))
@@ -98,32 +103,49 @@ extension ItemViewModel{
     
     
     ///タイトルとラベル番号を変更して保存する
-    func changeTitle(item: ItemDataType, newTitle: String ,newLabel: Int) async{
-        
-        //ラベル番号が変更されたらアイテムを削除してから新規追加
-        if item.label != newLabel{
-            //ラベル番号変更前後の配列を取得
-            var allDataArray = [label0Item, label1Item, label2Item]
-            let arrayBeforeChanging = allDataArray[Int(item.label)]
-            let arrayAfterChanging = allDataArray[newLabel]
-            
-            //データベースからアイテムを削除
-            deleteOneTask(item: item)
-            
-            //削除したコレクションのインデックス番号振り直し
-            firebaseService.updateIndexesForCollection(labelNum: Int(item.label), dataArray: arrayBeforeChanging)
-            
-            //データベースへの新規書き込み
-            await firebaseService.addItemToCollection(title: newTitle, label: newLabel, index: arrayAfterChanging.count)
-            
+    func updateLabelOrTitle(item: ItemDataType, newTitle: String ,newLabel: Int) async{
+        if item.label == newLabel{
+            //ラベル番号が同じでタイトルのみが変更された時の処理
+            await self.changeTitle(item: item, newTitle: newTitle)
+        }else{
+        //ラベル番号が変更された時の処理
+            await self.changeLabel(item: item, newTitle: newTitle, newLabel: newLabel)
             return
         }
         
-        //updateItemInCollectionメソッドを呼び出す
+    }
+    
+    ///タイトルだけが変更された時の処理
+    func changeTitle(item: ItemDataType, newTitle: String) async{
+        //アイテムの修正用のメソッドを呼び出す
         firebaseService.updateItemInCollection(oldItem: item, newCheckedStatus: item.checked, newTitle: newTitle)
         //コレクションをリロード
         self.fetchSelectedData(Int(item.label))
+    }
+    
+    
+    ///ラベル番号が変更された時の処理
+    func changeLabel(item: ItemDataType, newTitle: String ,newLabel: Int) async{
+
+        //新規追加するためのインデックスを取得
+        var allDataArray = [label0Item, label1Item, label2Item]
+        let newIndex = allDataArray[newLabel].count
+        
+        //データベースへの新規書き込み
+        await firebaseService.addItemToCollection(title: newTitle, label: newLabel, index: newIndex)
+        
+        //データベースから古いアイテムを削除
+        deleteOneTask(item: item)
+        
+        //ラベル番号変更前の配列を取得
+        let arrayBeforeChanging = allDataArray[Int(item.label)]
+        
+        //削除したコレクションのインデックス番号振り直し
+        firebaseService.updateIndexesForCollection(labelNum: Int(item.label), dataArray: arrayBeforeChanging)
+        
+        self.fetchSelectedData(Int(item.label))
         self.fetchSelectedData(newLabel)
+        return
     }
     
     
@@ -143,12 +165,10 @@ extension ItemViewModel{
     
     ///完了したタスクをまとめて削除
     func deleteCompletedTask(labelNum: Int) {
-        //配列を取得
+        //完了したタスクの配列を取得
         let allDataArray = [label0Item, label1Item, label2Item]
         let targetArray = allDataArray[labelNum]
-        
-        var completedArray: [ItemDataType] = []
-        completedArray = targetArray.filter { $0.checked == true }
+        var completedArray = targetArray.filter { $0.checked == true }
         
         //削除用関数を呼び出す
         firebaseService.deleteItemFromCollection(labelNum: labelNum, items: completedArray)

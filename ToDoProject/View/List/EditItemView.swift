@@ -97,7 +97,7 @@ struct EditItemView: View {
                     
                     Task{
                         //項目をデータベースに追加
-                        await itemVM.changeTitle(item: item, newTitle: newName, newLabel: newNum)
+                        await itemVM.updateLabelOrTitle(item: item, newTitle: newName, newLabel: newNum)
                     }
 
                     
