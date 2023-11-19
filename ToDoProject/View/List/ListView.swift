@@ -122,7 +122,6 @@ struct ListView: View {
                     }
                     .listRowBackground(Color.clear)
                     .opacity(item.checked ? 0.3 : 1)
-                    //                .padding(.vertical, 8)
                     //セルタップでボックスにチェック
                     .contentShape(Rectangle())
                     .onTapGesture {
@@ -158,8 +157,6 @@ struct ListView: View {
                 }
             })
             
-            //処理中はタップ不可
-            .disabled(itemVM.isBusy)
             //背景色変える
             .scrollContentBackground(.hidden)
         }

@@ -22,21 +22,18 @@ class ItemViewModel: ObservableObject {
     
     @Published var favoriteList = [String]()
     
-    @Published var isBusy = false
-    
     @Published var selectedTab = 0
     
     ///ユーザーデフォルト用の変数
     private let defaults = UserDefaults.standard
     ///ユーザーデフォルト用キー：目標用
     private let favoriteListKey = "favoriteList"
-    
-    let db = Firestore.firestore()
-    
+        
     
     init() {
+        //お気に入り登録されたタスクを取得
         self.favoriteList = defaults.object(forKey:favoriteListKey) as? [String] ?? [String]()
-        self.isBusy = isBusy
+        //すべてのデータをフェッチ
         fetchAllData()
     }
 }
