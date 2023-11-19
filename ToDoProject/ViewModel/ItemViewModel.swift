@@ -28,7 +28,7 @@ class ItemViewModel: ObservableObject {
     private let defaults = UserDefaults.standard
     ///ユーザーデフォルト用キー：目標用
     private let favoriteListKey = "favoriteList"
-        
+    
     
     init() {
         //お気に入り登録されたタスクを取得
@@ -38,7 +38,7 @@ class ItemViewModel: ObservableObject {
     }
 }
 
-    
+
 
 
 
@@ -108,7 +108,7 @@ extension ItemViewModel{
             //ラベル番号が同じでタイトルのみが変更された時の処理
             await self.changeTitle(item: item, newTitle: newTitle)
         }else{
-        //ラベル番号が変更された時の処理
+            //ラベル番号が変更された時の処理
             await self.changeLabel(item: item, newTitle: newTitle, newLabel: newLabel)
             return
         }
@@ -126,7 +126,7 @@ extension ItemViewModel{
     
     ///ラベル番号が変更された時の処理
     func changeLabel(item: ItemDataType, newTitle: String ,newLabel: Int) async{
-
+        
         //新規追加するためのインデックスを取得
         var allDataArray = [label0Item, label1Item, label2Item]
         let newIndex = allDataArray[newLabel].count
@@ -202,21 +202,28 @@ extension ItemViewModel{
 
 extension ItemViewModel{
     ///タスク名をお気に入りへ保存するメソッド
-    func addFavoriteList(itemName: String, delete: Bool){
-        
-        if delete{
-            let newArray = favoriteList.filter { $0 != itemName }
-            objectWillChange.send()
-            favoriteList = newArray
-        }else{
-            if favoriteList.contains(itemName){
-                return
-            }
-            
-            objectWillChange.send()
-            favoriteList.append(itemName)
+    func addFavoriteList(_ title: String){
+        //すでに同名のタスクが存在する場合は何もしない
+        if favoriteList.contains(title){
+            return
         }
         
+        //お気に入り配列に追加して更新
+        objectWillChange.send()
+        favoriteList.append(title)
+        
+        //ユーザーデフォルトに保存
+        defaults.set(favoriteList, forKey: favoriteListKey)
+    }
+    
+    ///タスク名をお気に入りから削除するメソッド
+    func deleteFavoriteList(_ title: String){
+        //itemName以外の名前のみを配列に格納
+        let newArray = favoriteList.filter { $0 != title }
+        objectWillChange.send()
+        //お気に入り配列を更新
+        favoriteList = newArray
+        //ユーザーデフォルトに保存
         defaults.set(favoriteList, forKey: favoriteListKey)
     }
 }

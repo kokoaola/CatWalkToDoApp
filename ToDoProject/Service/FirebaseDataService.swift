@@ -137,11 +137,5 @@ extension FirebaseDataService{
             }
         }
     }
-    
-    //データベースからアイテムを削除する
-//    func deleteAllItemFromCollection(){
-//
-//    }
-    
 }
 
