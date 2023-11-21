@@ -9,7 +9,7 @@ import SwiftUI
 import CoreData
 
 
-///アプリ起動時に表示されるビュー
+///アプリ起動時に表示される親ビュー
 struct ContentView: View {
     
     var body: some View {

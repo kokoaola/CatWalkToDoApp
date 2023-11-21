@@ -25,9 +25,13 @@ class AppSetting{
     ///アプリのメインカラー2
     static let mainColor2 = Color("reef2")
     
+    ///アプリのフォントカラー
     static let fontColor = Color.black
+}
+
+extension AppSetting{
     
-    ///キーボード閉じるボタン
+    ///キーボード閉じるボタンの挙動
     static func closeKeyBoard(){
         let keyWindow = UIApplication.shared.connectedScenes
             .filter({$0.activationState == .foregroundActive})

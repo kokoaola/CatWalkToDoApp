@@ -113,27 +113,30 @@ struct AddNewItem: View {
                     if newName.isEmpty{ return }
                     
                     //項目をデータベースに追加
-                    itemVM.addItem(title: newName, label: newLabelNum)
+                    Task{
+                        await itemVM.addNewItem(title: newName, label: newLabelNum)
+                        
+                    }
+                    
                     
                     //お気に入りOnならお気に入りリストに追加
                     if isFavorite{
-                        itemVM.changeFavoriteList(itemName: newName, delete: false)
+                        itemVM.addFavoriteList(newName)
                         
                         //お気に入りリストに存在するが、お気に入りスイッチがOFFになってる時
                     }else if !isFavorite && itemVM.favoriteList.contains(newName){
                         //お気に入りから削除する
-                        itemVM.changeFavoriteList(itemName: newName, delete: true)
+                        itemVM.deleteFavoriteList(newName)
                     }
                     
-                    dismiss() //追加後はページ破棄
+                    //追加後はページ破棄
+                    dismiss()
                     
                 },label: {
-                    SaveButton() //ボタンデザインは別ファイル
+                    //ボタンデザインは別ファイル
+                    SaveButton()
                 }).padding()
                 
-                //                    .onAppear{
-                //                        isInputActive = true
-                //                    }
                 Spacer()
                 
                 //ツールバーの設置
