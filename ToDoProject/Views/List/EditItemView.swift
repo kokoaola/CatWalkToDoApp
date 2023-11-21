@@ -95,17 +95,20 @@ struct EditItemView: View {
                     //入力された値が空白ならリターン
                     if newName.isEmpty{ return }
                     
-                    //項目をデータベースに追加
-                    itemVM.changeTitle(item: item, newTitle: newName, newLabel: newNum)
+                    Task{
+                        //項目をデータベースに追加
+                        await itemVM.updateLabelOrTitle(item: item, newTitle: newName, newLabel: newNum)
+                    }
+
                     
                     //お気に入りOnならお気に入りリストに追加
                     if isFavorite{
-                        itemVM.changeFavoriteList(itemName: newName, delete: false)
+                        itemVM.addFavoriteList(newName)
                         
                         //お気に入りリストに存在するが、お気に入りスイッチがOFFになってる時
                     }else if !isFavorite && itemVM.favoriteList.contains(newName){
                         //お気に入りから削除する
-                        itemVM.changeFavoriteList(itemName: newName, delete: true)
+                        itemVM.deleteFavoriteList(newName)
                     }
                     
                     dismiss() //追加後のページ破棄関数
@@ -143,7 +146,7 @@ struct EditItemView: View {
                               message: Text("Do you want to delete the displayed item?"),
                               //OKならチェックした項目をリストから削除（未搭載）
                               primaryButton: .destructive(Text("Delete"), action: {
-                            itemVM.deleteSelectedTask(item: item)
+                            itemVM.deleteOneTask(item: item)
                             dismiss()
                         }),
                               secondaryButton: .cancel(Text("Cancel"), action:{}))
