@@ -13,21 +13,6 @@ import Firebase
 
 class ListScreenViewModel: ViewModelBase {
     
-    ///選択したデータをフェッチするメソッド
-    func fetchSelectedData(_ label:Int) {
-        firebaseService.fetchDataForCollection(label) { [weak self] items in
-            switch label{
-            case 0:
-                self?.label0Item = items
-            case 1:
-                self?.label1Item = items
-            case 2:
-                self?.label2Item = items
-            default:
-                return
-            }
-        }
-    }
     
     ///ゴミ箱ボタンが押された時の処理
     ///完了したタスクをまとめて削除

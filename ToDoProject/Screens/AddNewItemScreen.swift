@@ -9,30 +9,22 @@ import SwiftUI
 
 ///タスクの新規追加シート
 struct AddNewItemScreen: View {
-    
-    ///ユーザーデフォルトから３つのラベルデータを取得
-    @AppStorage("label0") var label0 = "1"
-    @AppStorage("label1") var label1 = "2"
-    @AppStorage("label2") var label2 = "3"
+    ///itemViewModelのための変数
+    @ObservedObject var AddNewItemScreenVM = AddNewItemScreenViewModel()
     
     ///キーボードフォーカス用変数（Doneボタン表示のため）
     @FocusState var isInputActive: Bool
     
-    ///名前入力用の変数
-    @State var newName = ""
-    
     ///ラベル選択ピッカー用の変数
-    @State var newLabelNum = 0
+    @Binding var newLabelNum: Int
     
     ///お気に入り追加フラグ
-    @State var isFavorite = false
+    @State private var isFavorite = false
     
     ///ページ破棄用のdismiss
     @Environment(\.dismiss) private var dismiss
     
-    ///itemViewModelのための変数
-    @EnvironmentObject var itemVM: ItemViewModel
-    
+    ///タスクの文字数が50文字以上の時に表示するアラート用フラグ
     @State private var showTooLongAlert = false
     
     
@@ -43,29 +35,29 @@ struct AddNewItemScreen: View {
                 
                 VStack(spacing:0){
                     
-                    if !itemVM.favoriteList.isEmpty{
-                        //お気に入り表示用タグ
+                    //お気に入り登録されたタスクがある場合は文章を表示.font(.footnote)
+                    if !AddNewItemScreenVM.favoriteList.isEmpty{
                         HStack{
                             Text("Add from Favorites")
                             Spacer()
                         }.padding(.bottom)
                     }
                     
-                    //タグ用のビュー
+                    //お気に入り登録されたタスク名をタグ形式で全て表示する
                     FlowLayout(spacing: 7) {
-                        ForEach(itemVM.favoriteList, id: \.self) { tag in
+                        ForEach(AddNewItemScreenVM.favoriteList, id: \.self) { tag in
                             Text(tag)
                                 .padding(.vertical, 5)
                                 .padding(.horizontal, 12)
                                 .background(Color(.tertiarySystemGroupedBackground))
                                 .cornerRadius(15)
                                 .onTapGesture {
-                                    newName = tag
+                                    AddNewItemScreenVM.newName = tag
                                     isFavorite = true
                                 }
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 20)
-                                        .stroke(Color.primary, lineWidth: tag == newName ? 1 : 0))
+                                        .stroke(Color.primary, lineWidth: tag == AddNewItemScreenVM.newName ? 1 : 0))
                         }
                     }
                 }
@@ -79,24 +71,24 @@ struct AddNewItemScreen: View {
                         Spacer()
                     }
                     Picker(selection: $newLabelNum, label: Text("")){
-                        Text(label0)
+                        Text(AddNewItemScreenVM.indexLabel0)
                             .tag(0)
-                        Text(label1)
+                        Text(AddNewItemScreenVM.indexLabel1)
                             .tag(1)
-                        Text(label2)
+                        Text(AddNewItemScreenVM.indexLabel2)
                             .tag(2)
                     }
                     .pickerStyle(.segmented)
                 }
                 
-                //お気に入りに追加のスイッチ
+                //お気に入りに追加のトグルスイッチ
                 Toggle(isOn: $isFavorite){
                     Text("Add to Favorites")
                 }
                 
                 
                 //タイトル入力用テキストフィールド
-                TextField("Task to Add", text: $newName)
+                TextField("Task to Add", text: $AddNewItemScreenVM.newName)
                     .frame(height: 40)
                     .focused($isInputActive)
                     .overlay(RoundedRectangle(cornerRadius: 1).stroke(Color(.tertiarySystemGroupedBackground), lineWidth: 1))
@@ -104,37 +96,35 @@ struct AddNewItemScreen: View {
                 //保存ボタン
                 Button(action: {
                     
-                    //入力された値が５０文字以上ならアラートを表示してリターン
-                    if newName.count >= 50{
+                    //文字数が50文字のときはアラートを表示してリターン
+                    if AddNewItemScreenVM.isOver50{
                         showTooLongAlert = true
                         return
                     }
-                    //入力された値が空白ならリターン
-                    if newName.isEmpty{ return }
+                    //文字がからの時は何もせずリターン
+                    if AddNewItemScreenVM.isEmpty{
+                        return
+                    }
                     
                     //項目をデータベースに追加
                     Task{
-                        await itemVM.addNewItem(title: newName, label: newLabelNum)
-                        
+                        await AddNewItemScreenVM.addNewItem(title: AddNewItemScreenVM.newName, label: newLabelNum)
                     }
                     
                     
                     //お気に入りOnならお気に入りリストに追加
                     if isFavorite{
-                        itemVM.addFavoriteList(newName)
+                        AddNewItemScreenVM.addFavoriteList()
                         
-                        //お気に入りリストに存在するが、お気に入りスイッチがOFFになってる時
-                    }else if !isFavorite && itemVM.favoriteList.contains(newName){
-                        //お気に入りから削除する
-                        itemVM.deleteFavoriteList(newName)
+                    }else if !isFavorite && AddNewItemScreenVM.favoriteList.contains(AddNewItemScreenVM.newName){
+                        //お気に入りリストに存在するが、お気に入りスイッチがOFFになってる時はお気に入りから削除
+                        AddNewItemScreenVM.deleteFavoriteList()
                     }
-                    
                     //追加後はページ破棄
                     dismiss()
                     
                 },label: {
-                    //ボタンデザインは別ファイル
-                    SaveButton()
+                    SaveButton() //ボタンデザインは別ファイル
                 }).padding()
                 
                 Spacer()
@@ -168,7 +158,7 @@ struct AddNewItemScreen: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(.visible, for: .navigationBar)
             
-            //買い物完了ボタンが押された後の確認アラート
+            //タスクの文字が長すぎる時のアラート
             .alert(isPresented: $showTooLongAlert){
                 Alert(title: Text("Please shorten the item name."),
                       message: Text("Only up to 50 characters can be registered."),
@@ -179,9 +169,9 @@ struct AddNewItemScreen: View {
     }
 }
 
-struct AddNewItemScreen_Previews: PreviewProvider {
-    static var previews: some View {
-        AddNewItemScreen()
-            .environmentObject(ItemViewModel())
-    }
-}
+//struct AddNewItemScreen_Previews: PreviewProvider {
+//    static var previews: some View {
+//        AddNewItemScreen()
+//            .environmentObject(ItemViewModel())
+//    }
+//}

@@ -11,7 +11,7 @@ import SwiftUI
 
 struct ListScreen: View {
     ///itemViewModelのための変数
-//    @ObservedObject var itemVM = ItemViewModel()
+    @ObservedObject var itemVM = ItemViewModel()
     @ObservedObject var ListScreenVM = ListScreenViewModel()
     
     ///タスク追加シート管理用のフラグ
@@ -40,6 +40,7 @@ struct ListScreen: View {
         let catSize = AppSetting.screenWidth / 6
         let catLeftPosition = AppSetting.screenWidth + catSize * 2 / 2
         let catRightPosition = 0 - catSize
+        ///インデックスのサイズ
         let indexWidth = AppSetting.screenWidth / 3.5
         let indexHeight = 60.0
         
@@ -53,6 +54,7 @@ struct ListScreen: View {
                         
                         //インデックスと動く猫ちゃんを並べたHStack
                         HStack{
+                            
                             //猫のアニメーション
                             LottieView(filename: "cat", loop: .loop, shouldFlip: $flip, startAnimation: $startMoving)
                                 .frame(width: catSize)
@@ -147,8 +149,7 @@ struct ListScreen: View {
                     
                     //タスク新規追加用のシート
                     .sheet(isPresented: $showAddNewItemSheet, content: {
-                        AddNewItemScreen(newLabelNum: selection)
-                            .environmentObject(itemVM)
+                        AddNewItemScreen(newLabelNum: $selection)
                     })
                     
                     //ゴミ箱ボタンが押された後の確認アラート

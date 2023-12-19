@@ -13,7 +13,7 @@ import Firebase
 ///タスクの全リストを取り扱うビューモデル
 class ViewModelBase: ObservableObject {
     let firebaseService = FirebaseDataService()
-    private let defaults = UserDefaults.standard
+    let defaults = UserDefaults.standard
     
     @Published  var label0Item = [ItemDataType]()
     @Published  var label1Item = [ItemDataType]()
@@ -22,19 +22,19 @@ class ViewModelBase: ObservableObject {
     
     var indexLabel0:String{
         didSet {
-            UserDefaults.standard.set(indexLabel0, forKey: "label0")
+            defaults.set(indexLabel0, forKey: "label0")
         }
     }
     
     var indexLabel1:String{
         didSet {
-            UserDefaults.standard.set(indexLabel1, forKey: "label1")
+            defaults.set(indexLabel1, forKey: "label1")
         }
     }
     
     var indexLabel2:String{
         didSet {
-            UserDefaults.standard.set(indexLabel2, forKey: "label2")
+            defaults.set(indexLabel2, forKey: "label2")
         }
     }
     
@@ -60,6 +60,22 @@ class ViewModelBase: ObservableObject {
         }
         firebaseService.fetchDataForCollection(2) { [weak self] items in
             self?.label2Item = items
+        }
+    }
+    
+    ///選択したデータをフェッチするメソッド
+    func fetchSelectedData(_ label:Int) {
+        firebaseService.fetchDataForCollection(label) { [weak self] items in
+            switch label{
+            case 0:
+                self?.label0Item = items
+            case 1:
+                self?.label1Item = items
+            case 2:
+                self?.label2Item = items
+            default:
+                return
+            }
         }
     }
 }
