@@ -25,7 +25,7 @@ class ListScreenViewModel: ViewModelBase {
         //削除用関数を呼び出す
         firebaseService.deleteItemFromCollection(labelNum: labelNum, items: completedArray)
         //インデックス番号の振り直し
-        firebaseService.updateIndexesForCollection(labelNum: labelNum, dataArray: targetArray)
+        firebaseService.NEWupdateIndexesForCollection(labelNum: labelNum)
         //コレクションをリロード
         fetchSelectedData(labelNum)
     }
