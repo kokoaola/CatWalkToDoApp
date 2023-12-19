@@ -11,7 +11,8 @@ import SwiftUI
 
 struct ListScreen: View {
     ///itemViewModelのための変数
-    @ObservedObject var itemVM = ItemViewModel()
+//    @ObservedObject var itemVM = ItemViewModel()
+    @ObservedObject var ListScreenVM = ListScreenViewModel()
     
     ///タスク追加シート管理用のフラグ
     @State private var showAddNewItemSheet = false
@@ -21,11 +22,6 @@ struct ListScreen: View {
     
     ///買い物完了ボタンを押した時のアラート用のプロパティ
     @State var showCompleteTaskAlert = false
-    
-    ///ユーザーデフォルトから３つのラベルデータを取得
-    @AppStorage("label0") var label0 = "1"
-    @AppStorage("label1") var label1 = "2"
-    @AppStorage("label2") var label2 = "3"
     
     ///ラベル名を格納するための配列(ForEachで使用するため)
     @State var labelArray:[String] = ["" , "", ""]
@@ -42,6 +38,10 @@ struct ListScreen: View {
     var body: some View {
         ///猫のサイズ
         let catSize = AppSetting.screenWidth / 6
+        let catLeftPosition = AppSetting.screenWidth + catSize * 2 / 2
+        let catRightPosition = 0 - catSize
+        let indexWidth = AppSetting.screenWidth / 3.5
+        let indexHeight = 60.0
         
         ZStack{
             NavigationView{
@@ -56,7 +56,7 @@ struct ListScreen: View {
                             //猫のアニメーション
                             LottieView(filename: "cat", loop: .loop, shouldFlip: $flip, startAnimation: $startMoving)
                                 .frame(width: catSize)
-                                .position(x: goRight ? UIScreen.main.bounds.width + catSize * 2 / 2 : 0 - catSize, y: 40)
+                                .position(x: goRight ? catLeftPosition : catRightPosition, y: 40)
                                 .animation(.linear(duration: 7.0), value: goRight)
                                 .shadow(color:.black.opacity(0.5), radius: 3, x: 3, y: 3)
                                 .zIndex(1.0)
@@ -71,7 +71,7 @@ struct ListScreen: View {
                             ForEach(0 ..< 3) {num in
                                 IndexLabel()
                                     .foregroundColor(.white)
-                                    .frame(width: UIScreen.main.bounds.width / 3.5, height: 60)
+                                    .frame(width: indexWidth, height: indexHeight)
                                     .shadow(color:.black.opacity(selection == num ? 0.5 : 0.0001), radius: 3, x: 3, y: 3)
                                 //ラベルの文字
                                     .overlay(Text("\(labelArray[num])")
@@ -151,13 +151,13 @@ struct ListScreen: View {
                             .environmentObject(itemVM)
                     })
                     
-                    //買い物完了ボタンが押された後の確認アラート
+                    //ゴミ箱ボタンが押された後の確認アラート
                     .alert(isPresented: $showCompleteTaskAlert){
                         Alert(title: Text("Task Completion"),
                               message: Text("Do you want to delete the checked items?"),
                               //OKならチェックした項目をリストから削除
                               primaryButton: .destructive(Text("Delete"), action: {
-                            itemVM.deleteCompletedTask(labelNum: selection)
+                            ListScreenVM.deleteCompletedTask(labelNum: selection)
                             
                         }),
                               secondaryButton: .cancel(Text("Cancel"), action:{}))
@@ -165,7 +165,7 @@ struct ListScreen: View {
                     
                     //ビュー生成時にラベルを配列に追加する
                     .onAppear(){
-                        labelArray = [label0, label1, label2]
+                        labelArray = [ListScreenVM.indexLabel0, ListScreenVM.indexLabel1, ListScreenVM.indexLabel2]
                     }
                     .onDisappear(){
                         isEdit = false
