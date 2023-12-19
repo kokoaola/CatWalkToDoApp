@@ -61,6 +61,20 @@ struct SaveButton: View {
 }
 
 
+///ゴミ箱マーク削除ボタン
+struct TrashButton: View {
+    var body: some View {
+        Image(systemName: "trash.square.fill")
+            .symbolRenderingMode(SymbolRenderingMode.palette)
+            .font(.largeTitle)
+            .foregroundStyle(.white, .gray)
+            .shadow(color:.black.opacity(0.5), radius: 3, x: 3, y: 3
+            )
+    }
+}
+
+
+
 struct CompButton_Previews: PreviewProvider {
     @State static var aa = false
     @State static var bb = false

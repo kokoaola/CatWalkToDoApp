@@ -183,12 +183,7 @@ struct ListScreen: View {
                         Button(action: {
                             showCompleteTaskAlert.toggle()
                         }) {
-                            Image(systemName: "trash.square.fill")
-                                .symbolRenderingMode(SymbolRenderingMode.palette)
-                                .font(.largeTitle)
-                                .foregroundStyle(.white, .gray)
-                                .shadow(color:.black.opacity(0.5), radius: 3, x: 3, y: 3
-                                )
+                            TrashButton()
                         }
                         //VoiceOver
                         .accessibilityLabel("Delete")
