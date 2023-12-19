@@ -10,4 +10,6 @@ import Foundation
 
 struct Constants {
     static let collectionName = "users"
+    
+    static let favoriteListKey = "favoriteList"
 }
