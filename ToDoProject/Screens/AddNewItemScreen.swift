@@ -16,6 +16,7 @@ struct AddNewItemScreen: View {
     @FocusState var isInputActive: Bool
     
     ///ラベル選択ピッカー用の変数
+    ///ページ破棄後に追加したインデックスが表示されるようにバインディングしている
     @Binding var newLabelNum: Int
     
     ///お気に入り追加フラグ
@@ -27,47 +28,55 @@ struct AddNewItemScreen: View {
     ///タスクの文字数が50文字以上の時に表示するアラート用フラグ
     @State private var showTooLongAlert = false
     
+    @State var newName = ""
+    
+    var editItem: ItemDataType?
     
     var body: some View {
+        var isEdit: Bool{
+            editItem != nil
+        }
+        
         //ツールバー使用するためNavigationStack
         NavigationStack{
             VStack(spacing: 50.0){
                 
                 VStack(spacing:0){
                     
-                    //お気に入り登録されたタスクがある場合は文章を表示.font(.footnote)
-                    if !AddNewItemScreenVM.favoriteList.isEmpty{
-                        HStack{
-                            Text("Add from Favorites")
-                            Spacer()
-                        }.padding(.bottom)
-                    }
-                    
-                    //お気に入り登録されたタスク名をタグ形式で全て表示する
-                    FlowLayout(spacing: 7) {
-                        ForEach(AddNewItemScreenVM.favoriteList, id: \.self) { tag in
-                            Text(tag)
-                                .padding(.vertical, 5)
-                                .padding(.horizontal, 12)
-                                .background(Color(.tertiarySystemGroupedBackground))
-                                .cornerRadius(15)
-                                .onTapGesture {
-                                    AddNewItemScreenVM.newName = tag
-                                    isFavorite = true
-                                }
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .stroke(Color.primary, lineWidth: tag == AddNewItemScreenVM.newName ? 1 : 0))
+                    //タスク追加モードならタグを表示
+                    if !isEdit{
+                        //お気に入り登録されたタスクがある場合は文章を表示.font(.footnote)
+                        if !AddNewItemScreenVM.favoriteList.isEmpty{
+                            HStack{
+                                Text("Add from Favorites")
+                                Spacer()
+                            }.padding(.bottom)
                         }
+                        
+                        //お気に入り登録されたタスク名をタグ形式で全て表示する
+                        FlowLayout(spacing: 7) {
+                            ForEach(AddNewItemScreenVM.favoriteList, id: \.self) { tag in
+                                Text(tag)
+                                    .padding(.vertical, 5)
+                                    .padding(.horizontal, 12)
+                                    .background(Color(.tertiarySystemGroupedBackground))
+                                    .cornerRadius(15)
+                                    .onTapGesture {
+                                        newName = tag
+                                        isFavorite = true
+                                    }
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 20)
+                                            .stroke(Color.primary, lineWidth: tag == newName ? 1 : 0))
+                            }
+                        }                        .font(.footnote)
                     }
                 }
-                .font(.footnote)
-                
                 
                 //ラベル選択用のピッカー
                 VStack{
                     HStack{
-                        Text("Destination to Add")
+                        Text(isEdit ? "Destination to Move" : "Destination to Add")
                         Spacer()
                     }
                     Picker(selection: $newLabelNum, label: Text("")){
@@ -88,38 +97,44 @@ struct AddNewItemScreen: View {
                 
                 
                 //タイトル入力用テキストフィールド
-                TextField("Task to Add", text: $AddNewItemScreenVM.newName)
+                TextField("Task to Add", text: $newName)
                     .frame(height: 40)
                     .focused($isInputActive)
                     .overlay(RoundedRectangle(cornerRadius: 1).stroke(Color(.tertiarySystemGroupedBackground), lineWidth: 1))
+                    .onAppear{
+                        if let editItem{
+                            newName = editItem.title
+                        }
+                    }
                 
-                //保存ボタン
+                ///保存ボタン
                 Button(action: {
-                    
+                    AddNewItemScreenVM.newName = newName
                     //文字数が50文字のときはアラートを表示してリターン
                     if AddNewItemScreenVM.isOver50{
                         showTooLongAlert = true
                         return
                     }
-                    //文字がからの時は何もせずリターン
-                    if AddNewItemScreenVM.isEmpty{
-                        return
-                    }
+                    //文字が空の時は何もせずリターン
+                    if AddNewItemScreenVM.isEmpty{ return }
                     
-                    //項目をデータベースに追加
+                    //タスクを保存
                     Task{
-                        await AddNewItemScreenVM.addNewItem(title: AddNewItemScreenVM.newName, label: newLabelNum)
+                            if let editItem{
+                                await AddNewItemScreenVM.updateLabelAndTitle(item: editItem, newLabel: newLabelNum)
+                            }else{
+                            await AddNewItemScreenVM.addNewItem(label: newLabelNum)
+                        }
                     }
-                    
                     
                     //お気に入りOnならお気に入りリストに追加
                     if isFavorite{
                         AddNewItemScreenVM.addFavoriteList()
-                        
                     }else if !isFavorite && AddNewItemScreenVM.favoriteList.contains(AddNewItemScreenVM.newName){
                         //お気に入りリストに存在するが、お気に入りスイッチがOFFになってる時はお気に入りから削除
                         AddNewItemScreenVM.deleteFavoriteList()
                     }
+                    
                     //追加後はページ破棄
                     dismiss()
                     
@@ -151,10 +166,11 @@ struct AddNewItemScreen: View {
                     }
             }
             
+            
             .padding()
             
             //ナビゲーションバーの設定
-            .navigationTitle("Create New Task")
+            .navigationTitle(isEdit ? "Edit" : "Create New Task")
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(.visible, for: .navigationBar)
             
