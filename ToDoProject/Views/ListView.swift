@@ -153,7 +153,7 @@ struct ListView: View {
             //タスク編集用のシート
             .sheet(isPresented: $showEditSheet, content: {
                 if let item = selectedItem {
-                    EditItemView(oldLabel: labelNum, newNum: $labelNum, item: item).environmentObject(itemVM)
+                    EditItemScreen(oldLabel: labelNum, newNum: $labelNum, item: item).environmentObject(itemVM)
                 }
             })
             

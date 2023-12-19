@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  MainScreen.swift
 //  Kaimono
 //
 //  Created by koala panda on 2022/09/26.
@@ -10,7 +10,7 @@ import CoreData
 
 
 ///アプリ起動時に表示される親ビュー
-struct ContentView: View {
+struct MainScreen: View {
     
     var body: some View {
         VStack{
@@ -42,13 +42,13 @@ struct ContentView: View {
 
 
 
-struct ContentView_Previews: PreviewProvider {
+struct MainScreen_Previews: PreviewProvider {
     static var previews: some View {
         
         Group{
-            ContentView()
+            MainScreen()
                 .environment(\.locale, Locale(identifier:"en"))
-            ContentView()
+            MainScreen()
                 .environment(\.locale, Locale(identifier:"ja"))
         }
 

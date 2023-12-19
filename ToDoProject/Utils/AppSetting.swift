@@ -29,6 +29,7 @@ class AppSetting{
     static let fontColor = Color.black
 }
 
+
 extension AppSetting{
     
     ///キーボード閉じるボタンの挙動

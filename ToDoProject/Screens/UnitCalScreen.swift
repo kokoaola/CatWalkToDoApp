@@ -8,7 +8,7 @@
 import SwiftUI
 
 ///単価計算のビュー
-struct Keisan: View {
+struct UnitCalScreen: View {
     ///金額を格納する変数
     @State var price:Double?
     
@@ -150,7 +150,7 @@ struct Keisan: View {
 
 struct Keisan_Previews: PreviewProvider {
     static var previews: some View {
-        Keisan()
+        UnitCalScreen()
     }
 }
 
