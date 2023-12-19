@@ -6,3 +6,12 @@
 //
 
 import Foundation
+
+
+///タスクの全リストを取り扱うビューモデル
+class ViewModelBase: ObservableObject {
+    @Published  var label0Item = [ItemDataType]()
+    @Published  var label1Item = [ItemDataType]()
+    @Published  var label2Item = [ItemDataType]()
+}
+
