@@ -18,18 +18,18 @@ struct MainScreen: View {
             TabView{
                 
                 //買い物リストビュー
-                List_mainView()
+                ListScreen()
                     .tabItem{
                         Label("To-Do List", systemImage: "checklist")
                     }
                 
                 //単価計算ビュー
-                Keisan().tabItem{
+                UnitCalScreen().tabItem{
                     Label("Unit Price Calculation", systemImage: "arrow.2.squarepath")
                 }
                 
                 //設定ビュー
-                Setting_Top()
+                SettingScreen()
                     .tabItem{
                         Label("Settings", systemImage: "gearshape")
                     }

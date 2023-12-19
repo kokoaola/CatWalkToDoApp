@@ -8,7 +8,7 @@
 import SwiftUI
 
 ///タスクの新規追加シート
-struct AddNewItem: View {
+struct AddNewItemScreen: View {
     
     ///ユーザーデフォルトから３つのラベルデータを取得
     @AppStorage("label0") var label0 = "1"
@@ -179,9 +179,9 @@ struct AddNewItem: View {
     }
 }
 
-struct AddNewItem_Previews: PreviewProvider {
+struct AddNewItemScreen_Previews: PreviewProvider {
     static var previews: some View {
-        AddNewItem()
+        AddNewItemScreen()
             .environmentObject(ItemViewModel())
     }
 }

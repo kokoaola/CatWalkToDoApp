@@ -53,7 +53,7 @@ struct ToDoProjectApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainScreen()
         }
     }
 }

@@ -9,7 +9,7 @@ import SwiftUI
 ///買い物リストのメインのビュー
 
 
-struct List_mainView: View {
+struct ListScreen: View {
     ///itemViewModelのための変数
     @ObservedObject var itemVM = ItemViewModel()
     
@@ -147,7 +147,7 @@ struct List_mainView: View {
                     
                     //タスク新規追加用のシート
                     .sheet(isPresented: $showAddNewItemSheet, content: {
-                        AddNewItem(newLabelNum: selection)
+                        AddNewItemScreen(newLabelNum: selection)
                             .environmentObject(itemVM)
                     })
                     
@@ -203,16 +203,16 @@ struct List_mainView: View {
             ///ラベル名がロングタップされたら編集用ウィンドウを表示
             if isEdit{
                 LinearGradient(gradient: Gradient(colors: [AppSetting.mainColor1, AppSetting.mainColor2]), startPoint: .leading, endPoint: .trailing).ignoresSafeArea().opacity(0.5)
-                EditLabelWindow(showAlert: $isEdit, labelArray:$labelArray, labelNum: selection)
+                EditIndexAlertScreen(showAlert: $isEdit, labelArray:$labelArray, labelNum: selection)
             }
         }
 
     }
 }
 
-struct List_mainView_Previews: PreviewProvider {
+struct ListScreen_Previews: PreviewProvider {
     static var previews: some View {
-        List_mainView()
+        ListScreen()
             .environmentObject(ItemViewModel())
     }
 }

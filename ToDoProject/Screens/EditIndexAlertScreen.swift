@@ -8,7 +8,7 @@
 import SwiftUI
 
 
-struct EditIndexScreen: View {
+struct EditIndexAlertScreen: View {
     ///自分自身の表示状態を格納するフラグ
     @Binding var showAlert: Bool
     

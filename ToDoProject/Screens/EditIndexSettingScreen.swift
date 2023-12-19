@@ -8,7 +8,7 @@
 import SwiftUI
 
 
-struct AddNewLabel_View: View {
+struct EditIndexSettingScreen: View {
     //ユーザーデフォルトから３つのラベルデータを取得
     @AppStorage("label0") var label0 = "1"
     @AppStorage("label1") var label1 = "2"
@@ -63,6 +63,6 @@ struct AddNewLabel_View: View {
 }
 struct AddNewLabel_View_Previews: PreviewProvider {
     static var previews: some View {
-        AddNewLabel_View()
+        EditIndexSettingScreen()
     }
 }

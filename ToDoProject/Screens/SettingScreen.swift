@@ -9,7 +9,7 @@ import SwiftUI
 
 import SwiftUI
 
-struct Setting_Top: View {
+struct SettingScreen: View {
     var body: some View {
         NavigationView{
             
@@ -26,7 +26,7 @@ struct Setting_Top: View {
                     List{
                         Section{
                             NavigationLink(destination: {
-                                AddNewLabel_View()
+                                EditIndexSettingScreen()
                             }, label: {Text("Edit Labels")})
                         }
                         
@@ -61,13 +61,13 @@ struct Setting_Top: View {
     }
 }
 
-struct Setting_Top_Previews: PreviewProvider {
+struct SettingScreen_Previews: PreviewProvider {
     static var previews: some View {
         
         Group{
-            Setting_Top()
+            SettingScreen()
                 .environment(\.locale, Locale(identifier: "en"))
-            Setting_Top()
+            SettingScreen()
                 .environment (\.locale, Locale (identifier: "ja"))
         }
         

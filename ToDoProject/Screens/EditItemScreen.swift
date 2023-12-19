@@ -9,7 +9,7 @@ import SwiftUI
 
 
 ///アイテム編集用のシート
-struct EditItemView: View {
+struct EditItemScreen: View {
     ///ユーザーデフォルトから３つのラベルデータを取得
     @AppStorage("label0") var label0 = "1"
     @AppStorage("label1") var label1 = "2"
@@ -203,11 +203,11 @@ struct EditItemView: View {
     
 }
 
-struct EditItemView_Previews: PreviewProvider {
+struct EditItemScreen_Previews: PreviewProvider {
     @State static var num = 0
     static let item = ItemDataType(id: "A", title: "AA", index: 1, label: 0, checked: false, timestamp: Date())
     static var previews: some View {
-        EditItemView(oldLabel: 0, newNum: $num, item: item)
+        EditItemScreen(oldLabel: 0, newNum: $num, item: item)
             .environmentObject(ItemViewModel())
     }
 }
