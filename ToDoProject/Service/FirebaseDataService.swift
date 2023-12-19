@@ -55,9 +55,30 @@ extension FirebaseDataService{
     }
     
     
+    
+//    func addItemToCollection(title: String, label: Int, index: Int) async{
+//        //コレクション名を取得
+//        let subCollectionName = subCollectionNames[label]
+//
+//        let data = [
+//            "title": title,
+//            "index": index + 1,
+//            "label": label,
+//            "checked": false,
+//            "timestamp": FieldValue.serverTimestamp()
+//        ] as [String : Any]
+//
+//
+//        // 新しいアイテムを追加
+//        db.collection(self.collectionName).document(self.uid!).collection(subCollectionName).addDocument(data: data){ (error) in
+//            if error != nil {
+//                return
+//            }
+//        }
+//    }
+    
     ///アイテムをデータベースに追加する
-    func addItemToCollection(title: String, label: Int, index: Int) async{
-        //コレクション名を取得
+    func addItemToCollection(title: String, label: Int, index: Int, completion: @escaping (Error?) -> Void) {
         let subCollectionName = subCollectionNames[label]
         
         let data = [
@@ -68,19 +89,17 @@ extension FirebaseDataService{
             "timestamp": FieldValue.serverTimestamp()
         ] as [String : Any]
         
-        
         // 新しいアイテムを追加
-        db.collection(self.collectionName).document(self.uid!).collection(subCollectionName).addDocument(data: data){ (error) in
-            if error != nil {
-                return
-            }
+        db.collection(self.collectionName).document(self.uid!).collection(subCollectionName).addDocument(data: data) { error in
+            // コンプリーションハンドラを通じて、呼び出し元にエラー情報を返す
+            completion(error)
         }
     }
     
     
     
-    ///データベース内のアイテムを更新する
-    func updateItemInCollection(oldItem: ItemDataType, newCheckedStatus:Bool, newTitle: String){
+    ///データベース内のアイテムのタイトル、達成フラグを更新する
+    func updateItemInCollection(oldItem: ItemDataType, newCheckedStatus:Bool, newTitle: String, completion: @escaping (Error?) -> Void) {
         
         //コレクション名を取得
         let subCollectionName = subCollectionNames[Int(oldItem.label)]
@@ -93,17 +112,14 @@ extension FirebaseDataService{
             if let error = error {
                 print("Error updating document: \(error)")
                 // エラー処理
-                return
-            } else {
-                // 成功時の処理
-                return
-            }
+                completion(error)
+            } 
         }
     }
     
     
     
-    ///index番号を振り直す
+    ///消すよ
     func updateIndexesForCollection(labelNum: Int, dataArray:[ItemDataType]) {
 
         //コレクション名を取得
@@ -121,7 +137,8 @@ extension FirebaseDataService{
     
     
     
-    func NEWupdateIndexesForCollection(labelNum: Int) {
+    ///index番号を振り直す
+    func NEWupdateIndexesForCollection(labelNum: Int, completion: @escaping (Error?) -> Void) {
         let subCollectionName = self.subCollectionNames[labelNum]
         
         fetchDataForCollection(labelNum) { itemArray in
@@ -130,7 +147,13 @@ extension FirebaseDataService{
                 for (index, item) in itemArray.enumerated() {
                     self.db.collection(self.collectionName).document(self.uid!).collection(subCollectionName).document(item.id).updateData([
                         "index": index
-                    ])
+                    ]){ error in
+                        if let error = error {
+                            print("Error updating document: \(error)")
+                            // エラー処理
+                            completion(error)
+                        }
+                    }
                 }
             }
         }
@@ -140,7 +163,7 @@ extension FirebaseDataService{
     
     
     //データベースからアイテムを削除する
-    func deleteItemFromCollection(labelNum: Int, items:[ItemDataType]){
+    func deleteItemFromCollection(labelNum: Int, items:[ItemDataType], completion: @escaping (Error?) -> Void) {
         
         //操作したいコレクション名を取得
         let subCollectionName = subCollectionNames[labelNum]
@@ -153,7 +176,8 @@ extension FirebaseDataService{
             //該当するidのアイテムを削除
             self.db.collection(self.collectionName).document(self.uid!).collection(subCollectionName).document(item.id).delete() { error in
                 if error != nil {
-                    return
+                    // エラー処理
+                    completion(error)
                 }
                 // グループからリーブ
                 group.leave()
