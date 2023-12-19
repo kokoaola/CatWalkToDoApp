@@ -105,10 +105,10 @@ extension FirebaseDataService{
     
     ///index番号を振り直す
     func updateIndexesForCollection(labelNum: Int, dataArray:[ItemDataType]) {
-        
+
         //コレクション名を取得
         let subCollectionName = subCollectionNames[labelNum]
-        
+
         //順番にIndexを振り直して保存する
         DispatchQueue.main.async {
             for (index, item) in dataArray.enumerated() {
@@ -119,6 +119,23 @@ extension FirebaseDataService{
         }
     }
     
+    
+    
+    func NEWupdateIndexesForCollection(labelNum: Int) {
+        let subCollectionName = self.subCollectionNames[labelNum]
+        
+        fetchDataForCollection(labelNum) { itemArray in
+            //順番にIndexを振り直して保存する
+            DispatchQueue.main.async {
+                for (index, item) in itemArray.enumerated() {
+                    self.db.collection(self.collectionName).document(self.uid!).collection(subCollectionName).document(item.id).updateData([
+                        "index": index
+                    ])
+                }
+            }
+        }
+    }
+
     
     
     
