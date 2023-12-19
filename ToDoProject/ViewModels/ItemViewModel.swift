@@ -79,7 +79,7 @@ extension ItemViewModel{
         let newIndex = allDataArray[label].count
         
         //データベースへの書き込み
-        await firebaseService.addItemToCollection(title: title, label: label, index: newIndex)
+//        await firebaseService.addItemToCollection(title: title, label: label, index: newIndex)
         
         //追加したコレクションをリロード
         fetchSelectedData(label)
@@ -91,7 +91,7 @@ extension ItemViewModel{
         //Bool値を反転
         let newStatus = !item.checked
         //updateItemInCollectionメソッドを呼び出す
-        firebaseService.updateItemInCollection(oldItem: item, newCheckedStatus: newStatus, newTitle: item.title)
+//        firebaseService.updateItemInCollection(oldItem: item, newCheckedStatus: newStatus, newTitle: item.title)
         
         //コレクションをリロード
         self.fetchSelectedData(Int(item.label))
@@ -115,7 +115,7 @@ extension ItemViewModel{
     ///タイトルだけが変更された時の処理
     func changeTitle(item: ItemDataType, newTitle: String) async{
         //アイテムの修正用のメソッドを呼び出す
-        firebaseService.updateItemInCollection(oldItem: item, newCheckedStatus: item.checked, newTitle: newTitle)
+//        firebaseService.updateItemInCollection(oldItem: item, newCheckedStatus: item.checked, newTitle: newTitle)
         //コレクションをリロード
         self.fetchSelectedData(Int(item.label))
     }
@@ -129,7 +129,7 @@ extension ItemViewModel{
         let newIndex = allDataArray[newLabel].count
         
         //データベースへの新規書き込み
-        await firebaseService.addItemToCollection(title: newTitle, label: newLabel, index: newIndex)
+//        await firebaseService.addItemToCollection(title: newTitle, label: newLabel, index: newIndex)
         
         //データベースから古いアイテムを削除
         deleteOneTask(item: item)
@@ -165,7 +165,7 @@ extension ItemViewModel{
         var completedArray = targetArray.filter { $0.checked == true }
         
         //削除用関数を呼び出す
-        firebaseService.deleteItemFromCollection(labelNum: labelNum, items: completedArray)
+//        firebaseService.deleteItemFromCollection(labelNum: labelNum, items: completedArray)
         //インデックス番号の振り直し
         firebaseService.updateIndexesForCollection(labelNum: labelNum, dataArray: targetArray)
         //コレクションをリロード
@@ -179,7 +179,7 @@ extension ItemViewModel{
         let labelNumber = Int(item.label)
         
         //削除用関数を呼び出して削除を実行
-        firebaseService.deleteItemFromCollection(labelNum: labelNumber, items: [item])
+//        firebaseService.deleteItemFromCollection(labelNum: labelNumber, items: [item])
         
         //インデックス番号の振り直し
         let allDataArray = [label0Item, label1Item, label2Item]
