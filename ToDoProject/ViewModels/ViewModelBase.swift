@@ -15,9 +15,9 @@ class ViewModelBase: ObservableObject {
     let firebaseService = FirebaseDataService()
     let defaults = UserDefaults.standard
     
-    @Published  var label0Item = [ItemDataType]()
-    @Published  var label1Item = [ItemDataType]()
-    @Published  var label2Item = [ItemDataType]()
+    @Published var label0Item = [ItemDataType]()
+    @Published var label1Item = [ItemDataType]()
+    @Published var label2Item = [ItemDataType]()
     
     
     var indexLabel0:String{
