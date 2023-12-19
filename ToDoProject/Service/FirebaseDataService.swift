@@ -54,29 +54,6 @@ extension FirebaseDataService{
         }
     }
     
-    
-    
-//    func addItemToCollection(title: String, label: Int, index: Int) async{
-//        //コレクション名を取得
-//        let subCollectionName = subCollectionNames[label]
-//
-//        let data = [
-//            "title": title,
-//            "index": index + 1,
-//            "label": label,
-//            "checked": false,
-//            "timestamp": FieldValue.serverTimestamp()
-//        ] as [String : Any]
-//
-//
-//        // 新しいアイテムを追加
-//        db.collection(self.collectionName).document(self.uid!).collection(subCollectionName).addDocument(data: data){ (error) in
-//            if error != nil {
-//                return
-//            }
-//        }
-//    }
-    
     ///アイテムをデータベースに追加する
     func addItemToCollection(title: String, label: Int, index: Int, completion: @escaping (Error?) -> Void) {
         let subCollectionName = subCollectionNames[label]
@@ -117,28 +94,8 @@ extension FirebaseDataService{
         }
     }
     
-    
-    
-    ///消すよ
-    func updateIndexesForCollection(labelNum: Int, dataArray:[ItemDataType]) {
-
-        //コレクション名を取得
-        let subCollectionName = subCollectionNames[labelNum]
-
-        //順番にIndexを振り直して保存する
-        DispatchQueue.main.async {
-            for (index, item) in dataArray.enumerated() {
-                self.db.collection(self.collectionName).document(self.uid!).collection(subCollectionName).document(item.id).updateData([
-                    "index": index
-                ])
-            }
-        }
-    }
-    
-    
-    
     ///index番号を振り直す
-    func NEWupdateIndexesForCollection(labelNum: Int, completion: @escaping (Error?) -> Void) {
+    func updateIndexesForCollection(labelNum: Int, completion: @escaping (Error?) -> Void) {
         let subCollectionName = self.subCollectionNames[labelNum]
         
         fetchDataForCollection(labelNum) { itemArray in

@@ -97,7 +97,7 @@ class AddNewItemScreenViewModel: ViewModelBase {
                     } else {
                         
                         //削除したコレクションのインデックス番号振り直し
-                        self.firebaseService.NEWupdateIndexesForCollection(labelNum: oldLabel){error in
+                        self.firebaseService.updateIndexesForCollection(labelNum: oldLabel){error in
                             if let error = error {
                                 return
                             } else {

@@ -26,7 +26,7 @@ class ListScreenViewModel: ViewModelBase {
         firebaseService.deleteItemFromCollection(labelNum: labelNum, items: completedArray){ error in
             
             //インデックス番号の振り直し
-            self.firebaseService.NEWupdateIndexesForCollection(labelNum: labelNum){error in
+            self.firebaseService.updateIndexesForCollection(labelNum: labelNum){error in
                 if let error = error {
                     return
                 } else {

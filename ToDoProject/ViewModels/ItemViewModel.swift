@@ -138,7 +138,7 @@ extension ItemViewModel{
         let arrayBeforeChanging = allDataArray[Int(item.label)]
         
         //削除したコレクションのインデックス番号振り直し
-        firebaseService.updateIndexesForCollection(labelNum: Int(item.label), dataArray: arrayBeforeChanging)
+//        firebaseService.updateIndexesForCollection(labelNum: Int(item.label), dataArray: arrayBeforeChanging)
         
         self.fetchSelectedData(Int(item.label))
         self.fetchSelectedData(newLabel)
@@ -153,7 +153,7 @@ extension ItemViewModel{
         let allDataArray = [label0Item, label1Item, label2Item]
         let targetArray = allDataArray[labelNum]
         
-        firebaseService.updateIndexesForCollection(labelNum: labelNum, dataArray: targetArray)
+//        firebaseService.updateIndexesForCollection(labelNum: labelNum, dataArray: targetArray)
     }
     
     
@@ -167,7 +167,7 @@ extension ItemViewModel{
         //削除用関数を呼び出す
 //        firebaseService.deleteItemFromCollection(labelNum: labelNum, items: completedArray)
         //インデックス番号の振り直し
-        firebaseService.updateIndexesForCollection(labelNum: labelNum, dataArray: targetArray)
+//        firebaseService.updateIndexesForCollection(labelNum: labelNum, dataArray: targetArray)
         //コレクションをリロード
         fetchSelectedData(labelNum)
     }
@@ -184,7 +184,7 @@ extension ItemViewModel{
         //インデックス番号の振り直し
         let allDataArray = [label0Item, label1Item, label2Item]
         let targetArray = allDataArray[labelNumber]
-        firebaseService.updateIndexesForCollection(labelNum: labelNumber, dataArray: targetArray)
+//        firebaseService.updateIndexesForCollection(labelNum: labelNumber, dataArray: targetArray)
         
         //コレクションをリロード
         fetchSelectedData(labelNumber)
