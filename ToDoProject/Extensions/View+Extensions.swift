@@ -14,6 +14,11 @@ extension View {
         return NavigationView { self }
     }
     
+    //カスタマイズしたテキストエディットのスタイル
+    func customTextEditStyle() -> some View {
+        self.modifier(TextEditModifier())
+    }
+    
     //アクセシビリティを追加する
     func editAccessibility(label: String? = nil, hint: String? = nil, removeTraits: AccessibilityTraits? = nil, addTraits: AccessibilityTraits? = nil) -> some View {
         self
@@ -33,5 +38,18 @@ private struct AccessibilityModifier: ViewModifier {
             .accessibilityHint(LocalizedStringKey(hint ?? ""))
             .accessibilityAddTraits(addTraits ?? AccessibilityTraits())
             .accessibilityRemoveTraits(removeTraits ?? AccessibilityTraits())
+    }
+}
+
+
+private struct TextEditModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .foregroundColor(Color(UIColor.black))
+            .tint(.black)
+            .scrollContentBackground(Visibility.hidden)
+            .background(.gray.opacity(0.5))
+            .border(.gray, width: 1)
+            .frame(height: 80)
     }
 }

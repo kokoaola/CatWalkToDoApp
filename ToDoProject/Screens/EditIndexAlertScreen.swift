@@ -38,12 +38,7 @@ struct EditIndexAlertScreen: View {
             
             //テキストエディタ
             TextEditor(text: $editText)
-                .foregroundColor(Color(UIColor.black))
-                .tint(.black)
-                .scrollContentBackground(Visibility.hidden)
-                .background(.gray.opacity(0.5))
-                .border(.gray, width: 1)
-                .frame(height: 80)
+                .customTextEditStyle()
                 .opacity(editText.isEmpty ? 0.5 : 1)
                 .focused($isInputActive)
                 .editAccessibility(label: "Text field to change custom label name.")
