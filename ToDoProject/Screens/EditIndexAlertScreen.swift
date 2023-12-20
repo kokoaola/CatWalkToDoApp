@@ -9,11 +9,11 @@ import SwiftUI
 
 
 struct EditIndexAlertScreen: View {
-    ///自分自身の表示状態を格納するフラグ
-    @Binding var showAlert: Bool
+    ///インデックスラベルをアプリ内で共有する環境変数
+    @EnvironmentObject var store: Store
     
     ///自分自身の表示状態を格納するフラグ
-    @Binding var labelArray:[String]
+    @Binding var showAlert: Bool
     
     ///自分自身の表示状態を格納するフラグ
     var labelNum = 0
@@ -24,21 +24,11 @@ struct EditIndexAlertScreen: View {
     ///入力できる最大文字数
     let maxLength = 20
     
-    ///ユーザーデフォルト用変数
-    private let defaults = UserDefaults.standard
-    
-    @State var key = ""
-    
-    ///ユーザーデフォルトから３つのラベルデータを取得
-    @AppStorage("label0") var label0 = "1"
-    @AppStorage("label1") var label1 = "2"
-    @AppStorage("label2") var label2 = "3"
-    
     ///キーボードフォーカス用変数（Doneボタン表示のため）
     @FocusState var isInputActive: Bool
     
-    
     var body: some View {
+        
         
         VStack(alignment: .leading){
             
@@ -81,16 +71,14 @@ struct EditIndexAlertScreen: View {
                     if !editText.isEmpty && maxLength >= editText.count{
                         switch labelNum {
                         case 0:
-                            label0 = editText
+                            store.indexLabel0 = editText
                         case 1:
-                            label1 = editText
+                            store.indexLabel1 = editText
                         case 2:
-                            label2 = editText
+                            store.indexLabel2 = editText
                         default:
                             break
                         }
-                        
-                        labelArray = [label0,label1,label2]
                         showAlert = false
                     }
                     
@@ -123,18 +111,8 @@ struct EditIndexAlertScreen: View {
         .background(.white)
         .cornerRadius(15)
         .padding()
-        //ページ表示時に初期値として現在の目標をテキストエディターに入力
+        //ページ表示時に初期値として現在のインデックスをテキストエディターに入力
         .onAppear{
-            switch labelNum {
-            case 0:
-                editText = label0
-            case 1:
-                editText = label1
-            case 2:
-                editText = label2
-            default:
-                editText = "Error"
-            }
             isInputActive = true
         }
     }

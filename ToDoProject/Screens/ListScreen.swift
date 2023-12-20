@@ -10,9 +10,9 @@ import SwiftUI
 
 
 struct ListScreen: View {
-    ///itemViewModelのための変数
-    @ObservedObject var itemVM = ItemViewModel()
+    ///ViewModelのための変数
     @ObservedObject var ListScreenVM = ListScreenViewModel()
+    @EnvironmentObject var store: Store
     
     ///タスク追加シート管理用のフラグ
     @State private var showAddNewItemSheet = false
@@ -22,9 +22,6 @@ struct ListScreen: View {
     
     ///買い物完了ボタンを押した時のアラート用のプロパティ
     @State var showCompleteTaskAlert = false
-    
-    ///ラベル名を格納するための配列(ForEachで使用するため)
-    @State var labelArray:[String] = ["" , "", ""]
     
     ///猫動かす用
     @State private var goRight: Bool = false
@@ -76,7 +73,7 @@ struct ListScreen: View {
                                     .frame(width: indexWidth, height: indexHeight)
                                     .shadow(color:.black.opacity(selection == num ? 0.5 : 0.0001), radius: 3, x: 3, y: 3)
                                 //ラベルの文字
-                                    .overlay(Text("\(labelArray[num])")
+                                    .overlay(Text("\(store.getIndexArray()[num])")
                                         .font(.callout)
                                         .fontWeight(.bold)
                                         .foregroundColor(Color(selection == num ? .black : .gray)))
@@ -91,12 +88,10 @@ struct ListScreen: View {
                                 //ラベル名長押しで編集用ウィンドウ表示
                                     .onLongPressGesture {
                                         selection = num
-//                                        withAnimation {
-                                            isEdit = true
-//                                        }
+                                        isEdit = true
                                     }
                                     .accessibilityAddTraits(selection == num ? [.isSelected] : [])
-                                    .accessibilityLabel("\(labelArray[num]), tab")
+                                    .accessibilityLabel("\(store.getIndexArray()[num]), tab")
                             }
                         }
                         .offset(x: -UIScreen.main.bounds.width / 18.5)
@@ -106,16 +101,15 @@ struct ListScreen: View {
                         
                         //買い物リストの中身(選択中のタブによって切り替える)
                         TabView(selection: $selection) {
-                            ListView(filterdList: $itemVM.label0Item, labelNum: $selection, goRight: $goRight, isFlip: $flip, isMoving: $startMoving)
+                            ListView(filterdList: $ListScreenVM.label0Item, labelNum: $selection, goRight: $goRight, isFlip: $flip, isMoving: $startMoving)
                                 .tag(0)
-                            ListView(filterdList: $itemVM.label1Item, labelNum: $selection, goRight: $goRight, isFlip: $flip, isMoving: $startMoving)
+                            ListView(filterdList: $ListScreenVM.label1Item, labelNum: $selection, goRight: $goRight, isFlip: $flip, isMoving: $startMoving)
                                 .tag(1)
-                            ListView(filterdList: $itemVM.label2Item, labelNum: $selection, goRight: $goRight, isFlip: $flip, isMoving: $startMoving)
+                            ListView(filterdList: $ListScreenVM.label2Item, labelNum: $selection, goRight: $goRight, isFlip: $flip, isMoving: $startMoving)
                                 .tag(2)
                         }
                         .background(.white)
                         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-                        .environmentObject(itemVM)
                         
                     }.padding(.top, 5)
                     //編集用アラート表示中はタップ無効
@@ -149,7 +143,7 @@ struct ListScreen: View {
                     
                     //タスク新規追加用のシート
                     .sheet(isPresented: $showAddNewItemSheet, content: {
-                        AddNewItemScreen(newLabelNum: $selection)
+                        AddNewItemScreen(newLabelNum: $selection, indexArray: store.getIndexArray())
                     })
                     
                     //ゴミ箱ボタンが押された後の確認アラート
@@ -164,10 +158,6 @@ struct ListScreen: View {
                               secondaryButton: .cancel(Text("Cancel"), action:{}))
                     }
                     
-                    //ビュー生成時にラベルを配列に追加する
-                    .onAppear(){
-                        labelArray = [ListScreenVM.indexLabel0, ListScreenVM.indexLabel1, ListScreenVM.indexLabel2]
-                    }
                     .onDisappear(){
                         isEdit = false
                     }
@@ -199,10 +189,11 @@ struct ListScreen: View {
             ///ラベル名がロングタップされたら編集用ウィンドウを表示
             if isEdit{
                 LinearGradient(gradient: Gradient(colors: [AppSetting.mainColor1, AppSetting.mainColor2]), startPoint: .leading, endPoint: .trailing).ignoresSafeArea().opacity(0.5)
-                EditIndexAlertScreen(showAlert: $isEdit, labelArray:$labelArray, labelNum: selection)
+                EditIndexAlertScreen(showAlert: $isEdit, labelNum: selection, editText: store.getIndexArray()[selection])
+                    .environmentObject(store)
             }
         }
-
+        
     }
 }
 

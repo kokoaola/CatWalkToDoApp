@@ -32,6 +32,8 @@ struct AddNewItemScreen: View {
     
     var editItem: ItemDataType?
     
+    var indexArray = ["1", "2", "3"]
+    
     var body: some View {
         var isEdit: Bool{
             editItem != nil
@@ -80,11 +82,11 @@ struct AddNewItemScreen: View {
                         Spacer()
                     }
                     Picker(selection: $newLabelNum, label: Text("")){
-                        Text(AddNewItemScreenVM.indexLabel0)
+                        Text(indexArray[0])
                             .tag(0)
-                        Text(AddNewItemScreenVM.indexLabel1)
+                        Text(indexArray[1])
                             .tag(1)
-                        Text(AddNewItemScreenVM.indexLabel2)
+                        Text(indexArray[2])
                             .tag(2)
                     }
                     .pickerStyle(.segmented)
@@ -123,7 +125,7 @@ struct AddNewItemScreen: View {
                             if let editItem{
                                 await AddNewItemScreenVM.updateLabelAndTitle(item: editItem, newLabel: newLabelNum)
                             }else{
-                            await AddNewItemScreenVM.addNewItem(label: newLabelNum)
+                                AddNewItemScreenVM.addNewItem(label: newLabelNum)
                         }
                     }
                     

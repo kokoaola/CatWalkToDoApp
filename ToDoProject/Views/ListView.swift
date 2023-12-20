@@ -32,48 +32,14 @@ struct ListView: View {
     
     var body: some View {
         
-        ///保存されたアイテムが空ならチュートリアル吹き出しを表示
+        
         if filterdList.isEmpty{
-            VStack{
-                SpeechBubbleView1()
-                    .offset(x:0, y:-10)
-                    .overlay{
-                        VStack{
-                            Text("By long-pressing index,\nyou can edit label name.")
-                                .fontWeight(.bold)
-                                .lineSpacing(10)
-                        }
-                        .frame(width: AppSetting.screenWidth * 0.9, height: AppSetting.screenWidth * 0.3)
-                        .foregroundColor(.black).opacity(0.6)
-                    }
-                
-                
-                Spacer()
-                
-                
-                
-                SpeechBubbleView2()
-                    .offset(x:0, y:-10)
-                    .overlay{
-                        VStack{
-                            Text("Add tasks from here.")
-                                .fontWeight(.bold)
-                                .lineSpacing(10)
-                        }
-                        .frame(width: AppSetting.screenWidth * 0.9, height: AppSetting.screenWidth * 0.3)
-                        .foregroundColor(.black).opacity(0.6)
-                    }
-                
-                
-                
-                Spacer()
-                    .frame(height: 50)
-                
-                
-            }
-            .padding(.vertical, 50)
-            ///保存されたアイテムが１つ以上あれば、リストにして表示
+            ///保存されたアイテムが空ならチュートリアル吹き出しを表示
+            TutorialSpeechBubble()
+            
+            
         }else{
+            ///保存されたアイテムが１つ以上あれば、リストにして表示
             //買い物リスト本体
             List{
                 
@@ -164,19 +130,19 @@ struct ListView: View {
     
     func moveItem(offsets: IndexSet, index: Int) {
         filterdList.move(fromOffsets: offsets, toOffset: index)
-        itemVM.updateIndexesForCollection(labelNum: labelNum)
+//        itemVM.updateIndexesForCollection(labelNum: labelNum)
     }
 }
 
 
 
-struct ShoppingList1_Previews: PreviewProvider {
-    @State static var aaa  = 0
-    @State static var a = [ItemDataType]()
-    @State static var startAnimation = false
-    @State static var flip = false
-    static var previews: some View {
-        ListView(filterdList: $a, labelNum: $aaa, goRight: $startAnimation, isFlip: $flip,isMoving: $flip)
-            .environmentObject(ItemViewModel())
-    }
-}
+//struct ShoppingList1_Previews: PreviewProvider {
+//    @State static var aaa  = 0
+//    @State static var a = [ItemDataType]()
+//    @State static var startAnimation = false
+//    @State static var flip = false
+//    static var previews: some View {
+//        ListView(filterdList: $a, labelNum: $aaa, goRight: $startAnimation, isFlip: $flip,isMoving: $flip)
+//            .environmentObject(ItemViewModel())
+//    }
+//}

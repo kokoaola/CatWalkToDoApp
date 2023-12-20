@@ -80,7 +80,7 @@ class AddNewItemScreenViewModel: ViewModelBase {
         let oldLabel = Int(item.label)
         
         //新規追加するためのインデックス番号をカウント数から取得
-        var allDataArray = [label0Item, label1Item, label2Item]
+        let allDataArray = [label0Item, label1Item, label2Item]
         let newIndex = allDataArray[newLabel].count
         
         //データベースへの新規書き込み
