@@ -34,15 +34,19 @@ struct ContactWebView: UIViewRepresentable {
 }
 
 
-
-
-struct Contact_Previews: PreviewProvider {
-    static var previews: some View {
-        Group{
-            ContactWebView()
-                .environment(\.locale, Locale(identifier:"en"))
-            ContactWebView()
-                .environment(\.locale, Locale(identifier:"ja"))
-        }
+///ウェブ上のプライバシーポリシーを表示する
+struct PrivacyPolicyView: UIViewRepresentable {
+    ///URL
+    var urlString = "https://kokoaola.github.io/privacyPolicy/privacyToDo.html"
+    
+    func makeUIView(context: Context) -> WKWebView{
+        return WKWebView()
+    }
+    
+    func updateUIView(_ uiView: WKWebView, context: Context) {
+        let url = URL(string: urlString)!
+        let request = URLRequest(url: url)
+        uiView.load(request)
     }
 }
+

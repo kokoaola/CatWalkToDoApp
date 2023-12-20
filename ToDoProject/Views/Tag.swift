@@ -8,7 +8,7 @@
 import SwiftUI
 
 
-//お気に入りのタグ用のビュー
+///お気に入りのタグ用のビュー
 struct FlowLayout: Layout {
     var alignment: Alignment = .center
     var spacing: CGFloat?

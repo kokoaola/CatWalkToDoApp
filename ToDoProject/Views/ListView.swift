@@ -10,7 +10,7 @@ import SwiftUI
 ///買い物リストのリスト部分
 struct ListView: View {
     ///ViewModelのための変数
-    @ObservedObject var listScreenVM = ListViewModel()
+    @ObservedObject var listVM = ListViewModel()
     
     ///引数で受け取る配列（リスト表示用）
     @Binding var filterdList: [ItemDataType]
@@ -98,7 +98,7 @@ struct ListView: View {
                                 isMoving = false
                             }
                         }
-                        listScreenVM.toggleItemCheckStatus(item: item)
+                        listVM.toggleItemCheckStatus(item: item)
                     }
                 }
                 .onMove(perform: moveItem)

@@ -9,7 +9,7 @@ import SwiftUI
 
 
 ///リストの見出しのビュー
-struct IndexLabel: Shape {
+struct IndexShape: Shape {
     func path(in rect: CGRect) -> Path {
         var path = Path()
         
@@ -39,6 +39,6 @@ struct IndexLabel: Shape {
 
 struct IndexLabel_Previews: PreviewProvider {
     static var previews: some View {
-        IndexLabel()
+        IndexShape()
     }
 }
