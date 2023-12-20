@@ -45,30 +45,8 @@ struct ListScreen: View {
                         
                         ///上に表示される３つのインデックス
                         ForEach(0 ..< 3) {num in
-                            IndexShape()
-                                .foregroundColor(.white)
-                                .frame(width: indexWidth, height: indexHeight)
-                                .shadow(color:.black.opacity(selection == num ? 0.5 : 0.0001), radius: 3, x: 3, y: 3)
-                            //ラベルの文字
-                                .overlay(Text("\(store.getIndexArray()[num])")
-                                    .font(.callout)
-                                    .fontWeight(.bold)
-                                    .foregroundColor(Color(selection == num ? .black : .gray)))
-                            //表示中だけラベルの色を濃くする
-                                .opacity(selection == num ? 1.0 : 0.6)
-                            //タブは猫ちゃんの前後になるように表示
-                                .zIndex(selection == num ? 1.0 : -1.0)
-                                .contentShape(Rectangle())
-                                .onTapGesture {
-                                    selection = num
-                                }
-                            //ラベル名長押しで編集用ウィンドウ表示
-                                .onLongPressGesture {
-                                    selection = num
-                                    isEdit = true
-                                }
-                                .accessibilityAddTraits(selection == num ? [.isSelected] : [])
-                                .accessibilityLabel("\(store.getIndexArray()[num]), tab")
+                            IndexView(num: num, selection: $selection, isEdit: $isEdit)
+
                         }
                     }//インデックスと動く猫ちゃんを並べたHStackここまで
                     .offset(x: -UIScreen.main.bounds.width / 18.5)
@@ -128,11 +106,11 @@ struct ListScreen: View {
                           //OKならチェックした項目をリストから削除
                           primaryButton: .destructive(Text("Delete"), action: {
                         listVM.deleteCompletedTask(labelNum: selection)
-                        
                     }),
                           secondaryButton: .cancel(Text("Cancel"), action:{}))
                 }
                 
+                ///編集アラート表示中に別のタブに遷移したら、編集アラートを非表示にする
                 .onDisappear(){
                     isEdit = false
                 }
