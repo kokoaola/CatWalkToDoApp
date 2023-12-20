@@ -7,34 +7,18 @@
 
 import SwiftUI
 
+
+///タスクが一件も存在しない時に表示するビュー
 struct TutorialSpeechBubble: View {
     var body: some View {
         VStack{
-            SpeechBubbleView1()
-                .offset(x:0, y:-10)
-                .overlay{
-                    VStack{
-                        Text("By long-pressing index,\nyou can edit label name.")
-                            .fontWeight(.bold)
-                            .lineSpacing(10)
-                    }
-                    .frame(width: AppSetting.screenWidth * 0.9, height: AppSetting.screenWidth * 0.3)
-                    .foregroundColor(.black).opacity(0.6)
-                }
+            //上部の吹き出しのビュー
+            SpeechBubbleView(text: "By long-pressing index,\nyou can edit label name.", isLotation: false)
             
             Spacer()
             
-            SpeechBubbleView2()
-                .offset(x:0, y:-10)
-                .overlay{
-                    VStack{
-                        Text("Add tasks from here.")
-                            .fontWeight(.bold)
-                            .lineSpacing(10)
-                    }
-                    .frame(width: AppSetting.screenWidth * 0.9, height: AppSetting.screenWidth * 0.3)
-                    .foregroundColor(.black).opacity(0.6)
-                }
+            //下部の吹き出しのビュー
+            SpeechBubbleView(text: "Add tasks from here.", isLotation: true)
             
             Spacer()
                 .frame(height: 50)
@@ -45,29 +29,30 @@ struct TutorialSpeechBubble: View {
 
 
 ///吹き出しのビュー
-struct SpeechBubbleView1: View{
+struct SpeechBubbleView: View{
+    var text: String
+    var isLotation: Bool
+    
     var body: some View {
         SpeechBubblePath()
+            .rotation(Angle(degrees: isLotation ? 180 : 0))
             .frame(width: AppSetting.screenWidth * 0.8, height: AppSetting.screenWidth * 0.3)
             .padding(.top)
             .shadow(color:.black.opacity(1), radius: 5, x: 3, y: 3)
-            .foregroundColor(AppSetting.mainColor2).opacity(0.3)
+            .foregroundColor(isLotation ? AppSetting.mainColor1 : AppSetting.mainColor2).opacity(0.3)
+            .offset(x:0, y:-10)
+            .overlay{
+                VStack{
+                    Text(LocalizedStringKey(text))
+                        .fontWeight(.bold)
+                        .lineSpacing(10)
+                }
+                .frame(width: AppSetting.screenWidth * 0.9, height: AppSetting.screenWidth * 0.3)
+                .opacity(0.6)
+            }
+            .contentShape(Rectangle())
     }
 }
-
-
-///吹き出しのビュー
-struct SpeechBubbleView2: View{
-    var body: some View {
-        SpeechBubblePath()
-            .rotation(Angle(degrees:180))
-            .frame(width: AppSetting.screenWidth * 0.8, height: AppSetting.screenWidth * 0.2)
-            .padding(.top)
-            .shadow(color:.black.opacity(1), radius: 5, x: 3, y: 3)
-            .foregroundColor(AppSetting.mainColor1).opacity(0.3)
-    }
-}
-
 
 
 ///吹き出しのパス
