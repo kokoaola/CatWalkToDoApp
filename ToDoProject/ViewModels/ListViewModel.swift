@@ -36,4 +36,15 @@ class ListScreenViewModel: ViewModelBase {
             }
         }
     }
+    
+    ///達成フラグを反転して保存する
+    func toggleItemCheckStatus(item: ItemDataType){
+        //Bool値を反転
+        let newStatus = !item.checked
+        //updateItemInCollectionメソッドを呼び出す
+        firebaseService.updateItemInCollection(oldItem: item, newCheckedStatus: newStatus, newTitle: item.title) { error in
+            //コレクションをリロード
+            self.fetchSelectedData(Int(item.label))
+        }
+    }
 }
