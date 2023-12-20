@@ -121,6 +121,7 @@ struct ListView: View {
     
     func moveItem(offsets: IndexSet, index: Int) {
         filterdList.move(fromOffsets: offsets, toOffset: index)
+        listVM.updateAfterMove(labelNum: labelNum)
 //        itemVM.updateIndexesForCollection(labelNum: labelNum)
     }
 }

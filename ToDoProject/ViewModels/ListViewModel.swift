@@ -46,4 +46,10 @@ class ListViewModel: ViewModelBase {
             self.fetchSelectedData(Int(item.label))
         }
     }
+    
+    func updateAfterMove(labelNum: Int){
+        firebaseService.updateIndexesForCollection(labelNum: labelNum) { error in
+            return
+        }
+    }
 }
