@@ -22,7 +22,6 @@ struct UnitCalScreen: View {
     @FocusState var isInputActiveVolume: Bool
     
     var body: some View {
-        NavigationStack{
             ZStack{
                 //上のヘッダーセクション
                 VStack{
@@ -131,7 +130,7 @@ struct UnitCalScreen: View {
             }
             .background(.white)
             .ignoresSafeArea()
-        }
+            .embedInNavigationView()
     }
     
     ///単価を計算して整数を返す関数

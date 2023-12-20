@@ -42,7 +42,6 @@ struct AddNewItemScreen: View {
         let index = store.getIndexArray()
         
         //ツールバー使用するためNavigationStack
-        NavigationStack{
             VStack(spacing: 50.0){
                 VStack(spacing:0){
                     //タスク追加モードならタグを表示
@@ -132,7 +131,7 @@ struct AddNewItemScreen: View {
                     //お気に入りOnならお気に入りリストに追加
                     if isFavorite{
                         AddNewItemScreenVM.addFavoriteList()
-                        
+
                         //お気に入りリストに存在するが、お気に入りスイッチがOFFになってる時はお気に入りから削除
                     }else if !isFavorite && AddNewItemScreenVM.favoriteList.contains(AddNewItemScreenVM.newName){
                         AddNewItemScreenVM.deleteFavoriteList()
@@ -168,8 +167,6 @@ struct AddNewItemScreen: View {
                         }
                     }
             }//Vstackここまで
-            
-            
             .padding()
             
             //ナビゲーションバーの設定
@@ -184,7 +181,8 @@ struct AddNewItemScreen: View {
                       //OKならチェックした項目をリストから削除
                       dismissButton: .default(Text("OK")))
             }
-        }//Navigationstackここまで
+            
+            .embedInNavigationView()
     }
 }
 

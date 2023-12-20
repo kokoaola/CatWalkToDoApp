@@ -9,7 +9,8 @@ import Foundation
 
 
 struct Constants {
-    static let collectionName = "users"
+    static let firebaseCollectionName = "users"
     
     static let favoriteListKey = "favoriteList"
+    
 }

@@ -35,7 +35,7 @@ struct MainScreen: View {
                     }
             }
             .tint(AppSetting.mainColor1)
-        }
+        }//VStackここまで
     }
 }
 

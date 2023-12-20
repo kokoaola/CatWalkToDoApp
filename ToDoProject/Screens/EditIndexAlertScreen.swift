@@ -27,9 +27,8 @@ struct EditIndexAlertScreen: View {
     ///キーボードフォーカス用変数（Doneボタン表示のため）
     @FocusState var isInputActive: Bool
     
+    
     var body: some View {
-        
-        
         VStack(alignment: .leading){
             
             //見出しの文言
@@ -117,15 +116,3 @@ struct EditIndexAlertScreen: View {
         }
     }
 }
-
-//struct EditLabelWindow_Previews: PreviewProvider {
-//    @State static var isEdit = false
-//    static var previews: some View {
-//        Group{
-//            EditLabelWindow(showAlert: $isEdit)
-//                .environment(\.locale, Locale(identifier:"en"))
-//            EditLabelWindow(showAlert: $isEdit)
-//                .environment(\.locale, Locale(identifier:"ja"))
-//        }
-//    }
-//}

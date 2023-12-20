@@ -12,8 +12,8 @@ import Firebase
 
 ///タスクの全リストを取り扱うビューモデル
 class ViewModelBase: ObservableObject {
+    //firebaseServiceクラスのインスタンスを作成
     let firebaseService = FirebaseDataService()
-    let defaults = UserDefaults.standard
     
     @Published var label0Item = [ItemDataType]()
     @Published var label1Item = [ItemDataType]()
@@ -21,9 +21,6 @@ class ViewModelBase: ObservableObject {
     
     
     init() {
-        
-        self.defaults.object(forKey:"SavedArray") as? [String] ?? ["", "", ""]
-        
         //すべてのデータをフェッチ
         fetchAllData()
     }

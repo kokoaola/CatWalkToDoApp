@@ -10,6 +10,9 @@ import Foundation
 
 ///AddNewItemScreenのビューモデル
 class AddNewItemScreenViewModel: ViewModelBase {
+    ///ユーザーデフォルト操作用
+    let defaults = UserDefaults.standard
+    
     ///タスクのお気に入りリストを格納した配列
     var favoriteList = [String]()
     
@@ -44,9 +47,7 @@ class AddNewItemScreenViewModel: ViewModelBase {
         //Firestoreの操作は非同期で実行されるが、FirebaseのaddDocumentメソッドはコールバックベースのAPIを使用しており、Swiftのawaitキーワードはない
         //コンプリーションハンドラを使用する場合、非同期操作が完了した後にコールバックが実行され、awaitを使用せずとも非同期処理の完了をハンドルすることができる
         firebaseService.addItemToCollection(title: newName, label: label, index: newIndex){ error in
-            if let error = error {
-                return
-            } else {
+            if let error = error { return } else {
                 //追加したコレクションをリロード
                 self.fetchSelectedData(label)
             }
@@ -85,22 +86,14 @@ class AddNewItemScreenViewModel: ViewModelBase {
         
         //データベースへの新規書き込み
         firebaseService.addItemToCollection(title: newName, label: newLabel, index: newIndex){ error in
-            if let error = error {
-                return
-            } else {
-                
+            if let error = error { return } else {
                 //削除用関数を呼び出してデータベースから古いアイテムを削除
                 self.firebaseService.deleteItemFromCollection(labelNum: oldLabel, items: [item]){error in
                     
-                    if let error = error {
-                        return
-                    } else {
-                        
+                    if let error = error { return } else {
                         //削除したコレクションのインデックス番号振り直し
                         self.firebaseService.updateIndexesForCollection(labelNum: oldLabel){error in
-                            if let error = error {
-                                return
-                            } else {
+                            if let error = error { return } else {
                                 //コレクションをリロード
                                 
                                 self.fetchSelectedData(oldLabel)

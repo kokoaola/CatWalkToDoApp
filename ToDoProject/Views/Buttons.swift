@@ -72,17 +72,3 @@ struct TrashButton: View {
             )
     }
 }
-
-
-
-struct CompButton_Previews: PreviewProvider {
-    @State static var aa = false
-    @State static var bb = false
-    static var cc = "aaaaa"
-    static var previews: some View {
-        VStack{
-            SaveButton()
-        }
-    }
-}
-

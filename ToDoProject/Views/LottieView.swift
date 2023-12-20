@@ -8,6 +8,37 @@
 import SwiftUI
 import Lottie
 
+
+struct CatView: View{
+    ///猫動かす用
+    @Binding var goRight: Bool
+    @Binding var flip: Bool
+    @Binding var startMoving: Bool
+
+    var body: some View{
+        ///猫のサイズ
+        let catSize = AppSetting.screenWidth / 6
+        let catLeftPosition = AppSetting.screenWidth + catSize * 2 / 2
+        let catRightPosition = 0 - catSize
+        
+        //猫のアニメーション
+        LottieView(filename: "cat", loop: .loop, shouldFlip: $flip, startAnimation: $startMoving)
+            .frame(width: catSize)
+            .position(x: goRight ? catLeftPosition : catRightPosition, y: 40)
+            .animation(.linear(duration: 7.0), value: goRight)
+            .shadow(color:.black.opacity(0.5), radius: 3, x: 3, y: 3)
+            .zIndex(1.0)
+            .allowsHitTesting(false)
+        //VoiceOver用
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("Walking cat")
+            .accessibilityAddTraits(.isImage)
+    }
+}
+
+
+
+///LottieのアニメーションをSwiftUI用に変換するビュー
 struct LottieView: UIViewRepresentable {
     
     let filename: String
@@ -22,9 +53,6 @@ struct LottieView: UIViewRepresentable {
         animationView.animation = LottieAnimation.named(filename)
         animationView.contentMode = .scaleAspectFill
         animationView.loopMode = .repeat(10)
-        
-//        animationView.accessibilityLabel = "歩く猫ちゃん"
-//        animationView.accessibilityTraits = .image
         
         // shouldFlipがtrueの場合のみ反転を適用
         if shouldFlip {

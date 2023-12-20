@@ -8,35 +8,32 @@
 import SwiftUI
 
 
-
+///設定画面のスクリーン
 struct SettingScreen: View {
     var body: some View {
-        NavigationView{
-            
             //上のナビゲーションバーっぽいセクション
             VStack(spacing:0){
                 LinearGradient(gradient: Gradient(colors: [AppSetting.mainColor1, AppSetting.mainColor2]), startPoint: .leading, endPoint: .trailing)
                     .frame(height: AppSetting.screenHeight * 0.15)
                     .overlay(
                         Text("Setting").font(.largeTitle).fontWeight(.bold).foregroundColor(.white).padding(.top, AppSetting.screenHeight * 0.05)
-                            .accessibilityAddTraits(.isHeader)
-                    )
+                            .accessibilityAddTraits(.isHeader))
                 
                 List{
+                    ///インデックスラベル設定用のビュー
                     Section{
                         NavigationLink(destination: {
                             EditIndexSettingScreen()
                         }, label: {Text("Edit Labels")})
                     }
-                    
-                    // NavigationLink(destination: {
-                    //     FavoriteList()
-                    // }, label: {Text("Edit Favorite List")})
+
                     Section{
+                        ///お問い合わせ用のビュー
                         NavigationLink(destination: {
                             ContactWebView()
                         }, label: {Text("Contact Us")})
                         
+                        ///プライバシーポリシー用のビュー
                         NavigationLink(destination: {
                             PrivacyPolicyView()
                         }, label: {Text("Privacy Policy")})
@@ -51,6 +48,6 @@ struct SettingScreen: View {
             }
             .ignoresSafeArea()
             .navigationBarTitleDisplayMode(.inline)
-        }
+            .embedInNavigationView()
     }
 }

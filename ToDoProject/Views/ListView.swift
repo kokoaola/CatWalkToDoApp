@@ -22,24 +22,20 @@ struct ListView: View {
     ///項目編集シートに渡すItemDataTypeを格納する変数
     @State private var selectedItem: ItemDataType? = nil
     
-    
     ///猫動かす用
     @Binding var goRight: Bool
     @Binding var isFlip: Bool
     @Binding var isMoving: Bool
     
+    
     var body: some View {
-        
-        
         if filterdList.isEmpty{
             ///保存されたアイテムが空ならチュートリアル吹き出しを表示
             TutorialSpeechBubble()
-            
         }else{
             ///保存されたアイテムが１つ以上あれば、リストにして表示
             //買い物リスト本体
             List{
-                
                 ForEach(filterdList){ item in
                     HStack{
                         //１列の中でVoiceOverのタップ領域を分けるためのHStack
@@ -73,8 +69,7 @@ struct ListView: View {
                                 showEditSheet = true
                             }
                         //VoiceOver用
-                            .padding(.vertical,10)
-                            .padding(.horizontal, 15)
+                            .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
                             .contentShape(Rectangle())
                             .accessibilityRemoveTraits(.isImage)
                             .accessibilityAddTraits(.isButton)
@@ -82,11 +77,12 @@ struct ListView: View {
                             .accessibilityHint("Edit this task, \(item.title)")
                         
                         
-                    }
+                    }//HStackここまで
                     .listRowBackground(Color.clear)
                     .opacity(item.checked ? 0.3 : 1)
                     //セルタップでボックスにチェック
                     .contentShape(Rectangle())
+                    //タップでチェックを反転＋猫歩く
                     .onTapGesture {
                         if !isMoving && !item.checked{
                             self.isFlip.toggle()
@@ -131,15 +127,3 @@ struct ListView: View {
     }
 }
 
-
-
-//struct ShoppingList1_Previews: PreviewProvider {
-//    @State static var aaa  = 0
-//    @State static var a = [ItemDataType]()
-//    @State static var startAnimation = false
-//    @State static var flip = false
-//    static var previews: some View {
-//        ListView(filterdList: $a, labelNum: $aaa, goRight: $startAnimation, isFlip: $flip,isMoving: $flip)
-//            .environmentObject(ItemViewModel())
-//    }
-//}

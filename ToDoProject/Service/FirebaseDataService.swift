@@ -28,10 +28,7 @@ extension FirebaseDataService{
         //ユーザーのIDを使用してコレクションにアクセス
         db.collection(self.collectionName).document(self.uid!).collection(subCollectionName).order(by: "index").addSnapshotListener { (snapshot, error) in
             var items = [ItemDataType]()
-            
-            if error != nil {
-                return
-            }
+            if error != nil { return }
             
             var tempArray = [ItemDataType]()
             
@@ -53,6 +50,8 @@ extension FirebaseDataService{
             completion(items)
         }
     }
+    
+    
     
     ///アイテムをデータベースに追加する
     func addItemToCollection(title: String, label: Int, index: Int, completion: @escaping (Error?) -> Void) {
@@ -94,6 +93,8 @@ extension FirebaseDataService{
         }
     }
     
+    
+    
     ///index番号を振り直す
     func updateIndexesForCollection(labelNum: Int, completion: @escaping (Error?) -> Void) {
         let subCollectionName = self.subCollectionNames[labelNum]
@@ -119,7 +120,7 @@ extension FirebaseDataService{
     
     
     
-    //データベースからアイテムを削除する
+    ///データベースからアイテムを削除する
     func deleteItemFromCollection(labelNum: Int, items:[ItemDataType], completion: @escaping (Error?) -> Void) {
         
         //操作したいコレクション名を取得

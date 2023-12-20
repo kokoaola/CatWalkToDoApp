@@ -12,7 +12,10 @@ import Firebase
 
 
 class ListViewModel: ViewModelBase {
-    
+    ///猫動かす用
+    @Published var goRight: Bool = false
+    @Published var isFlip: Bool = false
+    @Published var isMoving: Bool = false
     
     ///ゴミ箱ボタンが押された時の処理
     ///完了したタスクをまとめて削除
@@ -27,9 +30,7 @@ class ListViewModel: ViewModelBase {
             
             //インデックス番号の振り直し
             self.firebaseService.updateIndexesForCollection(labelNum: labelNum){error in
-                if let error = error {
-                    return
-                } else {
+                if let error = error { return } else {
                     //コレクションをリロード
                     self.fetchSelectedData(labelNum)
                 }
