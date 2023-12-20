@@ -9,6 +9,9 @@ import SwiftUI
 
 ///買い物リストのリスト部分
 struct ListView: View {
+    ///ViewModelのための変数
+    @ObservedObject var listScreenVM = ListViewModel()
+    
     ///引数で受け取る配列（リスト表示用）
     @Binding var filterdList: [ItemDataType]
     @Binding var labelNum: Int
@@ -18,11 +21,6 @@ struct ListView: View {
     
     ///項目編集シートに渡すItemDataTypeを格納する変数
     @State private var selectedItem: ItemDataType? = nil
-    
-    ///itemViewModelのための変数
-    @EnvironmentObject var itemVM: ItemViewModel
-    
-    @State var list: [ItemDataType] = []
     
     
     ///猫動かす用
@@ -36,7 +34,6 @@ struct ListView: View {
         if filterdList.isEmpty{
             ///保存されたアイテムが空ならチュートリアル吹き出しを表示
             TutorialSpeechBubble()
-            
             
         }else{
             ///保存されたアイテムが１つ以上あれば、リストにして表示
@@ -101,7 +98,7 @@ struct ListView: View {
                                 isMoving = false
                             }
                         }
-                        itemVM.toggleItemCheckStatus(item: item)
+                        listScreenVM.toggleItemCheckStatus(item: item)
                     }
                 }
                 .onMove(perform: moveItem)

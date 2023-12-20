@@ -11,7 +11,7 @@ import Firebase
 
 
 
-class ListScreenViewModel: ViewModelBase {
+class ListViewModel: ViewModelBase {
     
     
     ///ゴミ箱ボタンが押された時の処理

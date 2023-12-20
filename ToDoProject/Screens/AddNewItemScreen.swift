@@ -11,6 +11,7 @@ import SwiftUI
 struct AddNewItemScreen: View {
     ///itemViewModelのための変数
     @ObservedObject var AddNewItemScreenVM = AddNewItemScreenViewModel()
+    @EnvironmentObject var store: Store
     
     ///キーボードフォーカス用変数（Doneボタン表示のため）
     @FocusState var isInputActive: Bool
@@ -32,12 +33,15 @@ struct AddNewItemScreen: View {
     
     var editItem: ItemDataType?
     
-    var indexArray = ["1", "2", "3"]
-    
     var body: some View {
+        
+        
+        //編集モードか新規追加モードかのフラグ
         var isEdit: Bool{
             editItem != nil
         }
+        
+        let index = store.getIndexArray()
         
         //ツールバー使用するためNavigationStack
         NavigationStack{
@@ -82,11 +86,11 @@ struct AddNewItemScreen: View {
                         Spacer()
                     }
                     Picker(selection: $newLabelNum, label: Text("")){
-                        Text(indexArray[0])
+                        Text(index[0])
                             .tag(0)
-                        Text(indexArray[1])
+                        Text(index[1])
                             .tag(1)
-                        Text(indexArray[2])
+                        Text(index[2])
                             .tag(2)
                     }
                     .pickerStyle(.segmented)
@@ -122,18 +126,19 @@ struct AddNewItemScreen: View {
                     
                     //タスクを保存
                     Task{
-                            if let editItem{
-                                await AddNewItemScreenVM.updateLabelAndTitle(item: editItem, newLabel: newLabelNum)
-                            }else{
-                                AddNewItemScreenVM.addNewItem(label: newLabelNum)
+                        if let editItem{
+                            await AddNewItemScreenVM.updateLabelAndTitle(item: editItem, newLabel: newLabelNum)
+                        }else{
+                            AddNewItemScreenVM.addNewItem(label: newLabelNum)
                         }
                     }
                     
                     //お気に入りOnならお気に入りリストに追加
                     if isFavorite{
                         AddNewItemScreenVM.addFavoriteList()
-                    }else if !isFavorite && AddNewItemScreenVM.favoriteList.contains(AddNewItemScreenVM.newName){
+                        
                         //お気に入りリストに存在するが、お気に入りスイッチがOFFになってる時はお気に入りから削除
+                    }else if !isFavorite && AddNewItemScreenVM.favoriteList.contains(AddNewItemScreenVM.newName){
                         AddNewItemScreenVM.deleteFavoriteList()
                     }
                     

@@ -11,7 +11,7 @@ import SwiftUI
 
 struct ListScreen: View {
     ///ViewModelのための変数
-    @ObservedObject var ListScreenVM = ListScreenViewModel()
+    @ObservedObject var listScreenVM = ListViewModel()
     @EnvironmentObject var store: Store
     
     ///タスク追加シート管理用のフラグ
@@ -101,11 +101,11 @@ struct ListScreen: View {
                         
                         //買い物リストの中身(選択中のタブによって切り替える)
                         TabView(selection: $selection) {
-                            ListView(filterdList: $ListScreenVM.label0Item, labelNum: $selection, goRight: $goRight, isFlip: $flip, isMoving: $startMoving)
+                            ListView(filterdList: $listScreenVM.label0Item, labelNum: $selection, goRight: $goRight, isFlip: $flip, isMoving: $startMoving)
                                 .tag(0)
-                            ListView(filterdList: $ListScreenVM.label1Item, labelNum: $selection, goRight: $goRight, isFlip: $flip, isMoving: $startMoving)
+                            ListView(filterdList: $listScreenVM.label1Item, labelNum: $selection, goRight: $goRight, isFlip: $flip, isMoving: $startMoving)
                                 .tag(1)
-                            ListView(filterdList: $ListScreenVM.label2Item, labelNum: $selection, goRight: $goRight, isFlip: $flip, isMoving: $startMoving)
+                            ListView(filterdList: $listScreenVM.label2Item, labelNum: $selection, goRight: $goRight, isFlip: $flip, isMoving: $startMoving)
                                 .tag(2)
                         }
                         .background(.white)
@@ -143,7 +143,7 @@ struct ListScreen: View {
                     
                     //タスク新規追加用のシート
                     .sheet(isPresented: $showAddNewItemSheet, content: {
-                        AddNewItemScreen(newLabelNum: $selection, indexArray: store.getIndexArray())
+                        AddNewItemScreen(newLabelNum: $selection)
                     })
                     
                     //ゴミ箱ボタンが押された後の確認アラート
@@ -152,7 +152,7 @@ struct ListScreen: View {
                               message: Text("Do you want to delete the checked items?"),
                               //OKならチェックした項目をリストから削除
                               primaryButton: .destructive(Text("Delete"), action: {
-                            ListScreenVM.deleteCompletedTask(labelNum: selection)
+                            listScreenVM.deleteCompletedTask(labelNum: selection)
                             
                         }),
                               secondaryButton: .cancel(Text("Cancel"), action:{}))
@@ -197,9 +197,9 @@ struct ListScreen: View {
     }
 }
 
-struct ListScreen_Previews: PreviewProvider {
-    static var previews: some View {
-        ListScreen()
-            .environmentObject(ItemViewModel())
-    }
-}
+//struct ListScreen_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ListScreen()
+//            .environmentObject(ItemViewModel())
+//    }
+//}
