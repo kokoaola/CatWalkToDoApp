@@ -29,10 +29,6 @@ struct ListScreen: View {
     
     var body: some View {
         
-        ///インデックスのサイズ
-        let indexWidth = AppSetting.screenWidth / 3.5
-        let indexHeight = 60.0
-        
         ZStack{//インデックス長押し時のアラート表示のためのZStack
             ZStack{//下部の追加ボタンを配置するためのZStack
                 ///ToDoリストとラベルの表示
@@ -46,7 +42,6 @@ struct ListScreen: View {
                         ///上に表示される３つのインデックス
                         ForEach(0 ..< 3) {num in
                             IndexView(num: num, selection: $selection, isEdit: $isEdit, index: store.getIndexArray()[num])
-                            
                         }
                     }//インデックスと動く猫ちゃんを並べたHStackここまで
                     .offset(x: -UIScreen.main.bounds.width / 18.5)
@@ -65,6 +60,7 @@ struct ListScreen: View {
                     }
                     .background(.white)
                     .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                    
                     
                 }//VStackここまで
                 .padding(.top, 5)
@@ -114,12 +110,16 @@ struct ListScreen: View {
                 .onDisappear(){
                     isEdit = false
                 }
+                
             }//ZStackここまで
+            
+            
+            
             .background(LinearGradient(gradient: Gradient(colors: [AppSetting.mainColor1, AppSetting.mainColor2]), startPoint: .leading, endPoint: .trailing))
             //キーボードによるビューの押し上げをなくす
             .ignoresSafeArea(.keyboard,edges: .all)
             
-            //右上のゴミ箱マーク削除ボタン
+            ///右上のゴミ箱マーク削除ボタン
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Button(action: {

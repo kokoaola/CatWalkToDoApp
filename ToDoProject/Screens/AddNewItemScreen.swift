@@ -46,7 +46,7 @@ struct AddNewItemScreen: View {
             VStack(spacing:0){
                 //タスク追加モードならタグを表示
                 if !isEdit{
-                    //お気に入り登録されたタスクがある場合は文章を表示.font(.footnote)
+                    //お気に入り登録されたタスクがある場合は文章を表示
                     if !AddNewItemScreenVM.favoriteList.isEmpty{
                         HStack{
                             Text("Add from Favorites")
