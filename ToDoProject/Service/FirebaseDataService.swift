@@ -15,7 +15,7 @@ class FirebaseDataService {
     private let db = Firestore.firestore()
     private let collectionName = "users"
     private let uid = Auth.auth().currentUser?.uid
-    private let subCollectionNames = ["label0Item", "label1Item", "label2Item"]
+//    private let subCollectionNames = ["label0Item", "label1Item", "label2Item"]
 }
 
 
@@ -23,7 +23,7 @@ extension FirebaseDataService{
     ///引数で渡されたラベルに応じたデータを取得するメソッド
     //非同期処理では、処理の結果がすぐには利用できないためコールバックパターンを使用し、コールバック関数を通じてitemsを返す
     func fetchDataForCollection(_ label: Int, completion: @escaping ([ItemDataType]) -> Void) {
-        let subCollectionName = subCollectionNames[label]
+        let subCollectionName = Constants.firebaseSubCollectionNameArray[label]
         
         //ユーザーのIDを使用してコレクションにアクセス
         db.collection(self.collectionName).document(self.uid!).collection(subCollectionName).order(by: "index").addSnapshotListener { (snapshot, error) in
@@ -55,7 +55,7 @@ extension FirebaseDataService{
     
     ///アイテムをデータベースに追加する
     func addItemToCollection(title: String, label: Int, index: Int, completion: @escaping (Error?) -> Void) {
-        let subCollectionName = subCollectionNames[label]
+        let subCollectionName = Constants.firebaseSubCollectionNameArray[label]
         
         let data = [
             "title": title,
@@ -78,7 +78,7 @@ extension FirebaseDataService{
     func updateItemInCollection(oldItem: ItemDataType, newCheckedStatus:Bool, newTitle: String, completion: @escaping (Error?) -> Void) {
         
         //コレクション名を取得
-        let subCollectionName = subCollectionNames[Int(oldItem.label)]
+        let subCollectionName = Constants.firebaseSubCollectionNameArray[Int(oldItem.label)]
         
         
         db.collection(self.collectionName).document(self.uid!).collection(subCollectionName).document(oldItem.id).updateData([
@@ -97,7 +97,7 @@ extension FirebaseDataService{
     
     ///index番号を振り直す
     func updateIndexesForCollection(labelNum: Int, completion: @escaping (Error?) -> Void) {
-        let subCollectionName = self.subCollectionNames[labelNum]
+        let subCollectionName = Constants.firebaseSubCollectionNameArray[labelNum]
         
         fetchDataForCollection(labelNum) { itemArray in
             //順番にIndexを振り直して保存する
@@ -124,7 +124,7 @@ extension FirebaseDataService{
     func deleteItemFromCollection(labelNum: Int, items:[ItemDataType], completion: @escaping (Error?) -> Void) {
         
         //操作したいコレクション名を取得
-        let subCollectionName = subCollectionNames[labelNum]
+        let subCollectionName = Constants.firebaseSubCollectionNameArray[labelNum]
         
         let group = DispatchGroup()
         //優先する処理

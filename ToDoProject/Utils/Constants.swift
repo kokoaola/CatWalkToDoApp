@@ -11,6 +11,7 @@ import Foundation
 struct Constants {
     ///firebaseのコレクション名
     static let firebaseCollectionName = "users"
+    static let firebaseSubCollectionNameArray = ["label0Item", "label1Item", "label2Item"]
     
     ///お気に入りリストのUserDefaultsのキー
     static let favoriteListKey = "favoriteList"
