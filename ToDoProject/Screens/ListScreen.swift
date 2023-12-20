@@ -45,8 +45,8 @@ struct ListScreen: View {
                         
                         ///上に表示される３つのインデックス
                         ForEach(0 ..< 3) {num in
-                            IndexView(num: num, selection: $selection, isEdit: $isEdit)
-
+                            IndexView(num: num, selection: $selection, isEdit: $isEdit, index: store.getIndexArray()[num])
+                            
                         }
                     }//インデックスと動く猫ちゃんを並べたHStackここまで
                     .offset(x: -UIScreen.main.bounds.width / 18.5)
@@ -114,7 +114,6 @@ struct ListScreen: View {
                 .onDisappear(){
                     isEdit = false
                 }
-                
             }//ZStackここまで
             .background(LinearGradient(gradient: Gradient(colors: [AppSetting.mainColor1, AppSetting.mainColor2]), startPoint: .leading, endPoint: .trailing))
             //キーボードによるビューの押し上げをなくす
@@ -122,7 +121,6 @@ struct ListScreen: View {
             
             //右上のゴミ箱マーク削除ボタン
             .toolbar {
-                
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Button(action: {
                         showCompleteTaskAlert.toggle()
@@ -133,12 +131,10 @@ struct ListScreen: View {
                     .editAccessibility(label:"Delete", hint:"Remove all completed tasks from the list", addTraits: .isButton)
                 }
             }
-            
             .embedInNavigationView()
             .opacity(isEdit ? 0.3:1.0)
             
-            
-            
+
             ///ラベル名がロングタップされたら編集用ウィンドウを表示
             if isEdit{
                 LinearGradient(gradient: Gradient(colors: [AppSetting.mainColor1, AppSetting.mainColor2]), startPoint: .leading, endPoint: .trailing).ignoresSafeArea().opacity(0.5)
@@ -146,6 +142,5 @@ struct ListScreen: View {
                     .environmentObject(store)
             }
         }
-        
     }
 }

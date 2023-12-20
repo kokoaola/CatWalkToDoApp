@@ -8,17 +8,17 @@
 import SwiftUI
 
 struct IndexView: View{
-    ///インデックスラベルをアプリ内で共有する環境変数
-    @EnvironmentObject var store: Store
-
     ///表示するラベルの番号を格納するプロパティ
     var num: Int
     
-    ///選択中のラベルを格納するプロパティ
+    ///ユーザーが選択中のラベルを格納するプロパティ
     @Binding var selection: Int
     
     ///ラベル編集アラート管理用のフラグ
     @Binding var isEdit:Bool
+    
+    ///ラベル文
+    var index: String
     
     ///インデックスのサイズ
     let indexWidth = AppSetting.screenWidth / 3.5
@@ -30,11 +30,12 @@ struct IndexView: View{
             .frame(width: indexWidth, height: indexHeight)
             .shadow(color:.black.opacity(selection == num ? 0.5 : 0.0001), radius: 3, x: 3, y: 3)
         //ラベルの文字
-            .overlay(Text("\(store.getIndexArray()[num])")
-                .font(.callout)
-                .fontWeight(.bold)
-                .foregroundColor(Color(selection == num ? .black : .gray)))
-        //表示中だけラベルの色を濃くする
+            .overlay(
+                Text(index)
+                    .font(.callout)
+                    .fontWeight(.bold)
+                    .foregroundColor(Color(selection == num ? .black : .gray)))
+        //ユーザーが選択中の時はラベルの色を濃くする
             .opacity(selection == num ? 1.0 : 0.6)
         //タブは猫ちゃんの前後になるように表示
             .zIndex(selection == num ? 1.0 : -1.0)
@@ -48,7 +49,7 @@ struct IndexView: View{
                 isEdit = true
             }
             .accessibilityAddTraits(selection == num ? [.isSelected] : [])
-            .accessibilityLabel("\(store.getIndexArray()[num]), tab")
+            .accessibilityLabel("\(index), tab")
     }
 }
 
