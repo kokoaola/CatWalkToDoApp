@@ -6,16 +6,14 @@
 //
 
 import SwiftUI
-import FirebaseFirestore
-import Firebase
 
-
-
+///リスト全体に関するビューモデル
 class ListViewModel: ViewModelBase {
     ///猫動かす用
     @Published var stayPositionRight: Bool = false
     @Published var isFacingRight: Bool = true
     @Published var isMoving: Bool = false
+    
     
     ///ゴミ箱ボタンが押された時の処理
     ///完了したタスクをまとめて削除

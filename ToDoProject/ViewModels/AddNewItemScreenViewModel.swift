@@ -110,12 +110,9 @@ class AddNewItemScreenViewModel: ViewModelBase {
     ///タスク名をお気に入りリストへ保存するメソッド
     func addFavoriteList(){
         //すでに同名のタスクが存在する場合は何もしない
-        if favoriteList.contains(newName){
-            return
-        }
+        if favoriteList.contains(newName){ return }
         //お気に入り配列に追加して更新
         favoriteList.append(newName)
-        
         //ユーザーデフォルトに保存
         defaults.set(favoriteList, forKey: Constants.favoriteListKey)
     }

@@ -6,11 +6,8 @@
 //
 
 import SwiftUI
-import FirebaseFirestore
-import Firebase
 
-
-///タスクの全リストを取り扱うビューモデル
+///タスクの全リストを取り扱うベースのビューモデル
 class ViewModelBase: ObservableObject {
     //firebaseServiceクラスのインスタンスを作成
     let firebaseService = FirebaseDataService()
@@ -24,7 +21,6 @@ class ViewModelBase: ObservableObject {
         //すべてのデータをフェッチ
         fetchAllData()
     }
-    
     
     ///すべてのデータをフェッチするメソッド
     func fetchAllData() {
