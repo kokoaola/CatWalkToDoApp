@@ -45,8 +45,8 @@ struct EditIndexAlertScreen: View {
                 .border(.gray, width: 1)
                 .frame(height: 80)
                 .opacity(editText.isEmpty ? 0.5 : 1)
-                .accessibilityLabel("Text field to change custom label name.")
                 .focused($isInputActive)
+                .editAccessibility(label: "Text field to change custom label name.")
             
             //文字数オーバー時の警告
             Text("Only up to \(maxLength) characters can be set").font(.caption) .font(.caption)

@@ -45,13 +45,13 @@ struct ListView: View {
                             Spacer()
                         }
                         .padding(.vertical, 10)
-                        .contentShape(Rectangle())
+
                         //VoiceOver用
+                        .contentShape(Rectangle())
                         //タスク名とチェック済みかどうかの読み上げ
                         .accessibilityElement(children: .combine)
                         .accessibilityLabel(item.checked ? LocalizedStringKey("Checked,\(item.title)") : LocalizedStringKey("Unchecked,\(item.title)"))
                         .accessibilityAddTraits(.isButton)
-                        .accessibilityRemoveTraits(.isSelected)
                         
                         
                         //編集マーク表示
@@ -66,12 +66,8 @@ struct ListView: View {
                         //VoiceOver用
                             .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
                             .contentShape(Rectangle())
-                            .accessibilityRemoveTraits(.isImage)
-                            .accessibilityAddTraits(.isButton)
-                            .accessibilityLabel("Edit")
-                            .accessibilityHint("Edit this task, \(item.title)")
-                        
-                        
+                            .editAccessibility(label: "Edit", removeTraits: .isImage, addTraits: .isButton)
+                            .accessibilityHint(LocalizedStringKey("Edit this task, \(item.title)"))
                     }//HStackここまで
                     
                     

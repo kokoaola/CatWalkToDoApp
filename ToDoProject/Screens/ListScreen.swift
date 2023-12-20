@@ -26,11 +26,6 @@ struct ListScreen: View {
     ///ラベル編集アラート管理用のフラグ
     @State var isEdit = false
     
-    ///猫動かす用
-    //    @State var goRight: Bool = false
-    //    @State var isFlip: Bool = false
-    //    @State var isMoving: Bool = false
-    
     
     var body: some View {
         
@@ -39,18 +34,16 @@ struct ListScreen: View {
         let indexHeight = 60.0
         
         ZStack{//インデックス長押し時のアラート表示のためのZStack
-            
             ZStack{//下部の追加ボタンを配置するためのZStack
-                
                 ///ToDoリストとラベルの表示
                 VStack {
                     
                     //インデックスと動く猫ちゃんを並べたHStack
                     HStack{
-                        //猫のアニメーション
+                        ///猫のアニメーション
                         CatView(listVM: listVM)
                         
-                        //上に表示される３つのインデックス
+                        ///上に表示される３つのインデックス
                         ForEach(0 ..< 3) {num in
                             IndexShape()
                                 .foregroundColor(.white)
@@ -77,13 +70,13 @@ struct ListScreen: View {
                                 .accessibilityAddTraits(selection == num ? [.isSelected] : [])
                                 .accessibilityLabel("\(store.getIndexArray()[num]), tab")
                         }
-                    }//HStackここまで
+                    }//インデックスと動く猫ちゃんを並べたHStackここまで
                     .offset(x: -UIScreen.main.bounds.width / 18.5)
                     .padding(.bottom, -20)
                     .frame(height: 60)
                     
                     
-                    //買い物リストの中身(選択中のタブによって切り替える)
+                    ///買い物リストの中身(選択中のタブによって切り替える)
                     TabView(selection: $selection) {
                         ListView(listVM: listVM, filterdList: $listVM.label0Item, labelNum: $selection)
                             .tag(0)
@@ -97,7 +90,6 @@ struct ListScreen: View {
                     
                 }//VStackここまで
                 .padding(.top, 5)
-                
                 //編集用アラート表示中はタップ無効
                 .disabled(isEdit)
                 .accessibilityHidden(isEdit)
@@ -111,28 +103,25 @@ struct ListScreen: View {
                         showAddNewItemSheet = true
                     }) {
                         CatAddButton(color: AppSetting.mainColor2)
+                            .padding(5)
                     }
-                    
-                    //VoiceOver
+                    //VoiceOver用の設定
                     .contentShape(Rectangle())
-                    .accessibilityLabel("Add new task")
-                    .accessibilityAddTraits(.isButton)
-                    .padding(5)
+                    .editAccessibility(label:"Add new task", addTraits: .isButton)
+                    
                 }//VStackここまで
                 .ignoresSafeArea(.keyboard, edges: .bottom)
-                //編集用アラート表示中はタップ無効
+                //インデックス編集用アラート表示中はタップ無効
                 .disabled(isEdit)
                 .accessibilityHidden(isEdit)
                 
                 
-                
-                
-                //タスク新規追加用のシート
+                ///タスク新規追加用のシート
                 .sheet(isPresented: $showAddNewItemSheet, content: {
                     AddNewItemScreen(newLabelNum: $selection)
                 })
                 
-                //ゴミ箱ボタンが押された後の確認アラート
+                ///ゴミ箱ボタンが押された後の確認アラート
                 .alert(isPresented: $showCompleteTaskAlert){
                     Alert(title: Text("Task Completion"),
                           message: Text("Do you want to delete the checked items?"),
@@ -163,9 +152,7 @@ struct ListScreen: View {
                         TrashButton()
                     }
                     //VoiceOver
-                    .accessibilityLabel("Delete")
-                    .accessibilityHint("Remove all completed tasks from the list")
-                    .accessibilityAddTraits(.isButton)
+                    .editAccessibility(label:"Delete", hint:"Remove all completed tasks from the list", addTraits: .isButton)
                 }
             }
             

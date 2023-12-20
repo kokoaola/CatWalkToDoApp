@@ -13,7 +13,6 @@ struct IndexShape: Shape {
     func path(in rect: CGRect) -> Path {
         var path = Path()
         
-        
         // 左下の角を開始点として
         path.move(to: CGPoint(x: rect.minX, y: rect.maxY))
         
@@ -27,10 +26,6 @@ struct IndexShape: Shape {
         
         // 右下へ移動
         path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
-        
-        // 下の辺は描画しないため、左下へ直接戻る
-        //        path.addLine(to: CGPoint(x: rect.minX - 1.5, y: rect.maxY))
-        
         
         return path
     }

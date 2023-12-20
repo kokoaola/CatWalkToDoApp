@@ -85,12 +85,14 @@ struct UnitCalScreen: View {
                     //計算結果を表示するセクション
                     VStack{
                         //単価を計算して表示（小数点3桁より下は切り捨て）
-                        VStack{
-                            Text("Per Unit").font(.title2).padding(.vertical, 5).padding(.trailing, 100)
-                            CurrencyText(value: keisan(price:price ?? 0, amount:amount ?? 0))
-                        }
-                        .padding(.bottom)
-                        //MARK: -
+                            VStack{
+                                Text("Per Unit").font(.title2).padding(.vertical, 5).padding(.trailing, 100)
+                                CurrencyText(value: keisan(price:price ?? 0, amount:amount ?? 0))
+                            }
+                            .padding(.bottom)
+                        
+                        //アクセシビリティ用
+                        .contentShape(Rectangle())
                         .accessibilityElement(children: .combine)
                         .accessibilityLabel("\(AppSetting.currencyString(from: keisan(price:price ?? 0, amount:amount ?? 0))), Per Unit")
                         

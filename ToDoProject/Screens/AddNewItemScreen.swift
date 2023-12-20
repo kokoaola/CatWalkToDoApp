@@ -70,7 +70,7 @@ struct AddNewItemScreen: View {
                                         RoundedRectangle(cornerRadius: 20)
                                             .stroke(Color.primary, lineWidth: tag == newName ? 1 : 0))
                             }
-                        }                        .font(.footnote)
+                        }.font(.footnote)
                     }
                 }//Vstackここまで
                 
@@ -162,8 +162,7 @@ struct AddNewItemScreen: View {
                             Button("Close") {
                                 dismiss()
                             }
-                            .accessibilityLabel("Close")
-                            .accessibilityAddTraits(.isButton)
+                            .editAccessibility(label: "Close", addTraits: .isButton)
                         }
                     }
             }//Vstackここまで

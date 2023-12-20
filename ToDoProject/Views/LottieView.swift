@@ -30,8 +30,7 @@ struct CatView: View{
             .allowsHitTesting(false)
         //VoiceOver用
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel("Walking cat")
-            .accessibilityAddTraits(.isImage)
+            .editAccessibility(label: "Walking cat", addTraits: .isImage)
     }
 }
 
