@@ -9,8 +9,14 @@ import Foundation
 
 
 struct Constants {
+    ///firebaseのコレクション名
     static let firebaseCollectionName = "users"
     
+    ///お気に入りリストのUserDefaultsのキー
     static let favoriteListKey = "favoriteList"
     
+    ///インデックス名のUserDefaultsのキー
+    static let index0Key = "Label0"
+    static let index1Key = "Label1"
+    static let index2Key = "Label2"
 }

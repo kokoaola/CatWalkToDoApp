@@ -26,28 +26,28 @@ class Store: ObservableObject {
     ///グローバルオブジェクト
     @Published var indexLabel0 = "1"{
         didSet {
-            defaults.set(indexLabel0, forKey: "label0")
+            defaults.set(indexLabel0, forKey: Constants.index0Key)
         }
     }
     
     @Published var indexLabel1 = "2"{
         didSet {
-            defaults.set(indexLabel1, forKey: "label1")
+            defaults.set(indexLabel1, forKey: Constants.index1Key)
         }
     }
     
     @Published var indexLabel2 = "3"{
         didSet {
-            defaults.set(indexLabel2, forKey: "label2")
+            defaults.set(indexLabel2, forKey: Constants.index2Key)
         }
     }
     
     
     init(){
         //お気に入り登録されたタスクを取得
-        self.indexLabel0 = defaults.string(forKey:"label0") ?? "1"
-        self.indexLabel1 = defaults.string(forKey:"label1") ?? "2"
-        self.indexLabel2 = defaults.string(forKey:"label2") ?? "3"
+        self.indexLabel0 = defaults.string(forKey: Constants.index0Key) ?? "1"
+        self.indexLabel1 = defaults.string(forKey: Constants.index1Key) ?? "2"
+        self.indexLabel2 = defaults.string(forKey: Constants.index2Key) ?? "3"
     }
     
     ///都市名を配列に追加する関数
