@@ -68,7 +68,7 @@ struct ListScreen: View {
                             
                             //上に表示される３つのインデックス
                             ForEach(0 ..< 3) {num in
-                                IndexLabel()
+                                IndexShape()
                                     .foregroundColor(.white)
                                     .frame(width: indexWidth, height: indexHeight)
                                     .shadow(color:.black.opacity(selection == num ? 0.5 : 0.0001), radius: 3, x: 3, y: 3)
@@ -196,10 +196,3 @@ struct ListScreen: View {
         
     }
 }
-
-//struct ListScreen_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ListScreen()
-//            .environmentObject(ItemViewModel())
-//    }
-//}

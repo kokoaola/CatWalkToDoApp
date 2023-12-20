@@ -9,7 +9,7 @@ import SwiftUI
 
 ///タスクの新規追加シート
 struct AddNewItemScreen: View {
-    ///itemViewModelのための変数
+    ///ViewModelのための変数
     @ObservedObject var AddNewItemScreenVM = AddNewItemScreenViewModel()
     @EnvironmentObject var store: Store
     
@@ -34,21 +34,17 @@ struct AddNewItemScreen: View {
     var editItem: ItemDataType?
     
     var body: some View {
-        
-        
         //編集モードか新規追加モードかのフラグ
         var isEdit: Bool{
             editItem != nil
         }
-        
+        //インデックスラベルを配列にして格納
         let index = store.getIndexArray()
         
         //ツールバー使用するためNavigationStack
         NavigationStack{
             VStack(spacing: 50.0){
-                
                 VStack(spacing:0){
-                    
                     //タスク追加モードならタグを表示
                     if !isEdit{
                         //お気に入り登録されたタスクがある場合は文章を表示.font(.footnote)
@@ -77,7 +73,7 @@ struct AddNewItemScreen: View {
                             }
                         }                        .font(.footnote)
                     }
-                }
+                }//Vstackここまで
                 
                 //ラベル選択用のピッカー
                 VStack{
@@ -171,7 +167,7 @@ struct AddNewItemScreen: View {
                             .accessibilityAddTraits(.isButton)
                         }
                     }
-            }
+            }//Vstackここまで
             
             
             .padding()
@@ -188,13 +184,7 @@ struct AddNewItemScreen: View {
                       //OKならチェックした項目をリストから削除
                       dismissButton: .default(Text("OK")))
             }
-        }
+        }//Navigationstackここまで
     }
 }
 
-//struct AddNewItemScreen_Previews: PreviewProvider {
-//    static var previews: some View {
-//        AddNewItemScreen()
-//            .environmentObject(ItemViewModel())
-//    }
-//}

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-import SwiftUI
+
 
 struct SettingScreen: View {
     var body: some View {
@@ -22,54 +22,35 @@ struct SettingScreen: View {
                             .accessibilityAddTraits(.isHeader)
                     )
                 
-//                VStack{
-                    List{
-                        Section{
-                            NavigationLink(destination: {
-                                EditIndexSettingScreen()
-                            }, label: {Text("Edit Labels")})
-                        }
-                        
-                        // NavigationLink(destination: {
-                        //     FavoriteList()
-                        // }, label: {Text("Edit Favorite List")})
-                        Section{
-                            NavigationLink(destination: {
-                                ContactWebView()
-                            }, label: {Text("Contact Us")})
-                            
-                            NavigationLink(destination: {
-                                PrivacyPolicyView()
-                            }, label: {Text("Privacy Policy")})
-                        }
+                List{
+                    Section{
+                        NavigationLink(destination: {
+                            EditIndexSettingScreen()
+                        }, label: {Text("Edit Labels")})
                     }
-                    .listStyle(.insetGrouped)
                     
-                    .padding(.top)
-//                }
+                    // NavigationLink(destination: {
+                    //     FavoriteList()
+                    // }, label: {Text("Edit Favorite List")})
+                    Section{
+                        NavigationLink(destination: {
+                            ContactWebView()
+                        }, label: {Text("Contact Us")})
+                        
+                        NavigationLink(destination: {
+                            PrivacyPolicyView()
+                        }, label: {Text("Privacy Policy")})
+                    }
+                }
+                .listStyle(.insetGrouped)
+                .padding(.top)
+                
                 //背景グラデーション設定
                 .scrollContentBackground(.hidden)
                 .background(.gray.opacity(0.1))
-                //                .modifier(background(.secondary).foregroundStyle(LinearGradient(gradient: Gradient(colors: [AppSetting.mainColor1, AppSetting.mainColor2]), startPoint: .leading, endPoint: .trailing)))
-                
-                
             }
             .ignoresSafeArea()
             .navigationBarTitleDisplayMode(.inline)
         }
-        
-    }
-}
-
-struct SettingScreen_Previews: PreviewProvider {
-    static var previews: some View {
-        
-        Group{
-            SettingScreen()
-                .environment(\.locale, Locale(identifier: "en"))
-            SettingScreen()
-                .environment (\.locale, Locale (identifier: "ja"))
-        }
-        
     }
 }
