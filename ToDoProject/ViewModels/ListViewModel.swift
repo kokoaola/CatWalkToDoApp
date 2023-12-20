@@ -13,8 +13,8 @@ import Firebase
 
 class ListViewModel: ViewModelBase {
     ///猫動かす用
-    @Published var goRight: Bool = false
-    @Published var isFlip: Bool = false
+    @Published var stayPositionRight: Bool = false
+    @Published var isFacingRight: Bool = true
     @Published var isMoving: Bool = false
     
     ///ゴミ箱ボタンが押された時の処理

@@ -10,7 +10,7 @@ import SwiftUI
 ///買い物リストのリスト部分
 struct ListView: View {
     ///ViewModelのための変数
-    @ObservedObject var listVM = ListViewModel()
+    @ObservedObject var listVM: ListViewModel
     
     ///引数で受け取る配列（リスト表示用）
     @Binding var filterdList: [ItemDataType]
@@ -21,12 +21,7 @@ struct ListView: View {
     
     ///項目編集シートに渡すItemDataTypeを格納する変数
     @State private var selectedItem: ItemDataType? = nil
-    
-    ///猫動かす用
-    @Binding var goRight: Bool
-    @Binding var isFlip: Bool
-    @Binding var isMoving: Bool
-    
+
     
     var body: some View {
         if filterdList.isEmpty{
@@ -78,23 +73,30 @@ struct ListView: View {
                         
                         
                     }//HStackここまで
+                    
+                    
                     .listRowBackground(Color.clear)
                     .opacity(item.checked ? 0.3 : 1)
                     //セルタップでボックスにチェック
                     .contentShape(Rectangle())
                     //タップでチェックを反転＋猫歩く
                     .onTapGesture {
-                        if !isMoving && !item.checked{
-                            self.isFlip.toggle()
-                            isMoving = true
+                        listVM.toggleItemCheckStatus(item: item)
+                        
+                        //猫が歩いていなくて、チェックマークがtrueの時
+                        if !listVM.isMoving && !item.checked{
+                            //猫を裏返す
+                            listVM.isFacingRight.toggle()
+                            //猫移動中にセット
+                            listVM.isMoving = true
+                            //猫歩く
                             withAnimation() {
-                                self.goRight.toggle()
+                                listVM.stayPositionRight.toggle()
                             }
                             DispatchQueue.main.asyncAfter(deadline: .now() + 7.5) {
-                                isMoving = false
+                                listVM.isMoving = false
                             }
                         }
-                        listVM.toggleItemCheckStatus(item: item)
                     }
                 }
                 .onMove(perform: moveItem)

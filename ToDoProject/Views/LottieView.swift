@@ -10,22 +10,21 @@ import Lottie
 
 
 struct CatView: View{
-    ///猫動かす用
-    @Binding var goRight: Bool
-    @Binding var flip: Bool
-    @Binding var startMoving: Bool
+    ///ViewModelのための変数
+    @ObservedObject var listVM: ListViewModel
 
     var body: some View{
         ///猫のサイズ
         let catSize = AppSetting.screenWidth / 6
-        let catLeftPosition = AppSetting.screenWidth + catSize * 2 / 2
-        let catRightPosition = 0 - catSize
+        ///猫のポジション
+        let rightPosition = AppSetting.screenWidth + catSize * 2 / 2
+        let leftPosition = 0 - catSize
         
         //猫のアニメーション
-        LottieView(filename: "cat", loop: .loop, shouldFlip: $flip, startAnimation: $startMoving)
+        LottieView(isFacingRight: $listVM.isFacingRight, startAnimation: $listVM.isMoving)
             .frame(width: catSize)
-            .position(x: goRight ? catLeftPosition : catRightPosition, y: 40)
-            .animation(.linear(duration: 7.0), value: goRight)
+            .position(x: listVM.stayPositionRight ? rightPosition : leftPosition, y: 40)
+            .animation(.linear(duration: 7.0), value: listVM.stayPositionRight)
             .shadow(color:.black.opacity(0.5), radius: 3, x: 3, y: 3)
             .zIndex(1.0)
             .allowsHitTesting(false)
@@ -41,9 +40,10 @@ struct CatView: View{
 ///LottieのアニメーションをSwiftUI用に変換するビュー
 struct LottieView: UIViewRepresentable {
     
-    let filename: String
-    let loop: LottieLoopMode
-    @Binding var shouldFlip: Bool  // 左右反転するか否かのフラグ
+    let filename: String = "cat"
+    let loop: LottieLoopMode = .loop
+    // 左右反転するか否かのフラグ
+    @Binding var isFacingRight: Bool
     @Binding var startAnimation: Bool  // アニメーションを開始/停止するかのフラグ
     
     func makeUIView(context: UIViewRepresentableContext<LottieView>) -> UIView {
@@ -54,8 +54,8 @@ struct LottieView: UIViewRepresentable {
         animationView.contentMode = .scaleAspectFill
         animationView.loopMode = .repeat(10)
         
-        // shouldFlipがtrueの場合のみ反転を適用
-        if shouldFlip {
+        // isFacingRightがtrueの場合のみ反転を適用
+        if isFacingRight {
             animationView.transform = CGAffineTransform(scaleX: -1, y: 1)
         }
         
@@ -76,7 +76,7 @@ struct LottieView: UIViewRepresentable {
                 animationView.play()
             }
             
-            if shouldFlip {
+            if isFacingRight {
                 animationView.transform = CGAffineTransform(scaleX: -1, y: 1)
             } else {
                 animationView.transform = CGAffineTransform.identity

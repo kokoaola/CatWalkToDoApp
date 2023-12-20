@@ -26,9 +26,14 @@ struct ListScreen: View {
     ///ラベル編集アラート管理用のフラグ
     @State var isEdit = false
     
+    ///猫動かす用
+    //    @State var goRight: Bool = false
+    //    @State var isFlip: Bool = false
+    //    @State var isMoving: Bool = false
+    
     
     var body: some View {
-
+        
         ///インデックスのサイズ
         let indexWidth = AppSetting.screenWidth / 3.5
         let indexHeight = 60.0
@@ -39,25 +44,11 @@ struct ListScreen: View {
                 
                 ///ToDoリストとラベルの表示
                 VStack {
-
+                    
                     //インデックスと動く猫ちゃんを並べたHStack
                     HStack{
-                        
-                        
-                        CatView(goRight: $listVM.goRight, listVM: $listVM.flip, startMoving: $listVM.startMoving)
-//                        //猫のアニメーション
-//                        LottieView(filename: "cat", loop: .loop, shouldFlip: $flip, startAnimation: $startMoving)
-//                            .frame(width: catSize)
-//                            .position(x: goRight ? catLeftPosition : catRightPosition, y: 40)
-//                            .animation(.linear(duration: 7.0), value: goRight)
-//                            .shadow(color:.black.opacity(0.5), radius: 3, x: 3, y: 3)
-//                            .zIndex(1.0)
-//                            .allowsHitTesting(false)
-//                        //VoiceOver用
-//                            .accessibilityElement(children: .ignore)
-//                            .accessibilityLabel("Walking cat")
-//                            .accessibilityAddTraits(.isImage)
-//                        
+                        //猫のアニメーション
+                        CatView(listVM: listVM)
                         
                         //上に表示される３つのインデックス
                         ForEach(0 ..< 3) {num in
@@ -94,11 +85,11 @@ struct ListScreen: View {
                     
                     //買い物リストの中身(選択中のタブによって切り替える)
                     TabView(selection: $selection) {
-                        ListView(filterdList: $listVM.label0Item, labelNum: $selection, goRight: $goRight, isFlip: $flip, isMoving: $startMoving)
+                        ListView(listVM: listVM, filterdList: $listVM.label0Item, labelNum: $selection)
                             .tag(0)
-                        ListView(filterdList: $listVM.label1Item, labelNum: $selection, goRight: $goRight, isFlip: $flip, isMoving: $startMoving)
+                        ListView(listVM: listVM, filterdList: $listVM.label1Item, labelNum: $selection)
                             .tag(1)
-                        ListView(filterdList: $listVM.label2Item, labelNum: $selection, goRight: $goRight, isFlip: $flip, isMoving: $startMoving)
+                        ListView(listVM: listVM, filterdList: $listVM.label2Item, labelNum: $selection)
                             .tag(2)
                     }
                     .background(.white)
