@@ -8,7 +8,8 @@
 import SwiftUI
 
 
-struct EditIndexAlertScreen: View {
+///インデックスボタン長押しで表示させるテキストフィールドアラート
+struct EditIndexAlertView: View {
     ///インデックスラベルをアプリ内で共有する環境変数
     @EnvironmentObject var store: Store
     

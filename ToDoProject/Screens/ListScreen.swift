@@ -129,7 +129,7 @@ struct ListScreen: View {
             ///ラベル名がロングタップされたら編集用ウィンドウを表示
             if isEdit{
                 LinearGradient(gradient: Gradient(colors: [AppSetting.mainColor1, AppSetting.mainColor2]), startPoint: .leading, endPoint: .trailing).ignoresSafeArea().opacity(0.5)
-                EditIndexAlertScreen(showAlert: $isEdit, editText: store.getIndexArray()[listVM.selectedLabelNum])
+                EditIndexAlertView(showAlert: $isEdit, editText: store.getIndexArray()[listVM.selectedLabelNum])
                     .environmentObject(store)
             }
         }
