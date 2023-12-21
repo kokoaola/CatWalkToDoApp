@@ -9,21 +9,12 @@ import Foundation
 
 
 ///.environmentObjectを使用してアプリケーション全体で認識するグローバルクラス
-/*
-これ必要
-@main
-struct WeatherAppApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView().environmentObject(Store())
-        }
-    }
-}*/
 
 class Store: ObservableObject {
     let defaults = UserDefaults.standard
     
     ///グローバルオブジェクト
+    ///インデックスラベルの名前
     @Published var indexLabel0 = "1"{
         didSet {
             defaults.set(indexLabel0, forKey: Constants.index0Key)

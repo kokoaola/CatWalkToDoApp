@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-///タスクの全リストを取り扱うベースのビューモデル
+///全タスクを取り扱うベースのビューモデル
 class ViewModelBase: ObservableObject {
     //firebaseServiceクラスのインスタンスを作成
     let firebaseService = FirebaseDataService()
