@@ -14,9 +14,6 @@ struct ListScreen: View {
     @StateObject var listVM = ListViewModel()
     @EnvironmentObject var store: Store
     
-    ///ラベル選択用のプロパティ
-    @State var selection = 0
-    
     ///買い物完了ボタンを押した時のアラート用のプロパティ
     @State var showCompleteTaskAlert = false
     ///ラベル編集アラート管理用のフラグ
@@ -39,7 +36,7 @@ struct ListScreen: View {
                         
                         ///上に表示される３つのインデックス
                         ForEach(0 ..< 3) {num in
-                            IndexView(num: num, selection: $selection, isEdit: $isEdit, index: store.getIndexArray()[num])
+                            IndexView(num: num, selection: $listVM.selectedLabelNum, isEdit: $isEdit, index: store.getIndexArray()[num])
                         }
                     }//インデックスと動く猫ちゃんを並べたHStackここまで
                     .offset(x: -UIScreen.main.bounds.width / 18.5)
@@ -48,12 +45,12 @@ struct ListScreen: View {
                     
                     
                     ///買い物リストの中身(選択中のタブによって切り替える)
-                    TabView(selection: $selection) {
-                        ListView(listVM: listVM, filterdList: $listVM.label0Item, labelNum: $selection)
+                    TabView(selection: $listVM.selectedLabelNum) {
+                        ListView(listVM: listVM, filterdList: $listVM.label0Item)
                             .tag(0)
-                        ListView(listVM: listVM, filterdList: $listVM.label1Item, labelNum: $selection)
+                        ListView(listVM: listVM, filterdList: $listVM.label1Item)
                             .tag(1)
-                        ListView(listVM: listVM, filterdList: $listVM.label2Item, labelNum: $selection)
+                        ListView(listVM: listVM, filterdList: $listVM.label2Item)
                             .tag(2)
                     }
                     .background(.white)
@@ -86,11 +83,9 @@ struct ListScreen: View {
                 //インデックス編集用アラート表示中はタップ無効
                 .disabled(isEdit)
                 .accessibilityHidden(isEdit)
-                
-                
                 ///タスク新規追加用のシート
                 .sheet(isPresented: $showAddNewItemSheet, content: {
-                    AddNewItemScreen(newLabelNum: $selection)
+                    AddNewItemScreen(newLabelNum: $listVM.selectedLabelNum)
                 })
                 
                 ///ゴミ箱ボタンが押された後の確認アラート
@@ -99,7 +94,7 @@ struct ListScreen: View {
                           message: Text("Do you want to delete the checked items?"),
                           //OKならチェックした項目をリストから削除
                           primaryButton: .destructive(Text("Delete"), action: {
-                        listVM.deleteCompletedTask(labelNum: selection)
+                        listVM.deleteCompletedTask(labelNum: listVM.selectedLabelNum)
                     }),
                           secondaryButton: .cancel(Text("Cancel"), action:{}))
                 }
@@ -108,9 +103,7 @@ struct ListScreen: View {
                 .onDisappear(){
                     isEdit = false
                 }
-                
             }//ZStackここまで
-            
             
             
             .background(LinearGradient(gradient: Gradient(colors: [AppSetting.mainColor1, AppSetting.mainColor2]), startPoint: .leading, endPoint: .trailing))
@@ -136,7 +129,7 @@ struct ListScreen: View {
             ///ラベル名がロングタップされたら編集用ウィンドウを表示
             if isEdit{
                 LinearGradient(gradient: Gradient(colors: [AppSetting.mainColor1, AppSetting.mainColor2]), startPoint: .leading, endPoint: .trailing).ignoresSafeArea().opacity(0.5)
-                EditIndexAlertScreen(showAlert: $isEdit, labelNum: selection, editText: store.getIndexArray()[selection])
+                EditIndexAlertScreen(showAlert: $isEdit, editText: store.getIndexArray()[listVM.selectedLabelNum])
                     .environmentObject(store)
             }
         }

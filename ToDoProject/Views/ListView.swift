@@ -14,9 +14,10 @@ struct ListView: View {
     
     ///引数で受け取る配列（リスト表示用）
     @Binding var filterdList: [ItemDataType]
-    @Binding var labelNum: Int
     
+    ///ユーザーが選択したタスクを格納する
     @State var selectedItem: ItemDataType? = nil
+    ///編集シート表示フラグ
     @State var showEditSheet = false
     
     var body: some View {
@@ -28,7 +29,7 @@ struct ListView: View {
             //買い物リスト本体
             List{
                 ForEach(filterdList){ item in
-                    listLowView(listVM: listVM, item: item, selectedItem: $selectedItem, showEditSheet: $showEditSheet)
+                    listLowView(item: item, selectedItem: $selectedItem, showEditSheet: $showEditSheet)
                         .listRowBackground(Color.clear)
                         .opacity(item.checked ? 0.3 : 1)
                         .contentShape(Rectangle())
@@ -59,7 +60,7 @@ struct ListView: View {
                 selectedItem = nil
             }) {
                 if let item = selectedItem {
-                    AddNewItemScreen(newLabelNum: $labelNum, editItem:item)
+                    AddNewItemScreen(newLabelNum: $listVM.selectedLabelNum, editItem:item)
                 }
             }
         }
@@ -67,14 +68,13 @@ struct ListView: View {
     
     func moveItem(offsets: IndexSet, index: Int) {
         filterdList.move(fromOffsets: offsets, toOffset: index)
-        listVM.updateAfterMove(labelNum: labelNum)
+        listVM.updateAfterMove(labelNum: listVM.selectedLabelNum)
     }
 }
 
 
 ///リストの1行分のビュー
 struct listLowView: View{
-    @ObservedObject var listVM: ListViewModel
     var item: ItemDataType
     @Binding var selectedItem: ItemDataType?
     @Binding var showEditSheet: Bool

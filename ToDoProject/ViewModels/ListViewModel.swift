@@ -15,7 +15,8 @@ class ListViewModel: ViewModelBase {
     @Published var isMoving: Bool = false
     
     ///ユーザーに表示しているリストの種類
-    @Published var labelNum: Int = 0
+    @Published var selectedLabelNum: Int = 0
+    
     
     ///ゴミ箱ボタンが押された時の処理、完了したタスクをまとめて削除
     func deleteCompletedTask(labelNum: Int) {
