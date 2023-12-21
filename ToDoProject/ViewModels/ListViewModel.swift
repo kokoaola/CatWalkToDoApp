@@ -14,9 +14,10 @@ class ListViewModel: ViewModelBase {
     @Published var isFacingRight: Bool = true
     @Published var isMoving: Bool = false
     
+    ///ユーザーに表示しているリストの種類
+    @Published var labelNum: Int = 0
     
-    ///ゴミ箱ボタンが押された時の処理
-    ///完了したタスクをまとめて削除
+    ///ゴミ箱ボタンが押された時の処理、完了したタスクをまとめて削除
     func deleteCompletedTask(labelNum: Int) {
         //完了したタスクの配列を取得
         let allDataArray = [label0Item, label1Item, label2Item]
@@ -36,6 +37,7 @@ class ListViewModel: ViewModelBase {
         }
     }
     
+    
     ///達成フラグを反転して保存する
     func toggleItemCheckStatus(item: ItemDataType){
         //Bool値を反転
@@ -47,9 +49,34 @@ class ListViewModel: ViewModelBase {
         }
     }
     
+    
+    ///リストをドラッグ&ドロップした後の処理、リストの序列を保存し直す
     func updateAfterMove(labelNum: Int){
-        firebaseService.updateIndexesForCollection(labelNum: labelNum) { error in
-            return
+        DispatchQueue.main.async {
+            self.firebaseService.updateIndexesForCollection(labelNum: labelNum) { error in
+                return
+            }
+        }
+    }
+    
+    
+    ///猫を歩かせる処理
+    func walkingCat(itemCheckStatus: Bool){
+        DispatchQueue.main.async {
+        //猫が歩いていなくて、チェックマークがfalseの時
+        if !self.isMoving && !itemCheckStatus{
+            //猫を裏返す
+            self.isFacingRight.toggle()
+            //猫移動中にセット
+            self.isMoving = true
+            //猫歩く
+            withAnimation() {
+                self.stayPositionRight.toggle()
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 7.5) {
+                self.isMoving = false
+                }
+            }
         }
     }
 }

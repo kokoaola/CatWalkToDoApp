@@ -11,21 +11,19 @@ import SwiftUI
 
 struct ListScreen: View {
     ///ViewModelのための変数
-    @ObservedObject var listVM = ListViewModel()
+    @StateObject var listVM = ListViewModel()
     @EnvironmentObject var store: Store
-    
-    ///タスク追加シート管理用のフラグ
-    @State private var showAddNewItemSheet = false
     
     ///ラベル選択用のプロパティ
     @State var selection = 0
     
     ///買い物完了ボタンを押した時のアラート用のプロパティ
     @State var showCompleteTaskAlert = false
-    
     ///ラベル編集アラート管理用のフラグ
     @State var isEdit = false
     
+    ///タスク追加シート管理用のフラグ
+    @State private var showAddNewItemSheet = false
     
     var body: some View {
         

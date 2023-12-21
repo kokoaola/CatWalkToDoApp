@@ -9,6 +9,7 @@ import SwiftUI
 import Lottie
 
 
+///歩く猫のビュー
 struct CatView: View{
     ///ViewModelのための変数
     @ObservedObject var listVM: ListViewModel
