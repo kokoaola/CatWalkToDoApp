@@ -13,9 +13,7 @@ import Firebase
 class FirebaseDataService {
     //データベース操作用のプロパティ
     private let db = Firestore.firestore()
-    private let collectionName = "users"
     private let uid = Auth.auth().currentUser?.uid
-//    private let subCollectionNames = ["label0Item", "label1Item", "label2Item"]
 }
 
 
@@ -26,7 +24,7 @@ extension FirebaseDataService{
         let subCollectionName = Constants.firebaseSubCollectionNameArray[label]
         
         //ユーザーのIDを使用してコレクションにアクセス
-        db.collection(self.collectionName).document(self.uid!).collection(subCollectionName).order(by: "index").addSnapshotListener { (snapshot, error) in
+        db.collection(Constants.firebaseCollectionName).document(self.uid!).collection(subCollectionName).order(by: "index").addSnapshotListener { (snapshot, error) in
             var items = [ItemDataType]()
             if error != nil { return }
             
@@ -66,7 +64,7 @@ extension FirebaseDataService{
         ] as [String : Any]
         
         // 新しいアイテムを追加
-        db.collection(self.collectionName).document(self.uid!).collection(subCollectionName).addDocument(data: data) { error in
+        db.collection(Constants.firebaseCollectionName).document(self.uid!).collection(subCollectionName).addDocument(data: data) { error in
             // コンプリーションハンドラを通じて、呼び出し元にエラー情報を返す
             completion(error)
         }
@@ -81,7 +79,7 @@ extension FirebaseDataService{
         let subCollectionName = Constants.firebaseSubCollectionNameArray[Int(oldItem.label)]
         
         
-        db.collection(self.collectionName).document(self.uid!).collection(subCollectionName).document(oldItem.id).updateData([
+        db.collection(Constants.firebaseCollectionName).document(self.uid!).collection(subCollectionName).document(oldItem.id).updateData([
             "checked": newCheckedStatus,
             "title": newTitle
         ]){ error in
@@ -103,7 +101,7 @@ extension FirebaseDataService{
             //順番にIndexを振り直して保存する
             DispatchQueue.main.async {
                 for (index, item) in itemArray.enumerated() {
-                    self.db.collection(self.collectionName).document(self.uid!).collection(subCollectionName).document(item.id).updateData([
+                    self.db.collection(Constants.firebaseCollectionName).document(self.uid!).collection(subCollectionName).document(item.id).updateData([
                         "index": index
                     ]){ error in
                         if let error = error {
@@ -132,7 +130,7 @@ extension FirebaseDataService{
             // グループにエンター
             group.enter()
             //該当するidのアイテムを削除
-            self.db.collection(self.collectionName).document(self.uid!).collection(subCollectionName).document(item.id).delete() { error in
+            self.db.collection(Constants.firebaseCollectionName).document(self.uid!).collection(subCollectionName).document(item.id).delete() { error in
                 if error != nil {
                     // エラー処理
                     completion(error)
