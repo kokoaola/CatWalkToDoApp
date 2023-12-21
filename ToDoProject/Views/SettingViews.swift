@@ -9,7 +9,7 @@ import SwiftUI
 import WebKit
 
 
-///インデックスラベル設定用のビュー
+///インデックスの名前設定用のビュー
 struct EditIndexSettingScreen: View {
     ///インデックスラベルをアプリ内で共有する環境変数
     @EnvironmentObject var store: Store
@@ -44,9 +44,17 @@ struct EditIndexSettingScreen: View {
             
             //ラベルの変更をユーザーデフォルトに保存
             Button(action: {
-                store.indexLabel0 = newName0
-                store.indexLabel1 = newName1
-                store.indexLabel2 = newName2
+                if store.indexLabel0 != newName0{
+                    store.indexLabel0 = newName0
+                }
+                
+                if store.indexLabel1 != newName1{
+                    store.indexLabel1 = newName1
+                }
+                
+                if store.indexLabel2 != newName2{
+                    store.indexLabel2 = newName2
+                }
                 dismiss()
             }, label: {
                 SaveButton() //保存ボタンは別ファイル
