@@ -17,8 +17,7 @@ class ViewModelBase: ObservableObject {
     @Published var label2Item = [ItemDataType]()
     
     
-    init() {
-        //すべてのデータをフェッチ
+    init() { //すべてのデータをフェッチ
         fetchAllData()
     }
     

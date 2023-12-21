@@ -50,7 +50,7 @@ class Store: ObservableObject {
         self.indexLabel2 = defaults.string(forKey: Constants.index2Key) ?? "3"
     }
     
-    ///都市名を配列に追加する関数
+    ///都市名を配列にして返す関数
     func getIndexArray() -> [String]{
         return [indexLabel0, indexLabel1, indexLabel2]
     }

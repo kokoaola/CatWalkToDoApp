@@ -6,12 +6,14 @@
 //
 
 import SwiftUI
+
+
+
+
 ///ボタンのデザインたち
 
-
-
 ///猫の＋ボタン
-struct CatAddButton:View{
+struct CatAddButton: View{
     let color: Color
     var body: some View{
         ZStack{
@@ -44,6 +46,7 @@ struct CatAddButton:View{
         .contentShape(Rectangle())
     }
 }
+
 
 ///買い物リストの要素追加の保存ボタン
 struct SaveButton: View {

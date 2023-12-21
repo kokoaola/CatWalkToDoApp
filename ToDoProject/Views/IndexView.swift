@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+
+///インデックス部分のビュー
 struct IndexView: View{
     ///表示するラベルの番号を格納するプロパティ
     var num: Int
@@ -55,7 +57,7 @@ struct IndexView: View{
 
 
 
-///リストの見出しのビュー
+///インデックスのパス
 struct IndexShape: Shape {
     func path(in rect: CGRect) -> Path {
         var path = Path()
@@ -75,12 +77,5 @@ struct IndexShape: Shape {
         path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
         
         return path
-    }
-}
-
-
-struct IndexLabel_Previews: PreviewProvider {
-    static var previews: some View {
-        IndexShape()
     }
 }
