@@ -67,8 +67,10 @@ struct ListView: View {
     }
     
     func moveItem(offsets: IndexSet, index: Int) {
-        filterdList.move(fromOffsets: offsets, toOffset: index)
-        listVM.updateAfterMove(labelNum: listVM.selectedLabelNum)
+        DispatchQueue.main.async {
+            filterdList.move(fromOffsets: offsets, toOffset: index)
+            listVM.updateAfterMove(list: filterdList,labelNum: listVM.selectedLabelNum)
+        }
     }
 }
 

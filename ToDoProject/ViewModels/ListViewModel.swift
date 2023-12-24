@@ -53,10 +53,9 @@ class ListViewModel: ViewModelBase {
     
     
     ///リストをドラッグ&ドロップした後の処理、リストの序列を保存し直す
-    func updateAfterMove(labelNum: Int){
+    func updateAfterMove(list: [ItemDataType],labelNum: Int){
         DispatchQueue.main.async {
-            self.firebaseService.updateIndexesForCollection(labelNum: labelNum) { error in
-                return
+            self.firebaseService.updateIndexesAfterMoving(movedList: list, collectionNum: labelNum) { error in
             }
         }
     }

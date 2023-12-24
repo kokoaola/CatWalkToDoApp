@@ -116,6 +116,25 @@ extension FirebaseDataService{
     }
 
     
+    func updateIndexesAfterMoving(movedList: [ItemDataType], collectionNum: Int, completion: @escaping (Error?) -> Void) {
+        let subCollectionName = Constants.firebaseSubCollectionNameArray[collectionNum]
+        
+            //順番にIndexを振り直して保存する
+            DispatchQueue.main.async {
+                for (index, item) in movedList.enumerated() {
+                    self.db.collection(Constants.firebaseCollectionName).document(self.uid!).collection(subCollectionName).document(item.id).updateData([
+                        "index": index
+                    ]){ error in
+                        if let error = error {
+                            print("Error updating document: \(error)")
+                            // エラー処理
+                            completion(error)
+                        }
+                    }
+                }
+            }
+        }
+    
     
     
     ///データベースからアイテムを削除する
