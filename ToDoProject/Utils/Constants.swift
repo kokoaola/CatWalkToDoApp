@@ -17,7 +17,7 @@ struct Constants {
     static let favoriteListKey = "favoriteList"
     
     ///インデックス名のUserDefaultsのキー
-    static let index0Key = "Label0"
-    static let index1Key = "Label1"
-    static let index2Key = "Label2"
+    static let index0Key = "label0"
+    static let index1Key = "label1"
+    static let index2Key = "label2"
 }
