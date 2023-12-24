@@ -24,7 +24,7 @@ struct IndexView: View{
     var index: String
     
     ///インデックスのサイズ
-    let indexWidth = AppSetting.screenWidth / 3.5
+    let indexWidth = AppStyles.screenWidth / 3.5
     let indexHeight = 60.0
     
     var body: some View{

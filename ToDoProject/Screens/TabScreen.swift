@@ -34,7 +34,7 @@ struct MainScreen: View {
                         Label("Settings", systemImage: "gearshape")
                     }
             }
-            .tint(AppSetting.mainColor1)
+            .tint(AppStyles.mainColor1)
         }//VStackここまで
     }
 }

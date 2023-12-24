@@ -37,10 +37,10 @@ struct SpeechBubbleView: View{
     var body: some View {
         SpeechBubblePath()
             .rotation(Angle(degrees: isLotation ? 180 : 0))
-            .frame(width: AppSetting.screenWidth * 0.8, height: AppSetting.screenWidth * 0.3)
+            .frame(width: AppStyles.screenWidth * 0.8, height: AppStyles.screenWidth * 0.3)
             .padding(.top)
             .shadow(color:.black.opacity(1), radius: 5, x: 3, y: 3)
-            .foregroundColor(isLotation ? AppSetting.mainColor1 : AppSetting.mainColor2).opacity(0.1)
+            .foregroundColor(isLotation ? AppStyles.mainColor1 : AppStyles.mainColor2).opacity(0.1)
             .offset(x:0, y:-10)
             .overlay{
                 VStack{
@@ -48,7 +48,7 @@ struct SpeechBubbleView: View{
                         .fontWeight(.bold)
                         .lineSpacing(10)
                 }
-                .frame(width: AppSetting.screenWidth * 0.9, height: AppSetting.screenWidth * 0.3)
+                .frame(width: AppStyles.screenWidth * 0.9, height: AppStyles.screenWidth * 0.3)
                 .opacity(0.6)
             }
             .contentShape(Rectangle())

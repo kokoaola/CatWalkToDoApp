@@ -13,10 +13,10 @@ struct SettingScreen: View {
     var body: some View {
             //上のナビゲーションバーっぽいセクション
             VStack(spacing:0){
-                LinearGradient(gradient: Gradient(colors: [AppSetting.mainColor1, AppSetting.mainColor2]), startPoint: .leading, endPoint: .trailing)
-                    .frame(height: AppSetting.screenHeight * 0.15)
+                LinearGradient(gradient: Gradient(colors: [AppStyles.mainColor1, AppStyles.mainColor2]), startPoint: .leading, endPoint: .trailing)
+                    .frame(height: AppStyles.screenHeight * 0.15)
                     .overlay(
-                        Text("Setting").font(.largeTitle).fontWeight(.bold).foregroundColor(.white).padding(.top, AppSetting.screenHeight * 0.05)
+                        Text("Setting").font(.largeTitle).fontWeight(.bold).foregroundColor(.white).padding(.top, AppStyles.screenHeight * 0.05)
                             .accessibilityAddTraits(.isHeader))
                 
                 List{

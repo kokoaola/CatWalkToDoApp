@@ -71,7 +71,7 @@ struct ListScreen: View {
                     Button(action: {
                         showAddNewItemSheet = true
                     }) {
-                        CatAddButton(color: AppSetting.mainColor2)
+                        CatAddButton(color: AppStyles.mainColor2)
                             .padding(5)
                     }
                     //VoiceOver用の設定
@@ -106,7 +106,7 @@ struct ListScreen: View {
             }//ZStackここまで
             
             
-            .background(LinearGradient(gradient: Gradient(colors: [AppSetting.mainColor1, AppSetting.mainColor2]), startPoint: .leading, endPoint: .trailing))
+            .background(LinearGradient(gradient: Gradient(colors: [AppStyles.mainColor1, AppStyles.mainColor2]), startPoint: .leading, endPoint: .trailing))
             //キーボードによるビューの押し上げをなくす
             .ignoresSafeArea(.keyboard,edges: .all)
             
@@ -128,7 +128,7 @@ struct ListScreen: View {
 
             ///ラベル名がロングタップされたら編集用ウィンドウを表示
             if isEdit{
-                LinearGradient(gradient: Gradient(colors: [AppSetting.mainColor1, AppSetting.mainColor2]), startPoint: .leading, endPoint: .trailing).ignoresSafeArea().opacity(0.5)
+                LinearGradient(gradient: Gradient(colors: [AppStyles.mainColor1, AppStyles.mainColor2]), startPoint: .leading, endPoint: .trailing).ignoresSafeArea().opacity(0.5)
                 EditIndexAlertView(showAlert: $isEdit, editText: store.getIndexArray()[listVM.selectedLabelNum])
                     .environmentObject(store)
             }

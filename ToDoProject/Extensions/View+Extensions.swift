@@ -40,7 +40,7 @@ extension View {
                 RoundedRectangle(cornerRadius: 2)
                     .stroke(.gray.opacity(0.5), lineWidth: 1)
             )
-            .frame(width: AppSetting.screenWidth / 2)
+            .frame(width: AppStyles.screenWidth / 2)
             .textFieldStyle(.plain)
             .scrollContentBackground(.hidden)
             .background(.white)

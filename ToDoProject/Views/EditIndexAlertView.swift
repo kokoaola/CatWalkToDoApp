@@ -55,7 +55,7 @@ struct EditIndexAlertView: View {
                     showAlert = false
                 } label: {
                     Text("Cancel")
-                        .frame(width: AppSetting.screenWidth / 3.5, height: AppSetting.screenWidth * 0.1)
+                        .frame(width: AppStyles.screenWidth / 3.5, height: AppStyles.screenWidth * 0.1)
                 }
                 .tint(.red)
                 
@@ -79,7 +79,7 @@ struct EditIndexAlertView: View {
                     
                 } label: {
                     Text("Save")
-                        .frame(width: AppSetting.screenWidth / 3.5, height: AppSetting.screenWidth * 0.1)
+                        .frame(width: AppStyles.screenWidth / 3.5, height: AppStyles.screenWidth * 0.1)
                 }.tint(.green)
                     .disabled(editText.isEmpty || editText.count > maxLength)
                 

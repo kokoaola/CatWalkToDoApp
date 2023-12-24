@@ -27,10 +27,10 @@ struct UnitCalScreen: View {
         ZStack{
             //上のヘッダーセクション
             VStack{
-                LinearGradient(gradient: Gradient(colors: [AppSetting.mainColor1, AppSetting.mainColor2]), startPoint: .leading, endPoint: .trailing)
-                    .frame(height: AppSetting.screenHeight * 0.15)
+                LinearGradient(gradient: Gradient(colors: [AppStyles.mainColor1, AppStyles.mainColor2]), startPoint: .leading, endPoint: .trailing)
+                    .frame(height: AppStyles.screenHeight * 0.15)
                     .overlay(
-                        Text("Unit Price Calculation").font(.largeTitle).fontWeight(.bold).foregroundColor(.white).padding(.top, AppSetting.screenHeight * 0.05)
+                        Text("Unit Price Calculation").font(.largeTitle).fontWeight(.bold).foregroundColor(.white).padding(.top, AppStyles.screenHeight * 0.05)
                             .accessibilityAddTraits(.isHeader)
                     )
                 Spacer()
@@ -72,8 +72,8 @@ struct UnitCalScreen: View {
                     }
                 }//VStackここまで
 
-                .foregroundColor(AppSetting.fontColor)
-                .frame(width: AppSetting.screenWidth * 0.8)
+                .foregroundColor(AppStyles.fontColor)
+                .frame(width: AppStyles.screenWidth * 0.8)
                 .padding(.vertical)
                 
                 
@@ -97,9 +97,9 @@ struct UnitCalScreen: View {
                         .font(.callout)
                 }//VStackここまで
                 .padding()
-                .frame(width: AppSetting.screenWidth * 0.8)
-                .foregroundColor(AppSetting.fontColor)
-                .background(AppSetting.mainColor1.opacity(0.1))
+                .frame(width: AppStyles.screenWidth * 0.8)
+                .foregroundColor(AppStyles.fontColor)
+                .background(AppStyles.mainColor1.opacity(0.1))
                 .cornerRadius(15)
                 
                 

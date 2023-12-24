@@ -16,9 +16,9 @@ struct CatView: View{
 
     var body: some View{
         ///猫のサイズ
-        let catSize = AppSetting.screenWidth / 6
+        let catSize = AppStyles.screenWidth / 6
         ///猫のポジション
-        let rightPosition = AppSetting.screenWidth + catSize * 2 / 2
+        let rightPosition = AppStyles.screenWidth + catSize * 2 / 2
         let leftPosition = 0 - catSize
         
         //猫のアニメーション

@@ -49,7 +49,7 @@ struct ListView: View {
                     .listRowBackground(EmptyView())
                     .accessibilityHidden(true)
             }
-            .foregroundColor(AppSetting.fontColor)
+            .foregroundColor(AppStyles.fontColor)
             .listStyle(.sidebar)
             .padding(.horizontal,-15)
             .scrollContentBackground(.hidden)//背景色変える
