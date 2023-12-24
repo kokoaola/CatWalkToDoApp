@@ -19,6 +19,10 @@ struct UnitCalScreen: View {
     ///Doneボタン表示のためのキーボードフォーカス用変数（量）
     @FocusState var isInputActiveVolume: Bool
     
+    ///入力された値を一時的に格納する変数
+    @State private var priceInput = ""
+    @State private var amountInput = ""
+    
     var body: some View {
         ZStack{
             //上のヘッダーセクション
@@ -42,9 +46,13 @@ struct UnitCalScreen: View {
                         
                         Spacer()
                         
-                        TextField("Enter Price", value: $unitCalScreenVM.price, format: .currency(code: Locale.current.currency?.identifier ?? "USD"), prompt: Text("Enter Price").foregroundColor(Color.black.opacity(0.4)))
+                        TextField("Enter Price", text: $priceInput, prompt: Text("Enter Price").foregroundColor(Color.black.opacity(0.4)))
+                            .keyboardType(.numberPad)
                             .focused($isInputActivePrice)
                             .unitCalTextField()
+                            .onChange(of: priceInput) { newValue in
+                                unitCalScreenVM.price = Double(newValue) ?? 0
+                            }
                     }//HStackここまで
                     
                     //全体量入力用のテキストフィールド
@@ -54,15 +62,16 @@ struct UnitCalScreen: View {
                         
                         Spacer()
                         
-                        TextField("Enter in ml, count, etc.", value: $unitCalScreenVM.amount, format: .number, prompt: Text("Enter in ml, count, etc.").foregroundColor(Color.black.opacity(0.4)))
+                        TextField("Enter Price", text: $amountInput, prompt: Text("Enter in ml, count, etc.").foregroundColor(Color.black.opacity(0.4)))
+                            .keyboardType(.numberPad)
                             .focused($isInputActiveVolume)
                             .unitCalTextField()
+                            .onChange(of: amountInput) { newValue in
+                                unitCalScreenVM.amount = Double(newValue) ?? 0
+                            }
                     }
                 }//VStackここまで
-                .keyboardType(.decimalPad)
-                .textFieldStyle(.plain)
-                .scrollContentBackground(.hidden)
-                .background(.white)
+
                 .foregroundColor(AppSetting.fontColor)
                 .frame(width: AppSetting.screenWidth * 0.8)
                 .padding(.vertical)
@@ -73,14 +82,14 @@ struct UnitCalScreen: View {
                     //単価を計算して表示（小数点3桁より下は切り捨て）
                     VStack{
                         Text("Per Unit").font(.title2).padding(.vertical, 5).padding(.trailing, 100)
-                        CurrencyText(value: unitCalScreenVM.unit)
+                        Text(unitCalScreenVM.currencyStringFromUnit()).font(.largeTitle)
                     }
                     .padding(.bottom)
                     
                     //アクセシビリティ用
                     .contentShape(Rectangle())
                     .accessibilityElement(children: .combine)
-                    .accessibilityLabel("\(AppSetting.currencyString(from: unitCalScreenVM.unit)), Per Unit")
+                    .accessibilityLabel("\(unitCalScreenVM.currencyStringFromUnit()), Per Unit")
                     
                     
                     Text("The smaller the value, the better the deal.\nValues are truncated.")
@@ -88,17 +97,28 @@ struct UnitCalScreen: View {
                         .font(.callout)
                 }//VStackここまで
                 .padding()
-                .foregroundColor(AppSetting.fontColor)
                 .frame(width: AppSetting.screenWidth * 0.8)
+                .foregroundColor(AppSetting.fontColor)
                 .background(AppSetting.mainColor1.opacity(0.1))
                 .cornerRadius(15)
                 
                 
             }//VStackここまで
+            
+            
             //タップでキーボードを閉じる
             .contentShape(Rectangle())
             .onTapGesture {
-                AppSetting.closeKeyBoard()
+                if unitCalScreenVM.amount == nil{
+                    print("nil")
+                }
+                
+                if unitCalScreenVM.price == nil{
+                    print("nil")
+                }
+                
+                isInputActivePrice = false
+                isInputActiveVolume = false
             }
             
             //キーボード閉じるボタンを配置
@@ -121,15 +141,3 @@ struct UnitCalScreen: View {
         .embedInNavigationView()
     }
 }
-
-
-///
-struct CurrencyText: View {
-    let value: Double
-    
-    var body: some View {
-        Text(AppSetting.currencyString(from: value))
-            .font(.largeTitle) // 文字サイズを大きく
-    }
-}
-
