@@ -18,6 +18,7 @@ class ListViewModel: ViewModelBase {
     @Published var selectedLabelNum: Int = 0
     
     
+    ///関数
     ///ゴミ箱ボタンが押された時の処理、完了したタスクをまとめて削除
     func deleteCompletedTask(labelNum: Int) {
         //完了したタスクの配列を取得
@@ -61,7 +62,7 @@ class ListViewModel: ViewModelBase {
     }
     
     
-    ///猫を歩かせる処理
+    ///猫を歩かせる処理を行う関数
     func walkingCat(itemCheckStatus: Bool){
         DispatchQueue.main.async {
         //猫が歩いていなくて、チェックマークがfalseの時
