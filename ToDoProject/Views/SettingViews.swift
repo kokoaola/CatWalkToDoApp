@@ -17,14 +17,18 @@ struct EditIndexSettingScreen: View {
     ///ページ破棄用のdismiss
     @Environment(\.dismiss) private var dismiss
     
+    ///３つのテキストフィールドそれぞれの値を格納する変数
     @State var newName0 = ""
     @State var newName1 = ""
     @State var newName2 = ""
     
+    
+    
     var body: some View {
-        
         VStack(spacing: 30.0){
+            
             Spacer()
+            
             Group{
                 HStack{
                     Text("Label1")
@@ -42,7 +46,7 @@ struct EditIndexSettingScreen: View {
                               prompt: Text("\(store.indexLabel2)"))}
             }.padding(.horizontal)
             
-            //ラベルの変更をユーザーデフォルトに保存
+            ///保存ボタンが押されたらラベルの変更をユーザーデフォルトに保存
             Button(action: {
                 if store.indexLabel0 != newName0{
                     store.indexLabel0 = newName0
@@ -66,7 +70,7 @@ struct EditIndexSettingScreen: View {
             
         }.textFieldStyle(.roundedBorder)
         
-        //ビュー作成時にテキストフィールドに初期値を入力しておく
+        ///ビュー作成時にテキストフィールドに初期値を入力しておく
             .onAppear(){
                 newName0 = store.indexLabel0
                 newName1 = store.indexLabel1
