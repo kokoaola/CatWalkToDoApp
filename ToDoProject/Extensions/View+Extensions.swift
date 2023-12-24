@@ -9,12 +9,12 @@ import Foundation
 import SwiftUI
 
 extension View {
-    //自身をナビゲーションビューに入れる
+    ///自身をナビゲーションビューに入れるextension
     func embedInNavigationView() -> some View {
         return NavigationView { self }
     }
     
-    //カスタマイズしたテキストエディットのスタイル
+    ///カスタマイズしたテキストエディットのスタイルのextension
     func customTextEditStyle() -> some View {
         self
             .foregroundColor(Color(UIColor.black))
@@ -25,12 +25,14 @@ extension View {
             .frame(height: 80)
     }
     
-    //アクセシビリティを追加する
+    ///アクセシビリティに関する項目を追加するextension
     func editAccessibility(label: String? = nil, hint: String? = nil, removeTraits: AccessibilityTraits? = nil, addTraits: AccessibilityTraits? = nil) -> some View {
         self
             .modifier(AccessibilityModifier(label: label, hint: hint, removeTraits: removeTraits, addTraits: addTraits))
     }
     
+    
+    ///単価計算用にカスタマイズしたテキストエディットのスタイルのextension
     func unitCalTextField() -> some View {
         self
             .padding(5)
@@ -39,11 +41,14 @@ extension View {
                     .stroke(.gray.opacity(0.5), lineWidth: 1)
             )
             .frame(width: AppSetting.screenWidth / 2)
-        
+            .textFieldStyle(.plain)
+            .scrollContentBackground(.hidden)
+            .background(.white)
     }
 }
 
 
+///アクセシビリティに関する項目を追加するAccessibilityModifier
 private struct AccessibilityModifier: ViewModifier {
     let label: String?
     let hint: String?
