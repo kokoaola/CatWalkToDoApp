@@ -16,13 +16,30 @@ extension View {
     
     //カスタマイズしたテキストエディットのスタイル
     func customTextEditStyle() -> some View {
-        self.modifier(TextEditModifier())
+        self
+            .foregroundColor(Color(UIColor.black))
+            .tint(.black)
+            .scrollContentBackground(Visibility.hidden)
+            .background(.gray.opacity(0.5))
+            .border(.gray, width: 1)
+            .frame(height: 80)
     }
     
     //アクセシビリティを追加する
     func editAccessibility(label: String? = nil, hint: String? = nil, removeTraits: AccessibilityTraits? = nil, addTraits: AccessibilityTraits? = nil) -> some View {
         self
             .modifier(AccessibilityModifier(label: label, hint: hint, removeTraits: removeTraits, addTraits: addTraits))
+    }
+    
+    func unitCalTextField() -> some View {
+        self
+            .padding(5)
+            .overlay(
+                RoundedRectangle(cornerRadius: 2)
+                    .stroke(.gray.opacity(0.5), lineWidth: 1)
+            )
+            .frame(width: AppSetting.screenWidth / 2)
+        
     }
 }
 
@@ -38,18 +55,5 @@ private struct AccessibilityModifier: ViewModifier {
             .accessibilityHint(LocalizedStringKey(hint ?? ""))
             .accessibilityAddTraits(addTraits ?? AccessibilityTraits())
             .accessibilityRemoveTraits(removeTraits ?? AccessibilityTraits())
-    }
-}
-
-
-private struct TextEditModifier: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .foregroundColor(Color(UIColor.black))
-            .tint(.black)
-            .scrollContentBackground(Visibility.hidden)
-            .background(.gray.opacity(0.5))
-            .border(.gray, width: 1)
-            .frame(height: 80)
     }
 }
