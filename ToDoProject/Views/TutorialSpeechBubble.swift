@@ -40,7 +40,7 @@ struct SpeechBubbleView: View{
             .frame(width: AppSetting.screenWidth * 0.8, height: AppSetting.screenWidth * 0.3)
             .padding(.top)
             .shadow(color:.black.opacity(1), radius: 5, x: 3, y: 3)
-            .foregroundColor(isLotation ? AppSetting.mainColor1 : AppSetting.mainColor2).opacity(0.3)
+            .foregroundColor(isLotation ? AppSetting.mainColor1 : AppSetting.mainColor2).opacity(0.1)
             .offset(x:0, y:-10)
             .overlay{
                 VStack{
