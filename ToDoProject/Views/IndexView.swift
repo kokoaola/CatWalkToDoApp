@@ -8,6 +8,7 @@
 import SwiftUI
 
 
+
 ///インデックス部分のビュー
 struct IndexView: View{
     ///表示するラベルの番号を格納するプロパティ

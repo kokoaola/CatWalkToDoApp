@@ -8,6 +8,7 @@
 import SwiftUI
 
 
+
 ///タスクが一件も存在しない時に表示するチュートリアルのビュー
 struct TutorialSpeechBubble: View {
     var body: some View {
